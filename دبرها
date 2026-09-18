@@ -1,0 +1,24 @@
+import zipfile, os, shutil
+
+src="/mnt/data/Dabbarha_Android_GitHub_Actions_FIXED.zip"
+out="/mnt/data/Dabbarha_Android_GitHub_Actions_FIXED_v2.zip"
+tmp="/mnt/data/dabbarha_fixed_v2"
+shutil.rmtree(tmp, ignore_errors=True)
+os.makedirs(tmp)
+
+with zipfile.ZipFile(src) as z:
+    z.extractall(tmp)
+
+wf=os.path.join(tmp,".github","workflows","android-apk.yml")
+text=open(wf,encoding="utf-8").read()
+text=text.replace("uses: android-actions/setup-android@v3",
+                  "uses: android-actions/setup-android@v4\n        with:\n          packages: ''")
+open(wf,"w",encoding="utf-8").write(text)
+
+with zipfile.ZipFile(out,"w",zipfile.ZIP_DEFLATED) as z:
+    for base, dirs, files in os.walk(tmp):
+        for fn in files:
+            p=os.path.join(base,fn)
+            z.write(p, os.path.relpath(p,tmp))
+
+print(out)
