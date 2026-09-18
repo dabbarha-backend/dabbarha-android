@@ -13,7 +13,21 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '20'
-      - run: npm ci || npm install
+      - name: Fix project structure
+        run: |
+          ls -la
+          if [ ! -f package.json ]; then
+            echo "package.json not in root, searching..."
+            PKG=$(find . -name "package.json" | head -1)
+            echo "Found: $PKG"
+            DIR=$(dirname "$PKG")
+            if [ "$DIR" != "." ]; then
+              cp -r $DIR/* . || true
+              cp -r $DIR/.* . || true
+              ls -la
+            fi
+          fi
+      - run: npm install
       - run: npm run build --if-present
       - run: |
           cd android
