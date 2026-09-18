@@ -13,23 +13,27 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '20'
-      - name: Fix project structure
+      - name: Fix and Build
         run: |
           ls -la
-          if [ ! -f package.json ]; then
-            echo "package.json not in root, searching..."
-            PKG=$(find . -name "package.json" | head -1)
-            echo "Found: $PKG"
+          echo "--- searching package.json ---"
+          find . -type f -name "package.json" | head -20
+          PKG=$(find . -type f -name "package.json" | head -1)
+          echo "Found: $PKG"
+          if [ -n "$PKG" ]; then
             DIR=$(dirname "$PKG")
+            echo "Dir is: $DIR"
             if [ "$DIR" != "." ]; then
-              cp -r $DIR/* . || true
-              cp -r $DIR/.* . || true
+              echo "Copying files from $DIR to root..."
+              cp -r $DIR/* . 
+              cp -r $DIR/.* . 2>/dev/null || true
               ls -la
             fi
           fi
-      - run: npm install
-      - run: npm run build --if-present
-      - run: |
+          npm install
+          npm run build --if-present
+      - name: Build APK
+        run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
