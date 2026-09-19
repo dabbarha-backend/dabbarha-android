@@ -170,6 +170,46 @@ body{
 }
 .plan li{color:#bdc2d2!important}
 </style>
+
+<style id="dabbarha-ai-premium">
+:root{
+ --p:#7c5cff;--p2:#a78bfa;--c:#22d3ee;--g:#f4c95d;
+ --bg:#080b16;--surface:rgba(255,255,255,.075);--line:rgba(255,255,255,.12);
+ --txt:#f8f9ff;--muted:#aeb6ca;
+}
+body{
+ background:
+ radial-gradient(650px 400px at 0% 0%,rgba(124,92,255,.28),transparent 65%),
+ radial-gradient(600px 380px at 100% 5%,rgba(34,211,238,.18),transparent 62%),
+ linear-gradient(145deg,#070a13,#0d1020 55%,#090b15)!important;
+ color:var(--txt)!important;
+}
+.app{max-width:720px}
+.header{
+ background:linear-gradient(135deg,#241858 0%,#4a2d88 48%,#087985 120%)!important;
+ border:1px solid rgba(255,255,255,.16)!important;
+ box-shadow:0 24px 70px rgba(76,55,180,.32),inset 0 1px rgba(255,255,255,.14)!important;
+}
+.brand{font-weight:950!important;text-shadow:0 5px 24px rgba(255,255,255,.18)}
+.card,.hero,.plan{
+ background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.035))!important;
+ border:1px solid var(--line)!important;
+ box-shadow:0 18px 50px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.06)!important;
+ backdrop-filter:blur(12px);
+}
+.card h3,.hero h2{color:#fff!important}
+.card p,.hero p,.plan li{color:var(--muted)!important}
+.primary-action{
+ background:linear-gradient(100deg,var(--p),var(--p2),var(--c))!important;
+ box-shadow:0 14px 34px rgba(124,92,255,.32)!important;
+}
+.btn{background:linear-gradient(135deg,#fff,#eeeaff)!important;color:#4d36b3!important}
+.bottom{
+ background:rgba(8,11,22,.86)!important;border-color:var(--line)!important;
+ box-shadow:0 20px 50px rgba(0,0,0,.4)!important;
+}
+.nav.active{background:rgba(124,92,255,.22)!important;color:#fff!important}
+</style>
 </head>
 <body>
 <div class="app">
@@ -181,6 +221,7 @@ body{
 <button class="primary" onclick="solve()">دبّرها</button>
 </div>
 <div id="result" class="result"></div>
+<div class="muted" style="margin-top:10px;font-size:12px">متصل بمساعد دبّرها الذكي ✨</div>
 </div>
 
 <div class="card">
@@ -220,13 +261,39 @@ body{
 </div>
 
 <script>
+const DABBARHA_API = 'https://dabbarha-android-3.onrender.com';
+
+function showResult(el, text, loading=false){
+  el.style.display='block';
+  el.textContent=text;
+  if(loading) el.setAttribute('aria-busy','true');
+  else el.removeAttribute('aria-busy');
+}
+
+async function askAI(problem, resultEl){
+  showResult(resultEl,'جاري التفكير وترتيب الحل... ⏳',true);
+  try {
+    const response = await fetch(DABBARHA_API + '/api/analyze', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({problem})
+    });
+    const data = await response.json().catch(()=>({}));
+    if(!response.ok) throw new Error(data.error || 'تعذر الاتصال بالخادم');
+    showResult(resultEl, data.answer || 'وصل الرد بدون نص.');
+    return data.answer || '';
+  } catch (error) {
+    showResult(resultEl,'تعذر الاتصال بالذكاء الاصطناعي الآن. تأكد من الإنترنت ثم جرّب مرة أخرى.\n\nالتفاصيل: '+(error.message || 'خطأ غير معروف'));
+    return '';
+  }
+}
+
 function solve(){
  const q=document.getElementById('q').value.trim(),r=document.getElementById('result');
- r.style.display='block';
- r.textContent=q?
- 'خطة مبدئية لمشكلتك:\n\n1. حدّد الهدف المطلوب.\n2. اجمع المعلومات والمستندات اللازمة.\n3. ابدأ بأبسط خطوة اليوم.\n4. راجع النتيجة وحدد الخطوة التالية.\n\nالمشكلة: '+q:
- 'اكتب مشكلتك أولًا.';
+ if(!q){ showResult(r,'اكتب مشكلتك أولًا.'); return; }
+ askAI(q,r);
 }
+
 function openTool(name){
  document.getElementById('title').textContent=name;
  document.getElementById('input').value='';
@@ -234,13 +301,42 @@ function openTool(name){
  document.getElementById('modal').style.display='flex';
 }
 function closeTool(){document.getElementById('modal').style.display='none'}
+
 function makePlan(){
  const v=document.getElementById('input').value.trim(),r=document.getElementById('toolResult');
- r.style.display='block';
- r.textContent=v?
- 'خطتك المبدئية:\n\n1. افهم المطلوب.\n2. جهّز المعلومات اللازمة.\n3. نفّذ أول خطوة.\n4. احفظ النتيجة وانتقل للخطوة التالية.':
- 'أدخل التفاصيل أولًا.';
+ if(!v){ showResult(r,'أدخل التفاصيل أولًا.'); return; }
+ const section=document.getElementById('title').textContent.trim();
+ askAI('القسم: '+section+'\n\nطلب المستخدم:\n'+v,r);
 }
+</script>
+
+<div id="documentsDashboard" style="display:none;min-height:100vh;background:#050507;color:#fff;font-family:sans-serif;text-align:center;padding:30px;position:fixed;inset:0;z-index:9999;overflow:auto;direction:rtl">
+  <button id="closeDocuments" style="position:absolute;top:18px;left:18px;border:1px solid #D4AF37;background:transparent;color:#F5D78E;border-radius:14px;padding:10px 15px;font-size:16px">رجوع</button>
+  <h1 style="color:#F5E6C4;font-size:40px;margin-top:35px">لوحة القيادة</h1>
+  <div style="border:1.5px solid #D4AF37;padding:30px;border-radius:30px;margin:30px 0;font-size:50px;color:#F5D78E;background:rgba(255,255,255,.07)">دبّرها ✨</div>
+  <div style="background:rgba(255,255,255,.06);padding:16px;margin:12px 0;border-radius:16px;text-align:right">💰 المال والعمل</div>
+  <div style="background:rgba(255,255,255,.06);padding:16px;margin:12px 0;border-radius:16px;text-align:right">📚 الدراسة</div>
+  <div style="background:rgba(255,255,255,.06);padding:16px;margin:12px 0;border-radius:16px;text-align:right">📄 المستندات</div>
+</div>
+
+<script id="documents-dashboard-script">
+(function(){
+  const dash=document.getElementById('documentsDashboard');
+  const close=document.getElementById('closeDocuments');
+  if(!dash || !close) return;
+  const cards=[...document.querySelectorAll('.card')];
+  cards.forEach(card=>{
+    if(card.textContent.includes('المستندات')){
+      card.addEventListener('click',function(e){
+        e.preventDefault(); e.stopPropagation();
+        dash.style.display='block';
+      },true);
+    }
+  });
+  close.addEventListener('click',function(){
+    dash.style.display='none';
+  });
+})();
 </script>
 </body>
 </html>
