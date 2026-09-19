@@ -1,16 +1,10 @@
 {
-  "name": "dabbarha-backend",
+  "name": "dabbarha",
   "version": "1.0.0",
   "private": true,
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "engines": {
-    "node": ">=20"
-  },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "@capacitor/core": "^7.4.0",
+    "@capacitor/android": "^7.4.0",
+    "@capacitor/cli": "^7.4.0"
   }
 }
