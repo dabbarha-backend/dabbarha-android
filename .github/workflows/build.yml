@@ -9,16 +9,11 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm install
-      - run: |
-          if [ ! -d "www" ]; then
-            mkdir -p www
-            echo '<html><body><h1>Dabbarha</h1></body></html>' > www/index.html
-          fi
       - run: npx cap add android || true
       - run: npx cap sync android
       - run: |
