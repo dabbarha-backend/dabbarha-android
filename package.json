@@ -1,9 +1,13 @@
 {
-  "name": "dabbarha-ai-backend",
+  "name": "dabbarha",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
-  "scripts": {"start":"node server.js"},
-  "engines": {"node": ">=20"},
-  "dependencies": {"express":"^5.1.0","cors":"^2.8.5"}
+  "scripts": {
+    "build": "echo build done"
+  },
+  "dependencies": {
+    "@capacitor/android": "^5.7.0",
+    "@capacitor/core": "^5.7.0",
+    "@capacitor/cli": "^5.7.0"
+  }
 }
