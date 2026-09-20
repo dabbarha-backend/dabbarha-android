@@ -1,19 +1,20 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-app.use(cors());
-app.use(express.json());
+const http = require('http');
+const PORT = process.env.PORT || 10000;
 
-app.post('/api/chat', async (req, res) => {
-  try {
-    const question = encodeURIComponent(req.body.message);
-    const r = await fetch(`https://text.pollinations.ai/${question}?model=openai&search=true`);
-    const answer = await r.text();
-    res.json({ reply: answer });
-  } catch (e) {
-    res.json({ reply: "جرب تاني النت ضعيف: " + e.message });
-  }
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+  res.end(`
+    <html dir="rtl">
+    <head><title>موقعك شغال</title></head>
+    <body style="font-family:Arial; text-align:center; padding:50px">
+      <h1>🎉 مبروك! موقعك شغال قدام البيت</h1>
+      <p>السيرفر شغال بدون مفتاح ومجاني مدى الحياة</p>
+      <p>الرابط ده هو موقعك النهائي</p>
+      <hr>
+      <p>جرب تكتب في المتصفح /api/search?q=مرحبا</p>
+    </body>
+    </html>
+  `);
 });
 
-app.get('/', (req, res) => res.send('Dabbarha Perplexity Free OK'));
-app.listen(process.env.PORT || 10000, () => console.log('Ready'));
+server.listen(PORT, () => console.log('Running on ' + PORT));
