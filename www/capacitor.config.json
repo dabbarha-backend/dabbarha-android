@@ -1,6 +1,1 @@
-{
-  "appId":"com.dabbarha.app",
-  "appName":"دبّرها",
-  "webDir":"www",
-  "server":{"androidScheme":"https"}
-}
+{"appId":"com.dabbarha.app","appName":"دبّرها | DABBARHA","webDir":"www","bundledWebRuntime":false}
