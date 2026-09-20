@@ -1,10 +1,1 @@
-{
-  "name": "dabbarha",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "@capacitor/core": "^7.4.0",
-    "@capacitor/android": "^7.4.0",
-    "@capacitor/cli": "^7.4.0"
-  }
-}
+{"name":"dabbarha-v6","version":"6.0.0","private":true,"scripts":{"build":"npx cap sync android && npx cap copy android"},"dependencies":{"@capacitor/android":"^7.4.3","@capacitor/core":"^7.4.3","@capacitor/cli":"^7.4.3"},"devDependencies":{"@capacitor/assets":"^3.0.5"}}
