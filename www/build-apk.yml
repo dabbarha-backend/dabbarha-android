@@ -1,28 +1,33 @@
-name: Build Dabbarha APK
+name: Build APK
 on:
   workflow_dispatch:
+  push:
+    branches: [ main, master ]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - uses: actions/setup-node@v4
+      - uses: android-actions/setup-android@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Create Android project
+        run: npx cap add android
+      - name: Sync web app
+        run: npx cap sync android
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          node-version: '20'
-          cache: npm
-      - run: npm install
-      - run: test -f www/index.html
-      - run: npx cap add android
-      - run: npx cap sync android
-      - run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dabbarha-apk
+          name: Dabbarha-V5-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
