@@ -1,0 +1,11 @@
+{
+  "name": "dabbarha-android",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo Dabbarha build"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.0"
+  }
+}
