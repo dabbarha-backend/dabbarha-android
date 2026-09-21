@@ -15,10 +15,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        env:
-          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       - run: npm install --legacy-peer-deps
       - run: npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
       - run: npx @capacitor/cli add android || true
