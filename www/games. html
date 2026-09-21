@@ -1,0 +1,115 @@
+Enter<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الألعاب والألغاز - دبّرها</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+*{font-family:'Cairo',sans-serif;box-sizing:border-box;margin:0;padding:0}
+body{background:#020a1a;color:#fff;min-height:100vh;padding:15px;background-image:radial-gradient(circle at 50% 0%, #0a2a6b 0%, #020a1a 70%)}
+.header{display:flex;align-items:center;gap:15px;margin-bottom:20px}
+.back{width:45px;height:45px;background:rgba(0,195,255,0.15);border:1px solid #00c3ff;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#00c3ff;font-size:22px;text-decoration:none}
+.title{font-size:22px;font-weight:900;color:#fff;text-shadow:0 0 10px #00c3ff}
+.title span{display:block;font-size:12px;font-weight:400;color:#7ec8ff}
+.tabs{display:flex;gap:10px;margin-bottom:20px}
+.tab{flex:1;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(0,195,255,0.3);border-radius:15px;text-align:center;cursor:pointer;transition:0.3s}
+.tab.active{background:linear-gradient(135deg,#00c3ff,#0066ff);box-shadow:0 0 20px rgba(0,195,255,0.5);border-color:#00c3ff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:linear-gradient(180deg,rgba(10,40,100,0.8),rgba(5,15,40,0.9));border:1px solid rgba(0,195,255,0.4);border-radius:18px;padding:18px;text-align:center;cursor:pointer;transition:0.3s;box-shadow:0 0 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,195,255,0.1)}
+.card:hover{transform:translateY(-3px);box-shadow:0 0 25px rgba(0,195,255,0.6)}
+.card.icon{font-size:32px;margin-bottom:8px}
+.card h3{font-size:14px;margin-bottom:4px}
+.card p{font-size:11px;color:#7ec8ff}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;padding:20px;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:linear-gradient(180deg,#0a2450,#05102a);border:1px solid #00c3ff;border-radius:20px;padding:20px;width:100%;max-width:380px;box-shadow:0 0 40px rgba(0,195,255,0.5)}
+.btn{background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:12px 20px;border-radius:12px;color:#fff;font-weight:700;width:100%;margin-top:15px;cursor:pointer}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0}
+.cell{aspect-ratio:1;background:rgba(0,195,255,0.1);border:1px solid #00c3ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;cursor:pointer}
+.puzzle-q{background:rgba(0,195,255,0.1);padding:15px;border-radius:12px;border-right:3px solid #00c3ff;margin:10px 0}
+input{width:100%;padding:12px;background:rgba(0,0,0,0.4);border:1px solid #00c3ff;border-radius:10px;color:#fff;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="back">‹</a>
+<div class="title">الألعاب والألغاز <span>تسلية وذكاء في مكان واحد</span></div>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('games',this)">🎮 الألعاب</div>
+<div class="tab" onclick="switchTab('puzzles',this)">🧩 الألغاز</div>
+</div>
+
+<div id="gamesSection">
+<div class="grid">
+<div class="card" onclick="openXO()"><div class="icon">❌⭕</div><h3>XO</h3><p>تحدي الأذكياء</p></div>
+<div class="card" onclick="openMemory()"><div class="icon">🧠</div><h3>الذاكرة</h3><p>قوي ذاكرتك</p></div>
+<div class="card" onclick="openMath()"><div class="icon">⚡</div><h3>الحساب السريع</h3><p>تحدي 30 ثانية</p></div>
+<div class="card" onclick="openGuess()"><div class="icon">🔢</div><h3>خمن الرقم</h3><p>من 1 إلى 100</p></div>
+</div>
+</div>
+
+<div id="puzzlesSection" style="display:none">
+<div class="grid">
+<div class="card" onclick="openPuzzle(0)"><div class="icon">🇸🇩</div><h3>لغز سوداني</h3><p>أمثال وحكم</p></div>
+<div class="card" onclick="openPuzzle(1)"><div class="icon">🤔</div><h3>لغز منطقي</h3><p>فكر خارج الصندوق</p></div>
+<div class="card" onclick="openPuzzle(2)"><div class="icon">🔤</div><h3>كلمة السر</h3><p>حروف مبعثرة</p></div>
+<div class="card" onclick="openDaily()"><div class="icon">📅</div><h3>لغز اليوم</h3><p>تحدي يومي</p></div>
+</div>
+<div id="dailyBox"></div>
+</div>
+
+<!-- Modals -->
+<div id="xoModal" class="modal"><div class="modal-box">
+<h3 style="text-align:center">❌⭕ لعبة XO</h3>
+<div class="board" id="xoBoard"></div>
+<p id="xoStatus" style="text-align:center;color:#00c3ff">دور X</p>
+<button class="btn" onclick="resetXO()">إعادة</button>
+<button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeAll()">إغلاق</button>
+</div></div>
+
+<div id="puzzleModal" class="modal"><div class="modal-box">
+<h3 id="puzzleTitle">اللغز</h3>
+<div id="puzzleContent"></div>
+<input id="puzzleAns" placeholder="اكتب إجابتك هنا...">
+<button class="btn" onclick="checkPuzzle()">تحقق</button>
+<p id="puzzleRes" style="text-align:center;margin-top:10px"></p>
+<button class="btn" style="background:rgba(255,255,255,0.1)" onclick="closeAll()">إغلاق</button>
+</div></div>
+
+<script>
+let curPuzzle=null;
+const puzzles=[
+{q:"شيء كلما أخذت منه كبر؟",a:"الحفرة",hint:"في الأرض"},
+{q:"ما هو الشيء الذي يمشي بلا رجلين؟",a:"الساعة",hint:"يعطيك الوقت"},
+{q:"كلمة من 5 حروف إذا حذفنا أول حرفين بقي حرف؟",a:"السماء",hint:"فوقنا"},
+{word:"سودان",hint:"بلدنا الحبيب",q:"رتب الحروف: ن ا و د س"},
+{word:"دبرها",hint:"اسم التطبيق",q:"رتب الحروف: ر هـ ا د ب ر"},
+];
+
+function switchTab(t,el){
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+el.classList.add('active');
+document.getElementById('gamesSection').style.display=t==='games'?'block':'none';
+document.getElementById('puzzlesSection').style.display=t==='puzzles'?'block':'none';
+}
+function closeAll(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('open'))}
+
+// XO Game
+let board=["","","","","","","","",""], turn="X", over=false;
+function openXO(){resetXO();document.getElementById('xoModal').classList.add('open');drawXO()}
+function drawXO(){let b=document.getElementById('xoBoard');b.innerHTML="";board.forEach((v,i)=>{let d=document.createElement('div');d.className='cell';d.textContent=v;d.onclick=()=>move(i);b.appendChild(d)})}
+function move(i){if(board[i]||over)return;board[i]=turn;if(checkWin()){document.getElementById('xoStatus').textContent=`فاز ${turn}! 🎉`;over=true}else if(board.every(x=>x)){document.getElementById('xoStatus').textContent="تعادل!";over=true}else{turn=turn=="X"?"O":"X";document.getElementById('xoStatus').textContent=`دور ${turn}`}drawXO()}
+function checkWin(){let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return w.some(c=>board[c[0]]&&board[c[0]]==board[c[1]]&&board[c[0]]==board[c[2]])}
+function resetXO(){board=["","","","","","","","",""];turn="X";over=false;document.getElementById('xoStatus').textContent="دور X";drawXO()}
+
+function openMemory(){alert("🧠 لعبة الذاكرة: حأجهزها ليك في التحديث الجاي! هسي العب XO")}
+function openMath(){let a=Math.floor(Math.random()*20)+1,b=Math.floor(Math.random()*20)+1,ans=prompt(`كم يساوي ${a} + ${b} ؟`);if(ans==a+b)alert("صحيح! ذكي ما شاء الله 🔥");else alert(`خطأ، الجواب ${a+b}`)}
+function openGuess(){let n=Math.floor(Math.random()*100)+1,g=prompt("خمنت رقم من 1-100، حاول تخمن:");if(g==n)alert("واااو! خمنت صح من أول مرة! 🎉");else alert(`الرقم كان ${n}، حاول تاني`)}
+function openPuzzle(i){curPuzzle=puzzles[i];document.getElementById('puzzleTitle').textContent=curPuzzle.q;document.getElementById('puzzleContent').innerHTML=`<div class='puzzle-q'>${curPuzzle.q}<br><small>تلميح: ${curPuzzle.hint}</small></div>`;document.getElementById('puzzleRes').textContent="";document.getElementById('puzzleAns').value="";document.getElementById('puzzleModal').classList.add('open')}
+function openDaily(){let d=puzzles[Math.floor(Math.random()*3)];openPuzzle(puzzles.indexOf(d))}
+function checkPuzzle(){let ans=document.getElementById('puzzleAns').value.trim();let correct=curPuzzle.a||curPuzzle.word;if(ans.includes(correct)||correct.includes(ans)){document.getElementById('puzzleRes').textContent="✅ إجابة صحيحة! ممتاز";document.getElementById('puzzleRes').style.color="#00ff88"}else{document.getElementById('puzzleRes').textContent=`❌ حاول تاني، التلميح: ${curPuzzle.hint}`;document.getElementById('puzzleRes').style.color="#ff5555"}}
+</script>
+</body>
+</html>
