@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دبّرها</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #07131c;
+      color: white;
+    }
+
+    main {
+      max-width: 720px;
+      margin: auto;
+      padding: 24px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #16d9ff, #1768ff);
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    h1 {
+      margin: 18px 0 6px;
+      font-size: 32px;
+    }
+
+    p {
+      color: #a9bdc9;
+    }
+
+    .card {
+      background: rgba(16, 31, 43, 0.85);
+      border: 1px solid #244454;
+      border-radius: 22px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      background: #08151e;
+      color: white;
+      border: 1px solid #31566a;
+      border-radius: 16px;
+      padding: 15px;
+      font-size: 17px;
+      resize: vertical;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      margin: 8px 4px 0 0;
+      background: #16d9ff;
+      color: #001018;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    button.secondary {
+      background: #173341;
+      color: #d9f7ff;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .tool {
+      padding: 16px;
+      border-radius: 16px;
+      background: #102733;
+      border: 1px solid #25495a;
+      cursor: pointer;
+    }
+
+    .answer {
+      white-space: pre-wrap;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<main>
+
+  <div class="logo">ف</div>
+
+  <h1>مرحبًا بك يا صديقي</h1>
+  <p>مشكلتك؟ دبّرها.</p>
+
+  <section class="card">
+
+    <textarea
+      id="msg"
+      placeholder="اكتب مشكلتك أو سؤالك هنا..."
+    ></textarea>
+
+    <div>
+      <button id="voice" class="secondary">🎙️ صوت</button>
+      <button id="send">✨ دبّرها</button>
+    </div>
+
+  </section>
+
+  <section class="card">
+
+    <h3>أدوات دبّرها</h3>
+
+    <div class="tools">
+
+      <div class="tool" data-t="المال والعمل">
+        💰 المال والعمل
+      </div>
+
+      <div class="tool" data-t="الدراسة">
+        📚 الدراسة
+      </div>
+
+      <div class="tool" data-t="الترجمة">
+        🌍 الترجمة
+      </div>
+
+      <div class="tool" data-t="التسوق">
+        🛒 التسوق
+      </div>
+
+      <div class="tool" data-t="الوثائق">
+        📄 الوثائق
+      </div>
+
+      <div class="tool" data-t="التذكيرات">
+        ⏰ التذكيرات
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="card">
+
+    <h3>النتيجة</h3>
+
+    <div id="answer" class="answer">
+      اكتب سؤالك واضغط «دبّرها».
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+
+const msg = document.getElementById("msg");
+const answer = document.getElementById("answer");
+
+document.querySelectorAll(".tool").forEach(tool => {
+
+  tool.onclick = () => {
+    msg.value = "ساعدني في " + tool.dataset.t;
+    msg.focus();
+  };
+
+});
+
+document.getElementById("send").onclick = async () => {
+
+  const text = msg.value.trim();
+
+  if (!text) {
+    answer.textContent = "اكتب سؤالك أولاً.";
+    return;
+  }
+
+  answer.textContent = "جاري التفكير...";
+
+  try {
+
+    const response = await fetch("/api/chat", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        message: text
+      })
+
+    });
+
+    const data = await response.json();
+
+    answer.textContent =
+      data.reply ||
+      data.error ||
+      "حدث خطأ.";
+
+    if ("speechSynthesis" in window) {
+
+      const speech =
+        new SpeechSynthesisUtterance(answer.textContent);
+
+      speech.lang = "ar-SA";
+
+      speechSynthesis.speak(speech);
+
+    }
+
+  } catch (error) {
+
+    answer.textContent =
+      "تعذر الاتصال بالخادم. تأكد من ربط التطبيق بالـ Backend.";
+
+  }
+
+};
+
+document.getElementById("voice").onclick = () => {
+
+  const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!Recognition) {
+
+    answer.textContent =
+      "الإملاء الصوتي غير مدعوم في هذا الجهاز.";
+
+    return;
+  }
+
+  const recognition = new Recognition();
+
+  recognition.lang = "ar-SA";
+
+  recognition.onresult = event => {
+
+    msg.value =
+      event.results[0][0].transcript;
+
+  };
+
+  recognition.start();
+
+};
+
+</script>
+
+</body>
+  </html>
