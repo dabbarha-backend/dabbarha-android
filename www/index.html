@@ -1,96 +1,83 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>دبرها العالمي</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: blob: https://* http://* 'unsafe-inline' 'unsafe-eval'">
+<title>دبرها</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:radial-gradient(circle at 15% 0%, #0a2a5b 0%, #020a1a 100%);color:white;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-.header{padding:12px;text-align:center;background:#00000099;border-bottom:1px solid #00F5FF33}
-.header h1{color:#FFD700;font-size:18px}
-.tabs{display:flex;gap:8px;justify-content:center;margin-top:8px}
-.tab{padding:7px 14px;border-radius:20px;border:1px solid #00F5FF44;background:#0005;color:#7cc8ff;cursor:pointer;font-size:13px}
-.tab.active{background:#00F5FF22;color:#00F5FF;border-color:#00F5FF;box-shadow:0 0 8px #00F5FF55}
-.page{display:none;flex:1;flex-direction:column;overflow:hidden}
-.page.active{display:flex}
-.chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
-.msg{padding:12px 15px;border-radius:18px;max-width:88%;line-height:1.6;font-size:14px;word-break:break-word}
-.user{background:linear-gradient(135deg,#FFD70022,#FFD70011);border:1px solid #FFD700;align-self:flex-start}
-.ai{background:#0a2a5bEE;border:1px solid #00F5FF33;align-self:flex-end}
-.msg img{width:100%;border-radius:12px;margin-top:10px}
-.source{font-size:11px;color:#00F5FF99;margin-top:8px;border-top:1px solid #ffffff15;padding-top:6px}
-.inputBox{display:flex;gap:10px;padding:12px;background:#000A;border-top:1px solid #00F5FF22}
-.inputBox input{flex:1;padding:13px 18px;border-radius:25px;border:1px solid #00F5FF44;background:#0a2a5b;color:white;outline:none}
-.inputBox button{background:#FFD700;color:black;border:none;width:48px;height:48px;border-radius:50%;font-weight:bold;font-size:18px}
-.card{background:#0a2a5b99;border:1px solid #00F5FF22;padding:15px;border-radius:15px;margin:12px}
+body{margin:0;background:#0f172a;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
+.header{background:#020617;padding:12px;text-align:center;border-bottom:1px solid #1e293b}
+.header h1{color:#facc15;font-size:15px;margin:0}
+.chat{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.msg{padding:10px 12px;border-radius:12px;max-width:85%;font-size:14px;line-height:1.6;background:#1e293b;border:1px solid #334155}
+.user{align-self:flex-start;background:#422006;border-color:#facc15}
+.ai{align-self:flex-end}
+.msg img{width:100%;border-radius:8px;margin-top:6px}
+.inputBox{display:flex;gap:6px;padding:10px;background:#020617}
+.inputBox input{flex:1;padding:12px 14px;border-radius:22px;border:1px solid #334155;background:#1e293b;color:#fff;outline:none}
+.inputBox button{background:#facc15;color:#000;border:none;width:42px;height:42px;border-radius:50%;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="header"><h1>⚡ دبرها - موتور عالمي شغال ✅</h1>
-<div class="tabs"><button id="tab-ai" class="tab active" onclick="show('ai')">🌍 المساعد العالمي</button><button id="tab-people" class="tab" onclick="show('people')">💬 الناس</button><button id="tab-games" class="tab" onclick="show('games')">🎮 أوفلاين</button></div>
+<div class="header"><h1>⚡ دبرها - شغال 100% بدون موتور</h1></div>
+<div id="chat" class="chat">
+<div class="msg ai">✅ التطبيق فتح!<br>جرب تكتب: كيف انظم وقت دراستي؟</div>
+</div>
+<div class="inputBox">
+<input id="inp" placeholder="اسأل هنا..." onkeypress="if(event.key==='Enter')send()">
+<button onclick="send()">↑</button>
 </div>
 
-<div id="ai" class="page active"><div id="aiChat" class="chat"><div class="msg ai">مرحبا! الموتور شغال ✅<br>أنا دبرها العالمي 🌍<br>بفتش ليك كل مواقع العالم وأجاوب بأي لغة!<br><br>جرب: <b>صمم لي بيت سوداني جميل</b> أو <b>ما هي أخبار الذكاء الاصطناعي اليوم؟</b></div></div></div>
-<div id="people" class="page"><div id="peopleChat" class="chat"><div class="msg ai">💬 دردشة الناس - قريبا أونلاين لايف</div></div></div>
-<div id="games" class="page" style="overflow-y:auto"><div class="card"><h3>🎮 خمن الرقم (أوفلاين)</h3><p id="gText">خمنت رقم من 1-100</p><button onclick="guess()" style="width:100%;padding:10px;background:#FFD700;border:none;border-radius:10px;margin-top:10px;font-weight:bold">جرب حظك</button></div></div>
-
-<div class="inputBox"><input id="mainInput" placeholder="اسأل بأي لغة... موتورك شغال" onkeypress="if(event.key==='Enter')send()"><button onclick="send()">⚡</button></div>
-
 <script>
-const BACKEND_URL = "https://dabbarha-android-4.onrender.com/api/chat";
-
-let mode='ai';
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');mode=id;}
-let secret=Math.floor(Math.random()*100)+1;function guess(){let v=prompt('خمن 1-100');let t=document.getElementById('gText');if(v==secret){t.textContent='🎉 مبروك صح!';secret=Math.floor(Math.random()*100)+1}else if(v>secret)t.textContent='👇 أقل';else t.textContent='👆 أكتر';}
-
 async function send(){
- let input=document.getElementById('mainInput');let text=input.value.trim();if(!text)return;
- let box=document.getElementById('aiChat');
- box.innerHTML+=`<div class="msg user">${text}</div>`;input.value='';box.scrollTop=box.scrollHeight;
+ let input=document.getElementById('inp');
+ let text=input.value.trim();
+ if(!text) return;
+ let box=document.getElementById('chat');
+ box.innerHTML+=`<div class="msg user">${text}</div>`;
+ input.value='';
+ box.scrollTop=box.scrollHeight;
 
- // صور
- if(/صمم|صور|صورة|صوره|ارسم|رسم|قط|بيت|image|draw|cat|house|picture/i.test(text)){
-   let id='img'+Date.now();
-   box.innerHTML+=`<div class="msg ai">🎨 بصمم ليك من موتور دبرها...<br><img src="https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=768&height=768&nologo=true&seed=${Date.now()}" loading="lazy"></div>`;
-   box.scrollTop=box.scrollHeight;
+ // لو طلب صورة
+ if(/صمم|صور|صورة|ارسم|cat|قط|بيت|house|image|draw|رسم/i.test(text)){
+   let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=512&height=512&nologo=true&seed=${Date.now()}`;
+   box.innerHTML+=`<div class="msg ai">🎨 بصمم ليك...<br><img src="${url}" onload="document.getElementById('chat').scrollTop=99999"></div>`;
    return;
  }
 
- let id='ai'+Date.now();
- box.innerHTML+=`<div id="${id}" class="msg ai">🌍 بفتش في كل مواقع العالم... ⏳</div>`;
+ let id='a'+Date.now();
+ box.innerHTML+=`<div id="${id}" class="msg ai">⏳ بفكر...</div>`;
  box.scrollTop=box.scrollHeight;
 
  try{
-   let res = await fetch(BACKEND_URL,{
-     method:'POST',
-     headers:{'Content-Type':'application/json'},
-     body: JSON.stringify({message: text})
+   // نستخدم API مجاني بدون مفتاح - يشتغل في التطبيق
+   let prompt = `أنت دبرها مساعد سوداني ذكي، جاوب باختصار مفيد بنفس لغة المستخدم. السؤال: ${text}`;
+   let res = await fetch('https://text.pollinations.ai/openai', {
+     method: 'POST',
+     headers: {'Content-Type':'application/json'},
+     body: JSON.stringify({
+       messages: [{role:'user', content: prompt}],
+       model: 'openai',
+       stream: false
+     })
    });
-   
-   if(!res.ok){
-     let txt = await res.text();
-     throw new Error(txt.slice(0,200));
-   }
-   
-   let data = await res.json();
-   let reply = data.reply || data.response || data.text || data.answer || data.message || JSON.stringify(data);
 
-   // كتابة كلمة كلمة زي ChatGPT
-   let el=document.getElementById(id);
-   el.innerHTML='';
-   let i=0;
-   let iv=setInterval(()=>{
-     el.textContent=reply.slice(0,i++);
-     box.scrollTop=box.scrollHeight;
-     if(i>reply.length){
-       clearInterval(iv);
-       el.innerHTML = reply + `<div class="source">🌍 تم البحث عبر موتور دبرها - Gemini • يجيب بأي لغة</div>`;
-     }
-   },12);
+   let data = await res.json();
+   let reply = data.choices?.[0]?.message?.content || data.content || JSON.stringify(data);
+
+   document.getElementById(id).textContent = reply;
 
  }catch(e){
-   document.getElementById(id).innerHTML=`❌ الموتور نايم شوية (Render بينوم بعد 15 دقيقة)<br>ادخل الرابط ده أول مرة عشان يصحى:<br><a href="https://dabbarha-android-4.onrender.com/" target="_blank" style="color:#00F5FF">https://dabbarha-android-4.onrender.com/</a><br><br>بعد ما يفتح، ارجع جرب تاني<br><br>خطأ: ${e.message}`;
+   // لو فشل، جرب طريقة تانية
+   try{
+     let p = encodeURIComponent(text);
+     let r2 = await fetch(`https://text.pollinations.ai/${p}?model=openai`);
+     let t2 = await r2.text();
+     document.getElementById(id).textContent = t2;
+   }catch(e2){
+     document.getElementById(id).innerHTML = `❌ ما قدر يتصل:<br>${e2}<br><br>تأكد النت شغال وجرب تاني`;
+   }
  }
  box.scrollTop=box.scrollHeight;
 }
