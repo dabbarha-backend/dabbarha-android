@@ -1,678 +1,148 @@
 from pathlib import Path
 
-html = r'''<!DOCTYPE html>
+html = r'''<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#070707">
-  <meta name="mobile-web-app-capable" content="yes">
-  <title>دبّرها | DABBARHA</title>
-
-  <!-- إعدادات المشروع الأصلية -->
-  <script src="config.js"></script>
-
-  <style>
-    *{
-      box-sizing:border-box;
-      -webkit-tap-highlight-color:transparent;
-    }
-
-    :root{
-      --bg:#050505;
-      --bg2:#0b0b0b;
-      --card:#111111;
-      --card2:#161616;
-      --gold:#d4af37;
-      --gold2:#f5d76e;
-      --gold3:#9d7b18;
-      --text:#fffaf0;
-      --muted:#aaa08b;
-      --line:rgba(212,175,55,.22);
-      --shadow:0 15px 45px rgba(0,0,0,.55);
-    }
-
-    html,body{
-      margin:0;
-      padding:0;
-      min-height:100%;
-      background:
-        radial-gradient(circle at 50% -10%, rgba(212,175,55,.13), transparent 34%),
-        radial-gradient(circle at 100% 40%, rgba(212,175,55,.06), transparent 30%),
-        var(--bg);
-      color:var(--text);
-      font-family:Tahoma, Arial, sans-serif;
-    }
-
-    body{
-      min-height:100vh;
-      overflow-x:hidden;
-    }
-
-    button,a{
-      font:inherit;
-    }
-
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
-
-    .app{
-      width:100%;
-      max-width:720px;
-      margin:auto;
-      min-height:100vh;
-      padding-bottom:92px;
-    }
-
-    /* ===== Header ===== */
-    .top{
-      position:sticky;
-      top:0;
-      z-index:50;
-      padding:14px 16px 12px;
-      background:rgba(5,5,5,.86);
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-      border-bottom:1px solid var(--line);
-    }
-
-    .top-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:11px;
-      min-width:0;
-    }
-
-    .logo{
-      width:50px;
-      height:50px;
-      border-radius:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex:0 0 50px;
-      color:#080808;
-      font-size:27px;
-      font-weight:1000;
-      font-family:Georgia,serif;
-      background:
-        linear-gradient(145deg,#fff2a8 0%,#f5d76e 18%,#d4af37 45%,#9d7413 70%,#f1d36a 100%);
-      border:1px solid rgba(255,244,180,.7);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.7),
-        inset 0 -5px 10px rgba(70,40,0,.28),
-        0 0 25px rgba(212,175,55,.18);
-    }
-
-    .brand-title{
-      font-weight:1000;
-      font-size:20px;
-      white-space:nowrap;
-      background:linear-gradient(90deg,#fff4b2,#d4af37,#fff0a0);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    .brand-sub{
-      font-size:11px;
-      color:var(--muted);
-      margin-top:3px;
-    }
-
-    .status{
-      display:flex;
-      align-items:center;
-      gap:6px;
-      padding:8px 10px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:rgba(212,175,55,.06);
-      font-size:11px;
-      color:#d9c78d;
-      white-space:nowrap;
-    }
-
-    .dot{
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      background:#d4af37;
-      box-shadow:0 0 10px #d4af37;
-    }
-
-    /* ===== Hero ===== */
-    .hero{
-      margin:18px 16px 16px;
-      padding:24px 20px;
-      position:relative;
-      overflow:hidden;
-      border:1px solid rgba(212,175,55,.28);
-      border-radius:27px;
-      background:
-        radial-gradient(circle at 15% 0%,rgba(245,215,110,.18),transparent 35%),
-        linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.015)),
-        #0d0d0d;
-      box-shadow:var(--shadow);
-    }
-
-    .hero:before{
-      content:"D";
-      position:absolute;
-      left:-15px;
-      bottom:-45px;
-      font-family:Georgia,serif;
-      font-size:170px;
-      font-weight:900;
-      line-height:1;
-      color:rgba(212,175,55,.035);
-      pointer-events:none;
-    }
-
-    .crown{
-      color:#e9ca63;
-      font-size:13px;
-      margin-bottom:8px;
-      letter-spacing:.7px;
-    }
-
-    .hero h1{
-      margin:0;
-      font-size:29px;
-      line-height:1.25;
-      font-weight:1000;
-      color:#fff8df;
-    }
-
-    .hero h1 span{
-      background:linear-gradient(90deg,#fff4b0,#d4af37,#fff0a0);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-
-    .hero p{
-      margin:10px 0 0;
-      color:#b9b09e;
-      line-height:1.8;
-      font-size:13px;
-      max-width:560px;
-    }
-
-    .hero-actions{
-      display:flex;
-      gap:9px;
-      margin-top:17px;
-      flex-wrap:wrap;
-    }
-
-    .gold-btn,
-    .dark-btn{
-      border-radius:14px;
-      min-height:45px;
-      padding:0 17px;
-      border:1px solid var(--line);
-      cursor:pointer;
-      font-weight:900;
-      transition:.18s ease;
-    }
-
-    .gold-btn{
-      color:#080808;
-      border-color:#e7ca64;
-      background:linear-gradient(145deg,#fff0a0,#d4af37 48%,#a67e1c);
-      box-shadow:0 7px 22px rgba(212,175,55,.15);
-    }
-
-    .dark-btn{
-      color:#eee2bd;
-      background:#111;
-    }
-
-    .gold-btn:active,.dark-btn:active{
-      transform:scale(.97);
-    }
-
-    /* ===== Section ===== */
-    .section{
-      padding:0 16px;
-      margin-top:20px;
-    }
-
-    .section-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:11px;
-    }
-
-    .section-title{
-      font-size:17px;
-      font-weight:1000;
-      color:#f7e8b3;
-    }
-
-    .section-note{
-      color:#7f786b;
-      font-size:11px;
-    }
-
-    /* ===== Cards ===== */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:11px;
-    }
-
-    .card{
-      position:relative;
-      overflow:hidden;
-      min-height:132px;
-      padding:17px;
-      border-radius:21px;
-      border:1px solid var(--line);
-      background:
-        linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012)),
-        #101010;
-      box-shadow:0 9px 28px rgba(0,0,0,.34);
-      cursor:pointer;
-      transition:transform .18s ease,border-color .18s ease;
-    }
-
-    .card:active{
-      transform:scale(.975);
-    }
-
-    .card:after{
-      content:"";
-      position:absolute;
-      width:90px;
-      height:90px;
-      left:-35px;
-      bottom:-42px;
-      border-radius:50%;
-      background:rgba(212,175,55,.07);
-      filter:blur(4px);
-    }
-
-    .icon{
-      width:43px;
-      height:43px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border-radius:14px;
-      margin-bottom:12px;
-      font-size:21px;
-      color:#090909;
-      background:linear-gradient(145deg,#fff0a0,#d4af37,#9c7519);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
-    }
-
-    .card h3{
-      margin:0;
-      font-size:15px;
-      color:#f8edc9;
-    }
-
-    .card p{
-      margin:6px 0 0;
-      font-size:11px;
-      line-height:1.55;
-      color:#928a7b;
-    }
-
-    /* ===== Feature strip ===== */
-    .strip{
-      display:flex;
-      gap:9px;
-      overflow-x:auto;
-      padding:2px 1px 8px;
-      scrollbar-width:none;
-    }
-
-    .strip::-webkit-scrollbar{
-      display:none;
-    }
-
-    .mini{
-      flex:0 0 148px;
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#101010;
-    }
-
-    .mini strong{
-      display:block;
-      color:#e9cf72;
-      font-size:13px;
-      margin-bottom:5px;
-    }
-
-    .mini span{
-      color:#817b70;
-      font-size:10px;
-      line-height:1.5;
-    }
-
-    /* ===== Footer nav ===== */
-    .bottom{
-      position:fixed;
-      z-index:60;
-      left:50%;
-      bottom:10px;
-      transform:translateX(-50%);
-      width:min(680px,calc(100% - 20px));
-      padding:8px;
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:5px;
-      border:1px solid rgba(212,175,55,.25);
-      border-radius:22px;
-      background:rgba(12,12,12,.92);
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-      box-shadow:0 15px 45px rgba(0,0,0,.7);
-    }
-
-    .nav-btn{
-      min-height:56px;
-      border:0;
-      border-radius:16px;
-      color:#8f8879;
-      background:transparent;
-      cursor:pointer;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      font-size:10px;
-    }
-
-    .nav-btn b{
-      font-size:18px;
-      line-height:1;
-    }
-
-    .nav-btn.active{
-      color:#0b0b0b;
-      background:linear-gradient(145deg,#fff0a0,#d4af37,#a67d1b);
-      box-shadow:0 5px 18px rgba(212,175,55,.16);
-    }
-
-    /* ===== Toast ===== */
-    #toast{
-      position:fixed;
-      z-index:100;
-      left:50%;
-      bottom:88px;
-      transform:translate(-50%,20px);
-      opacity:0;
-      pointer-events:none;
-      max-width:calc(100% - 35px);
-      padding:11px 15px;
-      border-radius:13px;
-      border:1px solid rgba(212,175,55,.35);
-      background:#141414;
-      color:#f2df9d;
-      font-size:12px;
-      text-align:center;
-      transition:.25s ease;
-    }
-
-    #toast.show{
-      opacity:1;
-      transform:translate(-50%,0);
-    }
-
-    @media(max-width:380px){
-      .brand-title{font-size:17px}
-      .hero h1{font-size:25px}
-      .grid{gap:8px}
-      .card{padding:14px;min-height:125px}
-      .status{display:none}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#050505">
+<title>دبّرها | DABBARHA</title>
+<script src="config.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#050505;--c:#101010;--c2:#171717;--g:#d4af37;--g2:#ffe88a;--tx:#fff8df;--mut:#968e7e;--ln:rgba(212,175,55,.25)}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,rgba(212,175,55,.18),transparent 34%),#050505;color:var(--tx);font-family:Tahoma,Arial,sans-serif}
+body{padding-bottom:90px}.wrap{max-width:760px;margin:auto}
+button,input,textarea{font:inherit}button{cursor:pointer}
+header{position:sticky;top:0;z-index:50;padding:12px 15px;background:rgba(5,5,5,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--ln)}
+.head{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}
+.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;color:#080808;font:bold 30px Georgia;background:linear-gradient(145deg,#fff5b0,#d4af37 48%,#976e13);box-shadow:inset 0 1px 0 #fff,0 0 25px rgba(212,175,55,.18)}
+.brand b{font-size:20px;background:linear-gradient(90deg,#fff2a4,#d4af37,#fff2a4);-webkit-background-clip:text;color:transparent}.brand small{display:block;color:var(--mut);font-size:10px;margin-top:4px}
+.status{border:1px solid var(--ln);border-radius:20px;padding:8px 10px;color:#ddca81;font-size:11px}.status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g);margin-left:5px}
+.hero{margin:17px 15px;padding:23px 19px;border:1px solid var(--ln);border-radius:27px;background:radial-gradient(circle at 10% 0,rgba(255,232,138,.15),transparent 35%),#0e0e0e;box-shadow:0 18px 50px #000}
+.tiny{color:#e4c65b;font-size:12px;margin-bottom:8px}.hero h1{margin:0;font-size:28px;line-height:1.35}.hero h1 span{color:var(--g)}.hero p{color:#aaa18f;font-size:13px;line-height:1.8;margin:9px 0 16px}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.gold,.dark{min-height:45px;border-radius:14px;padding:0 17px;font-weight:bold}.gold{border:1px solid #ebcf6c;color:#090909;background:linear-gradient(145deg,#fff1a0,#d4af37,#a37716)}.dark{border:1px solid var(--ln);color:#e7d79d;background:#121212}
+.section{padding:0 15px;margin-top:20px}.title{font-size:17px;font-weight:bold;color:#f1dc95;margin-bottom:11px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{display:block;min-height:128px;padding:16px;border:1px solid var(--ln);border-radius:20px;background:linear-gradient(145deg,#171717,#0d0d0d);box-shadow:0 10px 28px #0008;color:inherit;text-decoration:none}.card:active{transform:scale(.97)}
+.icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#fff0a0,#d4af37,#9c7317);color:#090909;font-weight:bold;font-size:20px;margin-bottom:11px}.card h3{margin:0;font-size:14px;color:#f6e9be}.card p{margin:6px 0 0;font-size:10px;line-height:1.55;color:#8f887b}
+.panel{display:none;margin:16px 15px 0;border:1px solid var(--ln);border-radius:23px;background:#0b0b0b;overflow:hidden}.panel-head{padding:15px;border-bottom:1px solid var(--ln);font-weight:bold;color:#e7ce6c}.messages{min-height:260px;max-height:48vh;overflow:auto;padding:12px}.msg{max-width:90%;padding:11px 13px;border-radius:15px;margin:8px 0;font-size:13px;line-height:1.8;white-space:pre-wrap}.ai{margin-left:auto;background:#15130e;border:1px solid var(--ln);color:#f6eac5}.me{margin-right:auto;background:#191919;border:1px solid #292929;color:#eee}.composer{display:flex;gap:7px;padding:10px;border-top:1px solid var(--ln)}textarea{flex:1;min-height:47px;max-height:130px;resize:none;border-radius:14px;border:1px solid #342b19;background:#070707;color:#fff;padding:12px;outline:none}.send{width:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#fff0a0,#d4af37);color:#080808;font-weight:bold}
+.voicebox{padding:15px}.voice-status{color:#a89f8e;font-size:12px;line-height:1.7;min-height:42px}.voice-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.bottom{position:fixed;z-index:60;bottom:9px;left:50%;transform:translateX(-50%);width:min(700px,calc(100% - 18px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px;border:1px solid var(--ln);border-radius:22px;background:rgba(12,12,12,.95);backdrop-filter:blur(18px);box-shadow:0 12px 40px #000}
+.nav{min-height:54px;border:0;border-radius:15px;background:transparent;color:#8e8778;font-size:10px}.nav b{display:block;font-size:18px;margin-bottom:3px}.nav.active{color:#080808;background:linear-gradient(145deg,#fff0a0,#d4af37,#a67c1a)}
+#toast{position:fixed;z-index:100;bottom:82px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#151515;border:1px solid var(--ln);color:#f0da8a;padding:10px 14px;border-radius:13px;font-size:12px;transition:.2s;max-width:90%;text-align:center}#toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:380px){.hero h1{font-size:24px}.grid{gap:7px}.card{padding:13px}}
+</style>
 </head>
-
 <body>
+<div class="wrap">
+<header><div class="head"><div class="brand"><div class="logo">D</div><div><b>دبّرها</b><small>DABBARHA • المساعد الذكي</small></div></div><div class="status"><i></i>متصل</div></div></header>
 
-<div class="app">
+<section class="hero">
+<div class="tiny">✦ ذكاء اصطناعي • أدوات • ترجمة • صوت</div>
+<h1>كل شيء في <span>دبّرها</span></h1>
+<p>واجهة فاخرة مرتبطة بالـBackend الموجود في مشروعك. المحادثة تستخدم المسار الحقيقي <b>/api/chat</b>.</p>
+<div class="actions"><button class="gold" onclick="show('chat')">✦ ابدأ المحادثة</button><button class="dark" onclick="go('image.html')">◈ الصور</button></div>
+</section>
 
-  <!-- رأس التطبيق -->
-  <header class="top">
-    <div class="top-row">
-      <div class="brand">
-        <div class="logo">D</div>
-        <div>
-          <div class="brand-title">دبّرها</div>
-          <div class="brand-sub">DABBARHA • مساعدك الذكي</div>
-        </div>
-      </div>
+<section class="section"><div class="title">الخدمات</div><div class="grid">
+<div class="card" onclick="show('chat')"><div class="icon">✦</div><h3>المساعد الذكي</h3><p>محادثة حقيقية مع Gemini عبر الخادم.</p></div>
+<a class="card" href="image.html"><div class="icon">◈</div><h3>الصور</h3><p>صفحة الصور الأصلية في مشروعك.</p></a>
+<a class="card" href="translation.html"><div class="icon">文</div><h3>الترجمة</h3><p>صفحة الترجمة الأصلية.</p></a>
+<a class="card" href="games.html"><div class="icon">♛</div><h3>الألعاب</h3><p>الألعاب والألغاز الأصلية.</p></a>
+<a class="card" href="money.html"><div class="icon">₿</div><h3>المال</h3><p>أدوات المال الموجودة في التطبيق.</p></a>
+<div class="card" onclick="show('voice')"><div class="icon">◉</div><h3>الصوت</h3><p>تحويل كلامك إلى نص وإرساله للمساعد.</p></div>
+</div></section>
 
-      <div class="status">
-        <span class="dot"></span>
-        <span>متصل</span>
-      </div>
-    </div>
-  </header>
+<section id="chat" class="panel">
+<div class="panel-head">✦ دبّرها — Gemini</div>
+<div id="messages" class="messages"><div class="msg ai">أهلاً بك 👋<br>اكتب رسالتك وسأرسلها إلى Gemini عبر الخادم.</div></div>
+<div class="composer"><textarea id="message" placeholder="اكتب رسالتك..." onkeydown="key(event)"></textarea><button id="send" class="send" onclick="send()">➤</button></div>
+</section>
 
-  <!-- الواجهة الرئيسية -->
-  <main>
-
-    <section class="hero">
-      <div class="crown">✦ تجربة فاخرة وذكية</div>
-      <h1>أهلاً بك في <span>دبّرها</span></h1>
-      <p>
-        كل أدواتك الذكية في مكان واحد: مساعد ذكي، صور، ترجمة، صوت،
-        ألعاب، دراسة وإدارة المال.
-      </p>
-
-      <div class="hero-actions">
-        <button class="gold-btn" onclick="openPage('chat.html')">ابدأ مع المساعد</button>
-        <button class="dark-btn" onclick="openPage('image.html')">إنشاء صورة</button>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div class="section-title">الخدمات الذكية</div>
-        <div class="section-note">كل شيء أمامك</div>
-      </div>
-
-      <div class="grid">
-
-        <a class="card" href="chat.html">
-          <div class="icon">✦</div>
-          <h3>المساعد الذكي</h3>
-          <p>تحدث مع المساعد واستخدم وظائف الذكاء الموجودة في مشروعك.</p>
-        </a>
-
-        <a class="card" href="image.html">
-          <div class="icon">◈</div>
-          <h3>الصور</h3>
-          <p>افتح صفحة الصور الموجودة في التطبيق.</p>
-        </a>
-
-        <a class="card" href="translation.html">
-          <div class="icon">文</div>
-          <h3>الترجمة</h3>
-          <p>ترجمة النصوص من خلال صفحة الترجمة الأصلية.</p>
-        </a>
-
-        <a class="card" href="games.html">
-          <div class="icon">♛</div>
-          <h3>الألعاب والألغاز</h3>
-          <p>استمتع بالألعاب والألغاز الموجودة في التطبيق.</p>
-        </a>
-
-        <a class="card" href="money.html">
-          <div class="icon">₿</div>
-          <h3>المال</h3>
-          <p>افتح أدوات المال والحسابات الموجودة في مشروعك.</p>
-        </a>
-
-        <a class="card" href="chat.html">
-          <div class="icon">◉</div>
-          <h3>الصوت</h3>
-          <p>استخدم وظائف الصوت من خلال المساعد الموجود في المشروع.</p>
-        </a>
-
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div class="section-title">لماذا دبّرها؟</div>
-        <div class="section-note">مصمم لك</div>
-      </div>
-
-      <div class="strip">
-        <div class="mini">
-          <strong>⚡ سريع</strong>
-          <span>واجهة خفيفة ومناسبة لشاشات الهاتف.</span>
-        </div>
-
-        <div class="mini">
-          <strong>🔒 إعداداتك</strong>
-          <span>يتم تحميل إعدادات الاتصال من config.js الخاص بمشروعك.</span>
-        </div>
-
-        <div class="mini">
-          <strong>✦ فاخر</strong>
-          <span>تصميم أسود وذهبي بلمسة لامعة.</span>
-        </div>
-
-        <div class="mini">
-          <strong>◈ منظم</strong>
-          <span>كل خدمة في صفحة مستقلة حتى لا تتعطل الوظائف الأصلية.</span>
-        </div>
-      </div>
-    </section>
-
-  </main>
+<section id="voice" class="panel">
+<div class="panel-head">◉ الصوت</div>
+<div class="voicebox">
+<div id="voiceStatus" class="voice-status">اضغط على «ابدأ الاستماع» وتحدث بالعربية.</div>
+<div class="voice-actions"><button class="gold" onclick="listen()">🎙️ ابدأ الاستماع</button><button class="dark" onclick="speakLast()">🔊 اقرأ آخر رد</button></div>
+</div>
+</section>
 </div>
 
-<!-- شريط التنقل -->
 <nav class="bottom">
-  <button class="nav-btn active" onclick="goHome()">
-    <b>⌂</b>
-    الرئيسية
-  </button>
-
-  <button class="nav-btn" onclick="openPage('chat.html')">
-    <b>✦</b>
-    المساعد
-  </button>
-
-  <button class="nav-btn" onclick="openPage('image.html')">
-    <b>◈</b>
-    الصور
-  </button>
-
-  <button class="nav-btn" onclick="openPage('translation.html')">
-    <b>文</b>
-    الترجمة
-  </button>
+<button class="nav active" onclick="home()"><b>⌂</b>الرئيسية</button>
+<button class="nav" onclick="show('chat')"><b>✦</b>المساعد</button>
+<button class="nav" onclick="go('image.html')"><b>◈</b>الصور</button>
+<button class="nav" onclick="go('translation.html')"><b>文</b>الترجمة</button>
 </nav>
-
 <div id="toast"></div>
 
 <script>
-  /*
-    ==========================================
-    DABBARHA
-    إعداد الاتصال بالمشروع الأصلي
-    ==========================================
+/* ===== إعداد الاتصال الحقيقي ===== */
+const CFG=window.DABBARHA_CONFIG||{};
+const BACKEND=String(CFG.BACKEND_URL||'').replace(/\/+$/,'');
+const CHAT_URL=BACKEND+'/api/chat';
+let lastAnswer='';
 
-    لا نضع رابط Gemini هنا يدوياً.
-    المشروع يستخدم config.js الموجود في www.
+function toast(x){const t=document.getElementById('toast');t.textContent=x;t.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove('show'),2400)}
+function go(p){location.href=p}
+function home(){document.querySelectorAll('.panel').forEach(x=>x.style.display='none');scrollTo({top:0,behavior:'smooth'})}
+function show(id){document.querySelectorAll('.panel').forEach(x=>x.style.display='none');const p=document.getElementById(id);p.style.display='block';p.scrollIntoView({behavior:'smooth',block:'start'});if(id==='chat')setTimeout(()=>document.getElementById('message').focus(),300)}
+function key(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
+function add(text,who){const d=document.createElement('div');d.className='msg '+who;d.textContent=text;const m=document.getElementById('messages');m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
 
-    الشكل المتوقع في config.js:
-    window.DABBARHA_CONFIG = {
-      BACKEND_URL: "https://..."
-    };
-  */
+/* الرد المتوقع من server.js: نحاول قراءة أكثر من صيغة، وأولها صيغة Gemini */
+function answerOf(d){
+ if(typeof d==='string')return d;
+ if(!d||typeof d!=='object')return '';
+ if(typeof d.answer==='string')return d.answer;
+ if(typeof d.reply==='string')return d.reply;
+ if(typeof d.response==='string')return d.response;
+ if(typeof d.text==='string')return d.text;
+ try{const x=d.candidates?.[0]?.content?.parts?.[0]?.text;if(x)return x}catch(e){}
+ return '';
+}
 
-  const APP_CONFIG =
-    window.DABBARHA_CONFIG || {};
+async function send(){
+ const input=document.getElementById('message'),btn=document.getElementById('send');
+ const text=input.value.trim();if(!text)return;
+ if(!BACKEND){add('لم يتم العثور على BACKEND_URL في config.js.','ai');return}
+ add(text,'me');input.value='';input.disabled=true;btn.disabled=true;
+ const wait=add('جاري الاتصال بـ Gemini...','ai');
+ try{
+  const r=await fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({message:text})});
+  const raw=await r.text();let d;try{d=JSON.parse(raw)}catch(e){d=raw}
+  wait.remove();
+  if(!r.ok){add((d&&typeof d==='object'&&(d.error||d.message))||('خطأ من الخادم: HTTP '+r.status),'ai');return}
+  const a=answerOf(d);
+  if(a){lastAnswer=a;add(a,'ai');}
+  else add('الخادم رد، لكن الواجهة لم تتعرف على صيغة الرد.','ai');
+ }catch(e){wait.remove();add('تعذر الاتصال بالخادم. تأكد من الإنترنت وأن Render يعمل.','ai');console.error(e)}
+ finally{input.disabled=false;btn.disabled=false;input.focus()}
+}
 
-  const BACKEND_URL =
-    APP_CONFIG.BACKEND_URL || "";
+/* ===== صوت حقيقي من الجهاز ===== */
+function listen(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){toast('المتصفح لا يدعم التعرف على الصوت');return}
+ const r=new SR();r.lang='ar-SA';r.interimResults=false;r.maxAlternatives=1;
+ const s=document.getElementById('voiceStatus');s.textContent='🎙️ أستمع الآن...';
+ r.onresult=e=>{const text=e.results[0][0].transcript;s.textContent='تم التعرف: '+text;show('chat');document.getElementById('message').value=text;send()}
+ r.onerror=e=>{s.textContent='تعذر استخدام الميكروفون: '+e.error}
+ r.onend=()=>{if(s.textContent.includes('أستمع'))s.textContent='انتهى الاستماع.'}
+ r.start()
+}
+function speakLast(){
+ if(!lastAnswer){toast('لا يوجد رد لقراءته');return}
+ if(!('speechSynthesis'in window)){toast('الصوت غير مدعوم');return}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang='ar-SA';speechSynthesis.speak(u)
+}
 
-  function showToast(message){
-    const el = document.getElementById("toast");
-    if(!el) return;
-
-    el.textContent = message;
-    el.classList.add("show");
-
-    clearTimeout(window.__toastTimer);
-    window.__toastTimer = setTimeout(() => {
-      el.classList.remove("show");
-    }, 2200);
-  }
-
-  function openPage(page){
-    if(!page) return;
-
-    try{
-      window.location.href = page;
-    }catch(e){
-      showToast("تعذر فتح الصفحة");
-    }
-  }
-
-  function goHome(){
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-  }
-
-  /*
-    فحص إعدادات الاتصال فقط.
-    لا نغيّر API ولا نخترع endpoint جديد هنا.
-    صفحات chat.html / image.html / translation.html
-    تبقى مسؤولة عن وظائفها الأصلية.
-  */
-  window.addEventListener("load", () => {
-    if(!BACKEND_URL){
-      console.warn("DABBARHA_CONFIG.BACKEND_URL غير موجود.");
-    }else{
-      console.log("DABBARHA backend configured.");
-    }
-  });
-
-  /*
-    منع النقر المزدوج السريع على الروابط داخل التطبيق.
-  */
-  document.querySelectorAll("a.card").forEach(card => {
-    card.addEventListener("click", () => {
-      card.style.opacity = ".72";
-      setTimeout(() => {
-        card.style.opacity = "1";
-      }, 350);
-    });
-  });
+window.addEventListener('load',()=>{console.log('Backend:',BACKEND,'Chat:',CHAT_URL);if(!BACKEND)toast('تحذير: تحقق من config.js')})
 </script>
-
 </body>
 </html>
 '''
-
-path = Path("/mnt/data/index.html")
-path.write_text(html, encoding="utf-8")
-print(f"تم إنشاء الملف: {path}")
-print(f"عدد الأحرف: {len(html):,}")
+p=Path("/mnt/data/index_FINAL_COMPLETE.html")
+p.write_text(html,encoding="utf-8")
+print(p)
+print(len(html))
