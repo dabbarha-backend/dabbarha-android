@@ -1,159 +1,98 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>دبرها - الذكاء السوداني</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>دبرها العالمي</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:radial-gradient(circle at 15% 0%, #0a2a5b 0%, #020a1a 100%);color:white;font-family:system-ui,-apple-system,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-.header{padding:12px;text-align:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,195,255,0.2)}
-.header h1{color:#FFD700;font-size:18px;margin-bottom:10px}
-.tabs{display:flex;gap:8px;justify-content:center}
-.tab{padding:8px 16px;border-radius:20px;border:1px solid rgba(0,195,255,0.3);background:rgba(0,0,0,0.3);color:#7cc8ff;cursor:pointer;font-size:13px;transition:0.2s}
-.tab.active{background:rgba(0,195,255,0.25);color:#00F5FF;border-color:#00F5FF;box-shadow:0 0 10px rgba(0,195,255,0.3)}
-.page{display:none;flex:1;overflow:hidden;flex-direction:column}
+body{background:radial-gradient(circle at 15% 0%, #0a2a5b 0%, #020a1a 100%);color:white;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
+.header{padding:12px;text-align:center;background:#00000099;border-bottom:1px solid #00F5FF33}
+.header h1{color:#FFD700;font-size:18px}
+.tabs{display:flex;gap:8px;justify-content:center;margin-top:8px}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid #00F5FF44;background:#0005;color:#7cc8ff;cursor:pointer;font-size:13px}
+.tab.active{background:#00F5FF22;color:#00F5FF;border-color:#00F5FF;box-shadow:0 0 8px #00F5FF55}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
 .page.active{display:flex}
-.chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
-.msg{padding:12px 15px;border-radius:18px;max-width:85%;line-height:1.6;font-size:14px;word-break:break-word;animation:pop 0.2s ease}
-@keyframes pop{from{transform:scale(0.9);opacity:0}to{transform:scale(1);opacity:1}}
-.user{background:linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1));border:1px solid #FFD700;align-self:flex-start;color:#FFE}
-.ai{background:rgba(0,20,50,0.9);border:1px solid rgba(0,195,255,0.3);align-self:flex-end}
-.msg img{width:100%;border-radius:12px;margin-top:10px;display:block}
-.msg small{color:#00F5FF88;font-size:11px;display:block;margin-top:5px}
-.inputBox{display:flex;gap:10px;padding:12px;background:rgba(0,0,0,0.6);border-top:1px solid rgba(0,195,255,0.2);align-items:center}
-.inputBox input{flex:1;padding:13px 18px;border-radius:25px;border:1px solid rgba(0,195,255,0.3);background:rgba(0,20,50,0.9);color:white;outline:none;font-size:14px}
-.inputBox input:focus{border-color:#00F5FF}
-.inputBox button{background:#FFD700;color:black;border:none;width:48px;height:48px;border-radius:50%;font-weight:bold;cursor:pointer;font-size:18px;flex-shrink:0}
-.card{background:rgba(0,20,50,0.6);border:1px solid rgba(0,195,255,0.2);padding:15px;border-radius:15px;margin:12px}
-.card h3{color:#FFD700;margin-bottom:8px}
-.card input{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#000;color:white;margin-top:10px}
-.card button{width:100%;padding:10px;border-radius:10px;border:none;background:#FFD700;font-weight:bold;margin-top:10px;cursor:pointer}
+.chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
+.msg{padding:12px 15px;border-radius:18px;max-width:88%;line-height:1.6;font-size:14px;word-break:break-word}
+.user{background:linear-gradient(135deg,#FFD70022,#FFD70011);border:1px solid #FFD700;align-self:flex-start}
+.ai{background:#0a2a5bEE;border:1px solid #00F5FF33;align-self:flex-end}
+.msg img{width:100%;border-radius:12px;margin-top:10px}
+.source{font-size:11px;color:#00F5FF99;margin-top:8px;border-top:1px solid #ffffff15;padding-top:6px}
+.inputBox{display:flex;gap:10px;padding:12px;background:#000A;border-top:1px solid #00F5FF22}
+.inputBox input{flex:1;padding:13px 18px;border-radius:25px;border:1px solid #00F5FF44;background:#0a2a5b;color:white;outline:none}
+.inputBox button{background:#FFD700;color:black;border:none;width:48px;height:48px;border-radius:50%;font-weight:bold;font-size:18px}
+.card{background:#0a2a5b99;border:1px solid #00F5FF22;padding:15px;border-radius:15px;margin:12px}
 </style>
 </head>
 <body>
-<div class="header">
-<h1>⚡ دبرها - الذكاء السوداني</h1>
-<div class="tabs">
-<button id="tab-ai" class="tab active" onclick="showPage('ai')">🧠 المساعد</button>
-<button id="tab-people" class="tab" onclick="showPage('people')">💬 الناس</button>
-<button id="tab-games" class="tab" onclick="showPage('games')">🎮 أوفلاين</button>
-</div>
+<div class="header"><h1>⚡ دبرها - موتور عالمي شغال ✅</h1>
+<div class="tabs"><button id="tab-ai" class="tab active" onclick="show('ai')">🌍 المساعد العالمي</button><button id="tab-people" class="tab" onclick="show('people')">💬 الناس</button><button id="tab-games" class="tab" onclick="show('games')">🎮 أوفلاين</button></div>
 </div>
 
-<div id="ai" class="page active"><div id="aiChat" class="chat"><div class="msg ai">مرحبا بيك في دبرها! 👋<br>أنا جاهز - اكتب لي أي شي، أو قول لي <b>صمم لي صورة...</b> 🎨</div></div></div>
+<div id="ai" class="page active"><div id="aiChat" class="chat"><div class="msg ai">مرحبا! الموتور شغال ✅<br>أنا دبرها العالمي 🌍<br>بفتش ليك كل مواقع العالم وأجاوب بأي لغة!<br><br>جرب: <b>صمم لي بيت سوداني جميل</b> أو <b>ما هي أخبار الذكاء الاصطناعي اليوم؟</b></div></div></div>
+<div id="people" class="page"><div id="peopleChat" class="chat"><div class="msg ai">💬 دردشة الناس - قريبا أونلاين لايف</div></div></div>
+<div id="games" class="page" style="overflow-y:auto"><div class="card"><h3>🎮 خمن الرقم (أوفلاين)</h3><p id="gText">خمنت رقم من 1-100</p><button onclick="guess()" style="width:100%;padding:10px;background:#FFD700;border:none;border-radius:10px;margin-top:10px;font-weight:bold">جرب حظك</button></div></div>
 
-<div id="people" class="page"><div id="peopleChat" class="chat"><div class="msg ai">💬 دردشة الناس - هنا الناس تتواصل مع بعض (حفظ محلي حاليا، قريبا أونلاين لايف)</div></div></div>
-
-<div id="games" class="page" style="overflow-y:auto">
-<div class="card"><h3>🎮 خمن الرقم (أوفلاين 100%)</h3><p id="gText">خمنت رقم من 1 لي 100، ورينا شطارتك!</p><input id="gInput" type="number" placeholder="اكتب تخمينك"><button onclick="guess()">جرب حظك</button></div>
-<div class="card"><h3>🧩 لغز اليوم (أوفلاين)</h3><p>ما هو الشيء كلما أخذت منه كبر؟<br><b style="color:#00F5FF">الجواب: الحفرة!</b></p></div>
-<div class="card"><h3>🧮 حساب سريع (أوفلاين)</h3><p id="mathQ"></p><input id="mathA" type="number" placeholder="الجواب"><button onclick="checkMath()">تحقق</button></div>
-</div>
-
-<div class="inputBox">
-<input id="mainInput" placeholder="اكتب هنا... صمم لي صورة، دبر لي..." onkeypress="if(event.key==='Enter')send()">
-<button onclick="send()">⚡</button>
-</div>
+<div class="inputBox"><input id="mainInput" placeholder="اسأل بأي لغة... موتورك شغال" onkeypress="if(event.key==='Enter')send()"><button onclick="send()">⚡</button></div>
 
 <script>
+const BACKEND_URL = "https://dabbarha-android-4.onrender.com/api/chat";
+
 let mode='ai';
-function showPage(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
- document.getElementById('tab-'+id).classList.add('active');
- mode=id;
- let inp=document.getElementById('mainInput');
- if(id==='people') inp.placeholder='دردش مع الناس...';
- else if(id==='games') inp.placeholder='الألعاب أوفلاين - ما بتحتاج نت';
- else inp.placeholder='اكتب... صمم لي صورة، دبر لي مشروع...';
-}
-
-let secret=Math.floor(Math.random()*100)+1;
-function guess(){
- let v=parseInt(document.getElementById('gInput').value);
- let t=document.getElementById('gText');
- if(!v) return;
- if(v==secret){t.innerHTML='🎉 مبروك! خمنت صح! عملت رقم جديد'; secret=Math.floor(Math.random()*100)+1}
- else if(v>secret) t.textContent='👇 أقل من كده شوية';
- else t.textContent='👆 أكتر من كده شوية';
- document.getElementById('gInput').value='';
-}
-let m1=Math.floor(Math.random()*20)+1, m2=Math.floor(Math.random()*20)+1;
-document.getElementById('mathQ').textContent=`كم يساوي ${m1} + ${m2} ؟`;
-function checkMath(){
- let v=parseInt(document.getElementById('mathA').value);
- if(v===(m1+m2)){alert('صح! 🎉'); m1=Math.floor(Math.random()*20)+1; m2=Math.floor(Math.random()*20)+1; document.getElementById('mathQ').textContent=`كم يساوي ${m1} + ${m2} ؟`; document.getElementById('mathA').value='';}
- else alert('حاول تاني');
-}
-
-let peopleMsgs=JSON.parse(localStorage.getItem('dabbarha_people')||'[]');
-function renderPeople(){
- let c=document.getElementById('peopleChat');
- c.innerHTML='<div class="msg ai">💬 دردشة الناس - حفظ محلي</div>'+peopleMsgs.map(m=>`<div class="msg ${m.me?'user':'ai'}">${m.text}<small>${m.time}</small></div>`).join('');
- c.scrollTop=c.scrollHeight;
-}
-renderPeople();
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');mode=id;}
+let secret=Math.floor(Math.random()*100)+1;function guess(){let v=prompt('خمن 1-100');let t=document.getElementById('gText');if(v==secret){t.textContent='🎉 مبروك صح!';secret=Math.floor(Math.random()*100)+1}else if(v>secret)t.textContent='👇 أقل';else t.textContent='👆 أكتر';}
 
 async function send(){
- let input=document.getElementById('mainInput');
- let text=input.value.trim(); if(!text) return;
- let box = mode==='ai'? document.getElementById('aiChat') : document.getElementById('peopleChat');
- box.innerHTML+=`<div class="msg user">${text}</div>`;
- input.value='';
- box.scrollTop=box.scrollHeight;
+ let input=document.getElementById('mainInput');let text=input.value.trim();if(!text)return;
+ let box=document.getElementById('aiChat');
+ box.innerHTML+=`<div class="msg user">${text}</div>`;input.value='';box.scrollTop=box.scrollHeight;
 
- if(mode==='people'){
-   let time=new Date().toLocaleTimeString('ar-SD',{hour:'2-digit',minute:'2-digit'});
-   peopleMsgs.push({text,me:true,time});
-   localStorage.setItem('dabbarha_people',JSON.stringify(peopleMsgs));
-   renderPeople();
+ // صور
+ if(/صمم|صور|صورة|صوره|ارسم|رسم|قط|بيت|image|draw|cat|house|picture/i.test(text)){
+   let id='img'+Date.now();
+   box.innerHTML+=`<div class="msg ai">🎨 بصمم ليك من موتور دبرها...<br><img src="https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=768&height=768&nologo=true&seed=${Date.now()}" loading="lazy"></div>`;
+   box.scrollTop=box.scrollHeight;
    return;
  }
- if(mode==='games') return;
 
- // === AI MODE - مصلح ===
- let isImage = text.includes('صمم')||text.includes('صورة')||text.includes('ارسم')||text.toLowerCase().includes('image')||text.toLowerCase().includes('draw');
+ let id='ai'+Date.now();
+ box.innerHTML+=`<div id="${id}" class="msg ai">🌍 بفتش في كل مواقع العالم... ⏳</div>`;
+ box.scrollTop=box.scrollHeight;
 
- if(isImage){
-   let id='img'+Date.now();
-   box.innerHTML+=`<div id="${id}" class="msg ai">🎨 بصمم ليك هسي... ثواني بس<br><img src="https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random()*9999)}" onload="this.parentElement.parentElement.scrollTop=this.parentElement.parentElement.scrollHeight"></div>`;
-   box.scrollTop=box.scrollHeight;
- }else{
-   let id='ai'+Date.now();
-   box.innerHTML+=`<div id="${id}" class="msg ai">⏳ دبرها بيفكر...</div>`;
-   box.scrollTop=box.scrollHeight;
-   try{
-     let resp = await fetch('https://text.pollinations.ai/openai', {
-       method:'POST',
-       headers:{'Content-Type':'application/json'},
-       body: JSON.stringify({
-         model: 'openai',
-         messages: [
-           {role:'system', content:'أنت دبرها، مساعد سوداني ذكي، خفيف، بترد باللهجة السودانية باختصار ومفيد. جاوب مباشر.'},
-           {role:'user', content: text}
-         ],
-         temperature: 0.7
-       })
-     });
-     let data = await resp.json();
-     let reply = data.choices?.[0]?.message?.content || 'ما قدرت ارد، حاول تاني';
-
-     let el=document.getElementById(id);
-     el.textContent='';
-     let i=0;
-     let iv=setInterval(()=>{
-       el.textContent=reply.slice(0,i++);
-       box.scrollTop=box.scrollHeight;
-       if(i>reply.length) clearInterval(iv);
-     },12);
-
-   }catch(e){
-     document.getElementById(id).innerHTML='⚠️ النت تقيل شوية، جرب تاني<br>لو داير صور، اكتب: <b>صمم لي بيت سوداني</b> - الصور شغالة طوالي';
+ try{
+   let res = await fetch(BACKEND_URL,{
+     method:'POST',
+     headers:{'Content-Type':'application/json'},
+     body: JSON.stringify({message: text})
+   });
+   
+   if(!res.ok){
+     let txt = await res.text();
+     throw new Error(txt.slice(0,200));
    }
-   box.scrollTop=box.scrollHeight;
+   
+   let data = await res.json();
+   let reply = data.reply || data.response || data.text || data.answer || data.message || JSON.stringify(data);
+
+   // كتابة كلمة كلمة زي ChatGPT
+   let el=document.getElementById(id);
+   el.innerHTML='';
+   let i=0;
+   let iv=setInterval(()=>{
+     el.textContent=reply.slice(0,i++);
+     box.scrollTop=box.scrollHeight;
+     if(i>reply.length){
+       clearInterval(iv);
+       el.innerHTML = reply + `<div class="source">🌍 تم البحث عبر موتور دبرها - Gemini • يجيب بأي لغة</div>`;
+     }
+   },12);
+
+ }catch(e){
+   document.getElementById(id).innerHTML=`❌ الموتور نايم شوية (Render بينوم بعد 15 دقيقة)<br>ادخل الرابط ده أول مرة عشان يصحى:<br><a href="https://dabbarha-android-4.onrender.com/" target="_blank" style="color:#00F5FF">https://dabbarha-android-4.onrender.com/</a><br><br>بعد ما يفتح، ارجع جرب تاني<br><br>خطأ: ${e.message}`;
  }
+ box.scrollTop=box.scrollHeight;
 }
 </script>
 </body>
