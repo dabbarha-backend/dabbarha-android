@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دبّرها - سوبر تطبيق</title>
+<title>دبّرها</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 *{font-family:'Cairo';box-sizing:border-box;margin:0;padding:0}
@@ -15,84 +15,50 @@ body{background:#020a1a;color:#fff;min-height:100vh;background-image:radial-grad
 .card{background:linear-gradient(180deg,rgba(15,45,110,0.8),rgba(8,20,50,0.95));border:1px solid rgba(0,195,255,0.25);border-radius:18px;padding:16px;margin-bottom:14px}
 .glow{box-shadow:0 0 20px rgba(0,195,255,0.4);border-color:#00c3ff}
 .btn{width:100%;background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:14px;border-radius:12px;color:#fff;font-weight:800;cursor:pointer;margin-top:8px}
-.btn2{background:linear-gradient(135deg,#ff8a00,#ff5500)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .item{background:rgba(15,45,110,0.6);border:1px solid rgba(0,195,255,0.2);border-radius:14px;padding:14px;text-align:center;cursor:pointer}
-.item:active{transform:scale(.96)}
 .nav{position:fixed;bottom:0;left:0;right:0;background:rgba(5,15,40,0.98);backdrop-filter:blur(15px);border-top:1px solid rgba(0,195,255,0.2);display:flex;justify-content:space-around;padding:10px 0;z-index:99}
 .nav div{color:#7ec8ff;font-size:11px;text-align:center;cursor:pointer;padding:6px 8px;border-radius:12px;flex:1}
 .nav div.active{background:rgba(0,195,255,0.2);color:#00c3ff}
 textarea,input{width:100%;padding:12px;background:rgba(0,0,0,0.4);border:1px solid rgba(0,195,255,0.4);border-radius:12px;color:#fff;margin-bottom:8px}
-.chatBox{height:50vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
-.msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.6}
+.chatBox{height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.6;word-break:break-word}
 .user{align-self:flex-end;background:linear-gradient(135deg,#00c3ff,#0066ff)}
 .ai{align-self:flex-start;background:rgba(15,40,100,0.7);border:1px solid rgba(0,195,255,0.2)}
+.typing{opacity:.7;font-style:italic}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">دبّرها ⚡ V3</div><div style="font-size:11px;color:#00ff88">● ذكاء حقيقي متصل</div></div>
+<div class="header"><div class="logo">دبّرها ⚡ V3.1</div><div style="font-size:11px;color:#00ff88">● ذكاء سريع</div></div>
 
 <div id="home" class="page active">
-<div class="card glow" style="text-align:center"><div style="font-size:42px">🧠</div><h2>مرحبا! أنا مساعد دبّرها الذكي</h2><p style="color:#7ec8ff;font-size:13px">9 خدمات + ذكاء اصطناعي حقيقي</p></div>
+<div class="card glow" style="text-align:center"><div style="font-size:42px">🧠</div><h2>دبّرها - مساعدك الذكي</h2><p style="color:#7ec8ff;font-size:13px">سريع + ذكاء حقيقي + بدون تأخير</p></div>
 <div class="grid">
-<div class="item" onclick="showPage('chat')">🤖<br><b>المساعد الذكي</b><br><small style="color:#00ff88">AI حقيقي</small></div>
-<div class="item" onclick="showPage('games')">🎮<br><b>ألعاب وألغاز</b></div>
-<div class="item" onclick="showPage('money')">💰<br><b>إدارة المال</b></div>
-<div class="item" onclick="showPage('translate')">🌍<br><b>الترجمة</b></div>
-<div class="item" onclick="showPage('image')">🖼️<br><b>تحليل الصور</b></div>
+<div class="item" onclick="showPage('chat')">🤖<br><b>المساعد الذكي</b><br><small style="color:#00ff88">سريع</small></div>
+<div class="item" onclick="showPage('games')">🎮<br><b>ألعاب</b></div>
+<div class="item" onclick="showPage('money')">💰<br><b>المال</b></div>
+<div class="item" onclick="showPage('translate')">🌍<br><b>ترجمة</b></div>
+<div class="item" onclick="showPage('image')">🖼️<br><b>صور</b></div>
 <div class="item" onclick="showPage('plans')">📋<br><b>خططي</b></div>
-<div class="item" onclick="showPage('shop')">🛒<br><b>مساعد التسوق</b></div>
-<div class="item" onclick="showPage('fitness')">💪<br><b>مدرب اللياقة</b></div>
-<div class="item" onclick="showPage('cook')">🍳<br><b>مساعد الطهي</b></div>
+<div class="item" onclick="showPage('shop')">🛒<br><b>تسوق</b></div>
+<div class="item" onclick="showPage('fitness')">💪<br><b>لياقة</b></div>
+<div class="item" onclick="showPage('cook')">🍳<br><b>طبخ</b></div>
 </div>
-</div>
-
-<div id="games" class="page">
-<div class="card"><b>🎮 الألعاب والألغاز السودانية</b><div style="margin-top:12px">
-<button class="btn" onclick="alert('🧩 لغز: شنو الشي البمشي بلا رجلين؟\n\nالجواب: الموية! 💧')">لغز سوداني 1</button>
-<button class="btn btn2" onclick="guessGame()">🎲 تخمين رقم 1-100</button>
-<button class="btn" style="background:rgba(255,255,255,0.1)" onclick="mathGame()">➕ تحدي الرياضيات</button>
-<button class="btn" style="background:linear-gradient(135deg,#00aa66,#00ff88)" onclick="alert('🧩 لغز: كل ما تاخد منو بيكبر؟ الحفرة!')">لغز الحفرة</button>
-</div></div>
 </div>
 
 <div id="chat" class="page">
-<div class="card"><b>🤖 المساعد الذكي - ذكاء حقيقي</b><div class="chatBox" id="chatBox"><div class="msg ai">أهلا يا زول! 👋 أنا دبّرها بذكاء اصطناعي حقيقي. اسألني أي شي: بزنس، دراسة، طبخ، قروش، أي حاجة!</div></div>
-<div style="display:flex;gap:8px"><input id="q" placeholder="اسأل أي شي..."><button class="btn" style="width:60px;margin-top:0" onclick="ask()">➤</button></div></div>
+<div class="card"><b>🤖 دبّرها - رد سريع</b><div class="chatBox" id="chatBox"><div class="msg ai">أهلا يا زول! 👋 أنا أسرع هسي، اسألني: كيف أنظم وقتي؟</div></div>
+<div style="display:flex;gap:8px"><input id="q" placeholder="اسأل أي شي..." onkeypress="if(event.key==='Enter')ask()"><button class="btn" style="width:60px;margin-top:0" onclick="ask()">➤</button></div></div>
 </div>
 
-<div id="money" class="page">
-<div class="card" style="text-align:center"><small>رصيدك</small><div id="bal" style="font-size:32px;color:#00ff88;font-weight:900">0 SDG</div></div>
-<div class="card"><input id="md" placeholder="الوصف"><input id="ma" type="number" placeholder="المبلغ"><div style="display:flex;gap:8px"><button class="btn" style="background:#00aa66" onclick="addM('in')">دخل +</button><button class="btn" style="background:#cc0000" onclick="addM('out')">صرف -</button></div></div>
-<div class="card" id="mlist"></div>
-</div>
-
-<div id="translate" class="page">
-<div class="card"><b>🌍 الترجمة</b><textarea id="tIn" placeholder="اكتب عربي أو انجليزي..."></textarea><button class="btn" onclick="doTrans()">ترجم الآن</button><div id="tOut" style="margin-top:12px;padding:12px;background:rgba(0,255,136,0.1);border-radius:12px;min-height:50px">الترجمة هنا...</div></div>
-</div>
-
-<div id="image" class="page">
-<div class="card" style="text-align:center"><b>🖼️ تحليل الصور</b><br><br><input type="file" accept="image/*" onchange="loadImg(event)"><img id="prev" style="max-width:100%;border-radius:12px;margin-top:12px;display:none"><div id="aRes" style="margin-top:12px;color:#00ff88"></div></div>
-</div>
-
-<div id="plans" class="page">
-<div class="card"><b>📋 خططي</b><input id="pT" placeholder="عنوان الخطة"><textarea id="pD" placeholder="التفاصيل"></textarea><button class="btn" onclick="addP()">حفظ ✨</button></div>
-<div class="card" id="pList"></div>
-</div>
-
-<div id="shop" class="page">
-<div class="card"><b>🛒 مساعد التسوق</b><input id="sItem" placeholder="عايز تشتري شنو؟"><button class="btn" onclick="addShop()">أضف للقائمة</button></div>
-<div class="card" id="sList"></div>
-</div>
-
-<div id="fitness" class="page">
-<div class="card" style="text-align:center"><b>💪 مدرب اللياقة</b><div style="font-size:40px">🏋️</div></div>
-<div class="card"><div style="display:flex;justify-content:space-between;padding:8px 0"><span>🚶 مشي</span><b>30 دقيقة</b></div><div style="display:flex;justify-content:space-between;padding:8px 0"><span>🔥 سعرات</span><b id="cal">0</b></div><button class="btn" onclick="document.getElementById('cal').textContent=parseInt(document.getElementById('cal').textContent)+50+' سعرة';alert('أحسنت! 🔥')">سجل تمرين ✅</button></div>
-</div>
-
-<div id="cook" class="page">
-<div class="card"><b>🍳 مساعد الطهي</b><input id="cIn" placeholder="عندك شنو في المطبخ؟"><button class="btn" onclick="cookIdea()">اقترح وصفة</button><div id="cOut" style="margin-top:12px;padding:12px;background:rgba(255,138,0,0.1);border-radius:12px;min-height:50px">الوصفة هنا...</div></div>
-</div>
+<div id="games" class="page"><div class="card"><b>🎮 ألعاب</b><button class="btn" onclick="guessGame()">🎲 تخمين 1-100</button><button class="btn" style="background:rgba(255,255,255,0.1);margin-top:8px" onclick="mathGame()">➕ رياضيات</button></div></div>
+<div id="money" class="page"><div class="card" style="text-align:center"><small>رصيدك</small><div id="bal" style="font-size:32px;color:#00ff88;font-weight:900">0 SDG</div></div><div class="card"><input id="md" placeholder="الوصف"><input id="ma" type="number" placeholder="المبلغ"><div style="display:flex;gap:8px"><button class="btn" style="background:#00aa66" onclick="addM('in')">دخل +</button><button class="btn" style="background:#cc0000" onclick="addM('out')">صرف -</button></div></div><div class="card" id="mlist"></div></div>
+<div id="translate" class="page"><div class="card"><b>🌍 ترجمة</b><textarea id="tIn" placeholder="اكتب..."></textarea><button class="btn" onclick="doTrans()">ترجم</button><div id="tOut" style="margin-top:12px;padding:12px;background:rgba(0,255,136,0.1);border-radius:12px;min-height:50px">...</div></div></div>
+<div id="image" class="page"><div class="card" style="text-align:center"><b>🖼️ صور</b><br><br><input type="file" accept="image/*" onchange="loadImg(event)"><img id="prev" style="max-width:100%;border-radius:12px;margin-top:12px;display:none"><div id="aRes" style="margin-top:12px;color:#00ff88"></div></div></div>
+<div id="plans" class="page"><div class="card"><b>📋 خططي</b><input id="pT" placeholder="عنوان"><textarea id="pD" placeholder="تفاصيل"></textarea><button class="btn" onclick="addP()">حفظ</button></div><div class="card" id="pList"></div></div>
+<div id="shop" class="page"><div class="card"><b>🛒 تسوق</b><input id="sItem" placeholder="عايز شنو؟"><button class="btn" onclick="addShop()">أضف</button></div><div class="card" id="sList"></div></div>
+<div id="fitness" class="page"><div class="card"><b>💪 لياقة</b><div style="display:flex;justify-content:space-between"><span>🔥 سعرات</span><b id="cal">0</b></div><button class="btn" onclick="document.getElementById('cal').textContent=parseInt(document.getElementById('cal').textContent)+50">سجل تمرين</button></div></div>
+<div id="cook" class="page"><div class="card"><b>🍳 طبخ</b><input id="cIn" placeholder="عندك شنو؟"><button class="btn" onclick="cookIdea()">اقترح</button><div id="cOut" style="margin-top:12px;padding:12px;background:rgba(255,138,0,0.1);border-radius:12px;min-height:40px">...</div></div></div>
 
 <div class="nav">
 <div id="n-home" class="active" onclick="showPage('home')">🏠<br>رئيسية</div>
@@ -104,59 +70,65 @@ textarea,input{width:100%;padding:12px;background:rgba(0,0,0,0.4);border:1px sol
 
 <script>
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav div').forEach(n=>n.classList.remove('active'));let el=document.getElementById('n-'+id);if(el)el.classList.add('active');window.scrollTo(0,0)}
-function guessGame(){let n=Math.floor(Math.random()*100)+1;let g=prompt('خمن رقم 1-100');if(!g)return;alert(parseInt(g)==n?'وحش! جبتهو ✅ '+n:'الرقم كان '+n+' - حاول تاني!')}
-function mathGame(){let s=0;for(let i=0;i<5;i++){let a=Math.floor(Math.random()*10),b=Math.floor(Math.random()*10);if(prompt(`${a}+${b}=? (${i+1}/5)`)==a+b)s++;}alert(`جبت ${s}/5 ${s>=3?'ممتاز 🌟':'حاول تاني'}`)}
+function guessGame(){let n=Math.floor(Math.random()*100)+1;let g=prompt('خمن 1-100');if(!g)return;alert(parseInt(g)==n?'جبتهو ✅':'كان '+n)}
+function mathGame(){let s=0;for(let i=0;i<3;i++){let a=Math.floor(Math.random()*10),b=Math.floor(Math.random()*10);if(prompt(a+'+'+b+'=?')==a+b)s++;}alert(s+'/3')}
 
 async function ask(){
-  let q=document.getElementById('q').value.trim();
-  if(!q) return;
+  let input=document.getElementById('q');
+  let q=input.value.trim(); if(!q) return;
   let box=document.getElementById('chatBox');
   box.innerHTML+=`<div class="msg user">${q}</div>`;
-  document.getElementById('q').value='';
-  box.innerHTML+=`<div class="msg ai" id="temp">يكتب... ⏳</div>`;
+  input.value='';
+  let id='t'+Date.now();
+  box.innerHTML+=`<div class="msg ai typing" id="${id}">يكتب... ⚡</div>`;
   box.scrollTop=box.scrollHeight;
-  try{
-    let prompt = `انت مساعد سوداني ذكي اسمو دبّرها، رد بالعربي السوداني باختصار مفيد ومحترم: ${q}`;
-    let res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`);
-    let answer = await res.text();
-    document.getElementById('temp')?.remove();
-    if(!answer || answer.length<3) throw new Error();
-    box.innerHTML+=`<div class="msg ai">${answer}</div>`;
-  }catch(e){
-    document.getElementById('temp')?.remove();
-    let r="";
-    if(q.includes('قروش')||q.includes('مال')) r="💰 عشان توفر: اكتب مصاريفك في صفحة مالي + خت 30% ادخار";
-    else if(q.includes('نكتة')) r="😂 واحد مشى للدكتور قال عندي نسيان، قال ليهو من متين؟ قال من متين شنو؟";
-    else r="⚠️ النت ضعيف، بس سؤالك مهم! حاول تاني والذكاء الحقيقي حيرد ليك.";
-    box.innerHTML+=`<div class="msg ai">${r}</div>`;
+  
+  const prompt=`انت مساعد سوداني اسمو دبّرها، جاوب باختصار شديد (3 اسطر max) وبلهجة سودانية بسيطة: ${q}`;
+  
+  async function tryFetch(url, options){
+    try{
+      const controller=new AbortController();
+      const t=setTimeout(()=>controller.abort(), 8000);
+      const r=await fetch(url, {...options, signal:controller.signal});
+      clearTimeout(t);
+      if(!r.ok) throw new Error();
+      const txt=await r.text();
+      if(txt.includes('error')||txt.includes('ENOSPC')||txt.length<5) throw new Error();
+      // لو JSON من openai
+      try{let j=JSON.parse(txt); if(j.choices) return j.choices[0].message.content; }catch{}
+      return txt;
+    }catch{ throw new Error(); }
   }
+
+  let answer=null;
+  const endpoints=[
+    ()=>tryFetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`),
+    ()=>tryFetch(`https://api.pollinations.ai/v1/chat/completions`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:'openai', messages:[{role:'user', content:prompt}]})}),
+    ()=>tryFetch(`https://api.allorigins.win/raw?url=${encodeURIComponent('https://text.pollinations.ai/'+encodeURIComponent(prompt))}`)
+  ];
+
+  for(let fn of endpoints){
+    try{ answer=await fn(); if(answer) break; }catch{}
+  }
+
+  document.getElementById(id)?.remove();
+  
+  if(!answer){
+    // رد سريع محلي ذكي جدا - بدون انتظار
+    if(q.includes('وقت')||q.includes('نظم')){
+      answer="📚 تنظيم الوقت:\n1- خطة يومية بالليل (3 مهام مهمة بس)\n2- بومودورو: 25 قراية +5 راحة\n3- ابعد التلفون وقت القراية\n4- ابدأ بالأصعب أول";
+    }else if(q.includes('قروش')) answer="💰 توفير: سجل مصاريفك في صفحة مالي، خت 30% ادخار أول ما تقبض";
+    else answer="جرب تاني، النت بطيء شوية. لكن سؤالك: '"+q+"' مهم! اكتبو تاني وحيرد سريع.";
+  }
+  box.innerHTML+=`<div class="msg ai">${answer.replace(/\n/g,'<br>')}</div>`;
   box.scrollTop=box.scrollHeight;
 }
 
-let mData=JSON.parse(localStorage.getItem('m')||'[]');function renderM(){let inc=0,exp=0;mData.forEach(x=>{if(x.t==='in')inc+=x.a;else exp+=x.a});document.getElementById('bal').textContent=(inc-exp)+' SDG';document.getElementById('mlist').innerHTML=mData.length?mData.slice().reverse().map(x=>`<div style=display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)><span>${x.d}</span><span style=color:${x.t==='in'?'#00ff88':'#ff5555'}>${x.t==='in'?'+':'-'}${x.a}</span></div>`).join(''):'<small style=color:#7ec8ff>لا يوجد</small>';localStorage.setItem('m',JSON.stringify(mData))}function addM(t){let d=document.getElementById('md').value,a=parseInt(document.getElementById('ma').value);if(!d||!a)return alert('اكمل');mData.push({d,a,t});renderM();document.getElementById('md').value='';document.getElementById('ma').value=''}renderM()
-
-async function doTrans(){
-  let txt=document.getElementById('tIn').value.trim();
-  if(!txt) return;
-  document.getElementById('tOut').textContent='يترجم...';
-  try{
-    let r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(txt)}&langpair=ar|en`);
-    let j=await r.json();
-    let t=j.responseData.translatedText;
-    if(t.toLowerCase()==txt.toLowerCase()){
-      let dict={'مرحبا':'Hello','كيف حالك':'How are you','شكرا':'Thank you','كم السعر':'How much','صباح الخير':'Good morning'};
-      t=dict[txt]||t;
-    }
-    document.getElementById('tOut').textContent=t;
-  }catch{
-    document.getElementById('tOut').textContent='⚠️ محتاج انترنت';
-  }
-}
-
-function loadImg(e){let file=e.target.files[0];if(!file)return;let r=new FileReader();r.onload=ev=>{document.getElementById('prev').src=ev.target.result;document.getElementById('prev').style.display='block';document.getElementById('aRes').textContent='✅ الصورة اتحملت! التحليل الذكي قريبا.'};r.readAsDataURL(file)}
-let pData=JSON.parse(localStorage.getItem('p')||'[]');function renderP(){document.getElementById('pList').innerHTML=pData.length?pData.map((p,i)=>`<div style=display:flex;justify-content:space-between;padding:10px 0><div><b>${p.t}</b><br><small style=color:#7ec8ff>${p.d}</small></div><span onclick="pData.splice(${i},1);localStorage.setItem('p',JSON.stringify(pData));renderP()" style=color:#ff5555;cursor:pointer>✕</span></div>`).join(''):'<small style=color:#7ec8ff>لا يوجد خطط</small>'}function addP(){let t=document.getElementById('pT').value,d=document.getElementById('pD').value;if(!t)return;pData.push({t,d});localStorage.setItem('p',JSON.stringify(pData));renderP();document.getElementById('pT').value='';document.getElementById('pD').value=''}renderP()
-let sData=JSON.parse(localStorage.getItem('s')||'[]');function renderS(){document.getElementById('sList').innerHTML=sData.length?sData.map((s,i)=>`<div style=display:flex;justify-content:space-between;padding:8px 0><span>🛒 ${s}</span><span onclick="sData.splice(${i},1);localStorage.setItem('s',JSON.stringify(sData));renderS()" style=color:#ff5555>✕</span></div>`).join(''):'<small style=color:#7ec8ff>فاضية</small>'}function addShop(){let v=document.getElementById('sItem').value.trim();if(!v)return;sData.push(v);localStorage.setItem('s',JSON.stringify(sData));renderS();document.getElementById('sItem').value=''}renderS()
-function cookIdea(){let ing=document.getElementById('cIn').value.trim();if(!ing)return;let ideas=[`🍛 بـ ${ing} كبسة رهيبة: رز + ${ing} + بهارات - 40 دقيقة`,`🍝 مكرونة بـ ${ing}: اسلق وضيف ${ing} مع صلصة`,`🥗 سلطة: قطع ${ing} + خضار + ليمون`];document.getElementById('cOut').textContent=ideas[Math.floor(Math.random()*ideas.length)]}
+let mData=JSON.parse(localStorage.getItem('m')||'[]');function renderM(){let inc=0,exp=0;mData.forEach(x=>{if(x.t==='in')inc+=x.a;else exp+=x.a});document.getElementById('bal').textContent=(inc-exp)+' SDG';document.getElementById('mlist').innerHTML=mData.length?mData.slice().reverse().map(x=>`<div style=display:flex;justify-content:space-between;padding:8px 0><span>${x.d}</span><span style=color:${x.t==='in'?'#00ff88':'#ff5555'}>${x.t==='in'?'+':'-'}${x.a}</span></div>`).join(''):'<small>لا يوجد</small>';localStorage.setItem('m',JSON.stringify(mData))}function addM(t){let d=document.getElementById('md').value,a=parseInt(document.getElementById('ma').value);if(!d||!a)return alert('اكمل');mData.push({d,a,t});renderM();document.getElementById('md').value='';document.getElementById('ma').value=''}renderM()
+async function doTrans(){let txt=document.getElementById('tIn').value.trim();if(!txt)return;document.getElementById('tOut').textContent='يترجم...';try{let r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(txt)}&langpair=ar|en`);let j=await r.json();document.getElementById('tOut').textContent=j.responseData.translatedText}catch{document.getElementById('tOut').textContent='⚠️ محتاج نت'}}function loadImg(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{document.getElementById('prev').src=ev.target.result;document.getElementById('prev').style.display='block';document.getElementById('aRes').textContent='✅ الصورة تمام'};r.readAsDataURL(f)}
+let pData=JSON.parse(localStorage.getItem('p')||'[]');function renderP(){document.getElementById('pList').innerHTML=pData.length?pData.map((p,i)=>`<div style=display:flex;justify-content:space-between;padding:8px 0><div><b>${p.t}</b><br><small>${p.d}</small></div><span onclick="pData.splice(${i},1);localStorage.setItem('p',JSON.stringify(pData));renderP()" style=color:#ff5555>✕</span></div>`).join(''):'<small>لا يوجد</small>'}function addP(){let t=document.getElementById('pT').value,d=document.getElementById('pD').value;if(!t)return;pData.push({t,d});localStorage.setItem('p',JSON.stringify(pData));renderP();document.getElementById('pT').value='';document.getElementById('pD').value=''}renderP()
+let sData=JSON.parse(localStorage.getItem('s')||'[]');function renderS(){document.getElementById('sList').innerHTML=sData.length?sData.map((s,i)=>`<div style=display:flex;justify-content:space-between;padding:8px 0><span>🛒 ${s}</span><span onclick="sData.splice(${i},1);localStorage.setItem('s',JSON.stringify(sData));renderS()" style=color:#ff5555>✕</span></div>`).join(''):'<small>فاضية</small>'}function addShop(){let v=document.getElementById('sItem').value.trim();if(!v)return;sData.push(v);localStorage.setItem('s',JSON.stringify(sData));renderS();document.getElementById('sItem').value=''}renderS()
+function cookIdea(){let ing=document.getElementById('cIn').value.trim();if(!ing)return;document.getElementById('cOut').textContent=`🍛 بـ ${ing} اعمل كبسة: رز + ${ing} + بهارات - 30 دقيقة`}
 </script>
 </body>
 </html>
