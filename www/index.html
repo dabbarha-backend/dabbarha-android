@@ -3,83 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: blob: https://* http://* 'unsafe-inline' 'unsafe-eval'">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: blob: https: http: 'unsafe-inline' 'unsafe-eval'">
 <title>دبرها</title>
 <style>
+*{box-sizing:border-box}
 body{margin:0;background:#0f172a;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-.header{background:#020617;padding:12px;text-align:center;border-bottom:1px solid #1e293b}
-.header h1{color:#facc15;font-size:15px;margin:0}
-.chat{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
-.msg{padding:10px 12px;border-radius:12px;max-width:85%;font-size:14px;line-height:1.6;background:#1e293b;border:1px solid #334155}
+.header{background:#020617;padding:12px;text-align:center;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
+.header h1{color:#facc15;font-size:16px;margin:0}
+.header span{font-size:12px;color:#94a3b8}
+.page{flex:1;overflow-y:auto;display:none;padding:10px}
+.page.active{display:flex;flex-direction:column}
+#page-chat.active{display:flex}
+.chat{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:10px}
+.msg{padding:10px 12px;border-radius:14px;max-width:85%;font-size:14px;line-height:1.5;background:#1e293b;border:1px solid #334155;word-wrap:break-word}
 .user{align-self:flex-start;background:#422006;border-color:#facc15}
 .ai{align-self:flex-end}
-.msg img{width:100%;border-radius:8px;margin-top:6px}
-.inputBox{display:flex;gap:6px;padding:10px;background:#020617}
-.inputBox input{flex:1;padding:12px 14px;border-radius:22px;border:1px solid #334155;background:#1e293b;color:#fff;outline:none}
-.inputBox button{background:#facc15;color:#000;border:none;width:42px;height:42px;border-radius:50%;font-weight:bold}
+.msg img{width:100%;border-radius:10px;margin-top:8px;min-height:200px;background:#0f172a}
+.inputBox{display:flex;gap:6px;padding:10px;background:#020617;border-top:1px solid #1e293b}
+.inputBox input{flex:1;padding:12px;border-radius:22px;border:1px solid #334155;background:#1e293b;color:#fff;outline:none}
+.inputBox button{background:#facc15;color:#000;border:none;min-width:44px;height:44px;border-radius:50%;font-weight:bold;font-size:18px}
+.nav{height:60px;background:#020617;border-top:1px solid #1e293b;display:flex;justify-content:space-around;align-items:center}
+.nav div{color:#64748b;font-size:12px;text-align:center;cursor:pointer;padding:5px 15px;border-radius:10px}
+.nav div.active{color:#facc15;background:#1e293b}
+.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:12px;margin:6px 0}
+.btn{width:100%;padding:12px;background:#facc15;color:#000;border:none;border-radius:10px;font-weight:bold;margin-top:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid img{width:100%;border-radius:8px;aspect-ratio:1}
 </style>
 </head>
 <body>
-<div class="header"><h1>⚡ دبرها - شغال 100% بدون موتور</h1></div>
+
+<div class="header">
+<h1>⚡ دبرها</h1>
+<span id="status">جاهز ✅</span>
+</div>
+
+<!-- صفحة الشات -->
+<div id="page-chat" class="page active">
 <div id="chat" class="chat">
-<div class="msg ai">✅ التطبيق فتح!<br>جرب تكتب: كيف انظم وقت دراستي؟</div>
+<div class="msg ai">مرحبا يا زول! 👋<br>أنا دبرها، شغال بدون موتور!<br><br>⚡ سريع<br>🎨 بصمم صور<br>🌍 بأي لغة</div>
 </div>
 <div class="inputBox">
-<input id="inp" placeholder="اسأل هنا..." onkeypress="if(event.key==='Enter')send()">
+<input id="inp" placeholder="اكتب سؤالك..." onkeypress="if(event.key==='Enter')send()">
 <button onclick="send()">↑</button>
+</div>
+</div>
+
+<!-- صفحة الصور -->
+<div id="page-images" class="page">
+<div class="card">
+<h3 style="margin:0 0 8px 0;color:#facc15">🎨 مولد الصور</h3>
+<input id="imgPrompt" placeholder="مثلا: منزل سوداني جميل..." style="width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff">
+<button class="btn" onclick="genImage()">صمم الصورة</button>
+</div>
+<div id="imgResult" class="grid"></div>
+<div style="color:#64748b;font-size:12px;text-align:center;margin-top:10px">الصور من Pollinations مجاني</div>
+</div>
+
+<!-- صفحة حول -->
+<div id="page-about" class="page">
+<div class="card">
+<h3 style="color:#facc15">عن دبرها</h3>
+<p style="font-size:13px;line-height:1.6;color:#cbd5e1">
+تطبيق سوداني ذكي 100% بدون موتور خارجي.<br><br>
+✅ بدون مفتاح Google<br>
+✅ بدون Render<br>
+✅ سريع وخفيف<br>
+✅ يعمل بدون انترنت؟ لا، يحتاج نت بس خفيف<br><br>
+المطور: انت 😎
+</p>
+<button class="btn" onclick="showPage('page-chat')">ابدأ الشات</button>
+</div>
+</div>
+
+<div class="nav">
+<div id="nav-chat" class="active" onclick="showPage('page-chat')">💬<br>شات</div>
+<div id="nav-images" onclick="showPage('page-images')">🎨<br>صور</div>
+<div id="nav-about" onclick="showPage('page-about')">⚙️<br>حول</div>
 </div>
 
 <script>
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.nav div').forEach(n=>n.classList.remove('active'));
+document.getElementById('nav-'+id.split('-')[1]).classList.add('active');
+}
+
+// شات سريع
 async function send(){
- let input=document.getElementById('inp');
- let text=input.value.trim();
- if(!text) return;
- let box=document.getElementById('chat');
- box.innerHTML+=`<div class="msg user">${text}</div>`;
- input.value='';
- box.scrollTop=box.scrollHeight;
+let input=document.getElementById('inp');
+let text=input.value.trim();
+if(!text) return;
+let box=document.getElementById('chat');
+box.innerHTML+=`<div class="msg user">${text}</div>`;
+input.value='';
+box.scrollTop=box.scrollHeight;
 
- // لو طلب صورة
- if(/صمم|صور|صورة|ارسم|cat|قط|بيت|house|image|draw|رسم/i.test(text)){
-   let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=512&height=512&nologo=true&seed=${Date.now()}`;
-   box.innerHTML+=`<div class="msg ai">🎨 بصمم ليك...<br><img src="${url}" onload="document.getElementById('chat').scrollTop=99999"></div>`;
-   return;
- }
+let id='a'+Date.now();
+box.innerHTML+=`<div id="${id}" class="msg ai">⏳ ثانية...</div>`;
+box.scrollTop=box.scrollHeight;
+document.getElementById('status').textContent='بكتب...';
 
- let id='a'+Date.now();
- box.innerHTML+=`<div id="${id}" class="msg ai">⏳ بفكر...</div>`;
- box.scrollTop=box.scrollHeight;
+try{
+let prompt=`جاوب باختصار شديد جدا (سطرين بس) بنفس لغة المستخدم: ${text}`;
+let res=await fetch('https://text.pollinations.ai/openai',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({messages:[{role:'user',content:prompt}],model:'openai-fast',stream:false})
+});
+let data=await res.json();
+let reply=data.choices?.[0]?.message?.content||'حاول تاني';
+document.getElementById(id).textContent=reply;
+}catch(e){
+try{
+let r2=await fetch(`https://text.pollinations.ai/${encodeURIComponent(text)}?model=openai-fast`);
+let t2=await r2.text();
+document.getElementById(id).textContent=t2;
+}catch(e2){document.getElementById(id).textContent='النت ضعيف، جرب تاني';}
+}
+document.getElementById('status').textContent='جاهز ✅';
+box.scrollTop=box.scrollHeight;
+}
 
- try{
-   // نستخدم API مجاني بدون مفتاح - يشتغل في التطبيق
-   let prompt = `أنت دبرها مساعد سوداني ذكي، جاوب باختصار مفيد بنفس لغة المستخدم. السؤال: ${text}`;
-   let res = await fetch('https://text.pollinations.ai/openai', {
-     method: 'POST',
-     headers: {'Content-Type':'application/json'},
-     body: JSON.stringify({
-       messages: [{role:'user', content: prompt}],
-       model: 'openai',
-       stream: false
-     })
-   });
-
-   let data = await res.json();
-   let reply = data.choices?.[0]?.message?.content || data.content || JSON.stringify(data);
-
-   document.getElementById(id).textContent = reply;
-
- }catch(e){
-   // لو فشل، جرب طريقة تانية
-   try{
-     let p = encodeURIComponent(text);
-     let r2 = await fetch(`https://text.pollinations.ai/${p}?model=openai`);
-     let t2 = await r2.text();
-     document.getElementById(id).textContent = t2;
-   }catch(e2){
-     document.getElementById(id).innerHTML = `❌ ما قدر يتصل:<br>${e2}<br><br>تأكد النت شغال وجرب تاني`;
-   }
- }
- box.scrollTop=box.scrollHeight;
+// صور شغالة 100%
+async function genImage(){
+let p=document.getElementById('imgPrompt').value.trim();
+if(!p) return alert('اكتب وصف الصورة');
+let resBox=document.getElementById('imgResult');
+let seed=Math.floor(Math.random()*1000000);
+let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&seed=${seed}&model=flux`;
+resBox.innerHTML=`<div class="card" style="grid-column:1/3">⏳ بصمم: ${p}<br><img src="${url}" onload="this.parentElement.scrollIntoView()" onerror="this.src='https://via.placeholder.com/512?text=حاول+تاني'"></div>`+resBox.innerHTML;
+document.getElementById('imgPrompt').value='';
+showPage('page-images');
 }
 </script>
 </body>
