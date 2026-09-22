@@ -1,141 +1,134 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html dir="rtl" lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: blob: https: http: 'unsafe-inline' 'unsafe-eval'">
-<title>دبرها</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0f172a;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-.header{background:#020617;padding:12px;text-align:center;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center}
-.header h1{color:#facc15;font-size:16px;margin:0}
-.header span{font-size:12px;color:#94a3b8}
-.page{flex:1;overflow-y:auto;display:none;padding:10px}
-.page.active{display:flex;flex-direction:column}
-#page-chat.active{display:flex}
-.chat{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-bottom:10px}
-.msg{padding:10px 12px;border-radius:14px;max-width:85%;font-size:14px;line-height:1.5;background:#1e293b;border:1px solid #334155;word-wrap:break-word}
-.user{align-self:flex-start;background:#422006;border-color:#facc15}
+*{box-sizing:border-box;font-family:system-ui}
+body{margin:0;background:#070509;color:#fff;height:100vh;overflow:hidden}
+.gold{color:#facc15}
+.page{display:none;height:100vh;flex-direction:column;background:radial-gradient(120% 120% at 50% 0%,#2a1f0a 0%,#070509 60%);overflow-y:auto}
+.page.active{display:flex}
+.card{background:linear-gradient(180deg,#1e1608,#0e0b05);border:1px solid #facc1580;border-radius:18px;padding:12px;margin:6px;box-shadow:0 0 20px #facc1520}
+.btn-gold{background:linear-gradient(90deg,#facc15,#fde68a);color:#000;border:none;border-radius:12px;padding:12px;font-weight:900;width:100%}
+.nav{height:62px;background:#020107;border-top:1px solid #facc1530;display:flex;justify-content:space-around;align-items:center;position:sticky;bottom:0}
+.nav div{color:#6b5a2a;font-size:11px;text-align:center;cursor:pointer}
+.nav div.active{color:#facc15}
+.splash{background:url('https://i.imgur.com/8Km9tLL.jpg') center/cover #000;justify-content:flex-end;align-items:center;text-align:center;padding:20px}
+.chat{flex:1;display:flex;flex-direction:column;gap:8px;padding:10px;overflow-y:auto}
+.msg{padding:10px 12px;border-radius:14px;max-width:85%;font-size:13px;line-height:1.6;border:1px solid #facc1540;background:#1a1405}
+.user{align-self:flex-start;background:#3a2a0a;border-color:#facc15}
 .ai{align-self:flex-end}
-.msg img{width:100%;border-radius:10px;margin-top:8px;min-height:200px;background:#0f172a}
-.inputBox{display:flex;gap:6px;padding:10px;background:#020617;border-top:1px solid #1e293b}
-.inputBox input{flex:1;padding:12px;border-radius:22px;border:1px solid #334155;background:#1e293b;color:#fff;outline:none}
-.inputBox button{background:#facc15;color:#000;border:none;min-width:44px;height:44px;border-radius:50%;font-weight:bold;font-size:18px}
-.nav{height:60px;background:#020617;border-top:1px solid #1e293b;display:flex;justify-content:space-around;align-items:center}
-.nav div{color:#64748b;font-size:12px;text-align:center;cursor:pointer;padding:5px 15px;border-radius:10px}
-.nav div.active{color:#facc15;background:#1e293b}
-.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:12px;margin:6px 0}
-.btn{width:100%;padding:12px;background:#facc15;color:#000;border:none;border-radius:10px;font-weight:bold;margin-top:8px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.grid img{width:100%;border-radius:8px;aspect-ratio:1}
+.msg img{width:100%;border-radius:10px;margin-top:6px}
+.input{display:flex;gap:6px;padding:10px;background:#020107;border-top:1px solid #facc1530}
+.input input{flex:1;padding:12px;border-radius:22px;border:1px solid #facc1540;background:#1a1405;color:#fff}
+.input button{width:44px;height:44px;border-radius:50%;background:#facc15;border:none;font-weight:bold}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tool{padding:12px;text-align:center;font-size:12px}
+.tool b{display:block;color:#facc15;margin-top:4px}
+.mic{width:120px;height:120px;border-radius:50%;background:radial-gradient(#facc15,#854d0e);display:flex;align-items:center;justify-content:center;font-size:50px;margin:20px auto;box-shadow:0 0 40px #facc15;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{box-shadow:0 0 20px #facc15}50%{box-shadow:0 0 50px #facc15}100%{box-shadow:0 0 20px #facc15}}
 </style>
 </head>
 <body>
 
-<div class="header">
-<h1>⚡ دبرها</h1>
-<span id="status">جاهز ✅</span>
-</div>
-
-<!-- صفحة الشات -->
-<div id="page-chat" class="page active">
-<div id="chat" class="chat">
-<div class="msg ai">مرحبا يا زول! 👋<br>أنا دبرها، شغال بدون موتور!<br><br>⚡ سريع<br>🎨 بصمم صور<br>🌍 بأي لغة</div>
-</div>
-<div class="inputBox">
-<input id="inp" placeholder="اكتب سؤالك..." onkeypress="if(event.key==='Enter')send()">
-<button onclick="send()">↑</button>
+<!-- 1 Splash -->
+<div id="p-splash" class="page active splash" style="background-image:linear-gradient(to top,#000 10%,transparent 60%),url('/mnt/data/image_20260922_095107.webp');background-size:cover;background-position:center">
+<div style="margin-bottom:30px">
+<h1 style="font-size:42px;color:#facc15;margin:0;text-shadow:0 0 20px gold">دبّرها</h1>
+<p>DABBARHA</p>
+<p style="font-size:12px;color:#fde68a">ذكاء اصطناعي.. لحياة أسهل</p>
+<button class="btn-gold" onclick="go('p-home')" style="margin-top:20px">ابدأ الآن →</button>
 </div>
 </div>
 
-<!-- صفحة الصور -->
-<div id="page-images" class="page">
-<div class="card">
-<h3 style="margin:0 0 8px 0;color:#facc15">🎨 مولد الصور</h3>
-<input id="imgPrompt" placeholder="مثلا: منزل سوداني جميل..." style="width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff">
-<button class="btn" onclick="genImage()">صمم الصورة</button>
+<!-- 2 Home -->
+<div id="p-home" class="page">
+<div style="padding:12px;display:flex;justify-content:space-between;align-items:center"><b>👑 مرحباً بك في دبرها<br><small style="color:#aaa">أنت هنا.. دائما معك</small></b><span>ⓘ</span></div>
+<div class="card" style="text-align:center"><h2 style="color:#facc15;margin:0">D دبرها</h2><small>DABBARHA</small></div>
+<div class="input"><input id="homeIn" placeholder="اكتب سؤالك أو مشكلتك هنا..."><button onclick="askFromHome()">➤</button></div>
+<div class="grid2">
+<div class="card tool">📊<b>المال والعمل</b><small>فرص - دخل - استثمار</small></div>
+<div class="card tool">📚<b>الدراسة</b><small>مذاكرة - ملخصات - حلول</small></div>
+<div class="card tool">📄<b>المستندات</b><small>تواصل - تربية - كتابة</small></div>
+<div class="card tool">🎭<b>الترفيه</b><small>جميع اللغات</small></div>
 </div>
-<div id="imgResult" class="grid"></div>
-<div style="color:#64748b;font-size:12px;text-align:center;margin-top:10px">الصور من Pollinations مجاني</div>
+<div class="grid2" style="padding:0 6px">
+<div class="card tool">🎤 الصوتي</div><div class="card tool">🖼️ الصور</div><div class="card tool">📋 الخطط</div><div class="card tool">⏰ التذكيرات</div>
 </div>
-
-<!-- صفحة حول -->
-<div id="page-about" class="page">
-<div class="card">
-<h3 style="color:#facc15">عن دبرها</h3>
-<p style="font-size:13px;line-height:1.6;color:#cbd5e1">
-تطبيق سوداني ذكي 100% بدون موتور خارجي.<br><br>
-✅ بدون مفتاح Google<br>
-✅ بدون Render<br>
-✅ سريع وخفيف<br>
-✅ يعمل بدون انترنت؟ لا، يحتاج نت بس خفيف<br><br>
-المطور: انت 😎
-</p>
-<button class="btn" onclick="showPage('page-chat')">ابدأ الشات</button>
-</div>
+<div class="nav"><div class="active" onclick="go('p-home')">🏠<br>الرئيسية</div><div onclick="go('p-chat')">💬<br>المحادثات</div><div onclick="go('p-plans')">📋<br>المستندات</div><div onclick="go('p-more')">⚙️<br>المزيد</div></div>
 </div>
 
-<div class="nav">
-<div id="nav-chat" class="active" onclick="showPage('page-chat')">💬<br>شات</div>
-<div id="nav-images" onclick="showPage('page-images')">🎨<br>صور</div>
-<div id="nav-about" onclick="showPage('page-about')">⚙️<br>حول</div>
+<!-- 3 Chat -->
+<div id="p-chat" class="page">
+<div style="padding:10px;border-bottom:1px solid #facc1530;display:flex;gap:10px"><span onclick="go('p-home')">＜</span><b>المساعد الذكي<br><small>دبرها.. دائما معك</small></b></div>
+<div class="card">مرحبا فخري<br>كيف يمكنني مساعدتك اليوم؟<br><br><small>بإمكاني مساعدتك في:</small>
+<div style="margin-top:8px">
+<div class="card">❓ الأسئلة العامة</div>
+<div class="card">🛠️ حل المشكلات</div>
+<div class="card">✍️ كتابة وتحرير النصوص</div>
+<div class="card">📚 دراسة وتلخيص</div>
+<div class="card">🌍 الترجمة بين اللغات</div>
+<div class="card">🖼️ تحليل الصور والمستندات</div>
 </div>
+</div>
+<div id="chat" class="chat"></div>
+<div class="input"><input id="inp" placeholder="اكتب رسالتك هنا..."><button onclick="send()">➤</button></div>
+<div class="nav"><div onclick="go('p-home')">🏠<br>الرئيسية</div><div class="active">💬<br>المحادثات</div><div onclick="go('p-plans')">📋<br>المستندات</div><div onclick="go('p-more')">⚙️<br>المزيد</div></div>
+</div>
+
+<!-- 4 More -->
+<div id="p-more" class="page">
+<div style="padding:10px"><b>المزيد من الأدوات</b><br><small>اكتشف كل ما تحتاجه من أدوات في مكان واحد</small><div class="input" style="margin-top:8px"><input placeholder="ابحث عن أداة...">🔍</div></div>
+<div class="grid2">
+<div class="card tool">💹<b>التسويق</b><small>عروض - خصومات</small></div>
+<div class="card tool">🧠<b>التعلم الذكي</b><small>دورات - اختبارات</small></div>
+<div class="card tool">🍳<b>الطهي</b><small>وصفات - طبخ صحي</small></div>
+<div class="card tool">🏋️<b>الرياضة</b><small>تمارين - لياقة</small></div>
+<div class="card tool">🎮<b>الألعاب</b><small>ترفيه - تحديات</small></div>
+<div class="card tool">💰<b>الاقتصاد</b><small>مباريات - تذكيرات</small></div>
+<div class="card tool">🖼️<b>تخطيط الصور</b><small>استخراج النصوص</small></div>
+<div class="card tool">🤖<b>الذكاء الاصطناعي</b><small>توليد الصور والفيديوهات</small></div>
+</div>
+<div class="card" style="text-align:center">👑 كل الأدوات في مكان واحد<br><small>لأنك تستحق الأفضل</small></div>
+<div class="nav"><div onclick="go('p-home')">🏠<br>الرئيسية</div><div onclick="go('p-chat')">💬<br>المحادثات</div><div onclick="go('p-plans')">📋<br>المستندات</div><div class="active">⚙️<br>المزيد</div></div>
+</div>
+
+<!-- 5 Voice / Images / Plans etc simplified -->
+<div id="p-voice" class="page"><div style="padding:10px" onclick="go('p-home')">＜ محادثة صوتية</div><div class="mic">🎤</div><p style="text-align:center">جاري الاستماع...</p><div style="text-align:center;font-size:30px">〰️〰️〰️</div><div style="display:flex;justify-content:space-around;margin-top:20px"><button onclick="go('p-home')">❌ إيقاف</button><button style="background:#facc15;border-radius:50%;width:60px;height:60px">🎤</button><button>⚙️</button></div></div>
+
+<div id="p-images" class="page"><div style="padding:10px" onclick="go('p-home')">＜ تحليل الصور</div><div class="card" style="height:300px;background:#111 url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400') center/cover"></div><div class="card">✅ تم تحليل الصورة بنجاح<br>المحتوى: طبيعة وجبال<br>الوصف: منظر طبيعي جميل<br>العناصر: جبال - بحيرة - سماء<br>الجودة: عالية</div><div class="input"><input id="imgPrompt2" placeholder="اكتب وصف صورة..."><button onclick="genImage2()">🎨</button></div><div id="imgRes"></div></div>
+
+<div id="p-plans" class="page"><div style="padding:10px">📄 المستندات والترجمة<br><small>فهم - ترجمة - كتابة</small></div><div class="card"><div style="display:flex;gap:6px"><span>🇸🇩 العربية</span>⇄<span>🇬🇧 الإنجليزية</span></div><textarea id="trIn" placeholder="اكتب النص هنا أو ارفع ملف..." style="width:100%;height:80px;background:#000;color:#fff;border:1px solid #facc15;border-radius:8px;margin-top:8px"></textarea><button class="btn-gold" onclick="doTranslate()">ترجمة</button><div id="trOut" class="card" style="min-height:60px"></div></div></div>
+
+<div id="p-saved" class="page"><div style="padding:10px">الخطط المحفوظة</div><div class="card">خطة الدراسة الأسبوعية<br><small>2025-09-18</small></div><div class="card">خطة العمل الحر<br><small>2025-09-17</small></div><div class="card">خطة الصحة واللياقة<br><small>2025-09-15</small></div><button class="btn-gold">+ إنشاء خطة جديدة</button></div>
 
 <script>
-function showPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('.nav div').forEach(n=>n.classList.remove('active'));
-document.getElementById('nav-'+id.split('-')[1]).classList.add('active');
-}
-
-// شات سريع
+function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function askFromHome(){let t=document.getElementById('homeIn').value;if(!t) return;go('p-chat');document.getElementById('inp').value=t;send();}
 async function send(){
-let input=document.getElementById('inp');
-let text=input.value.trim();
-if(!text) return;
-let box=document.getElementById('chat');
-box.innerHTML+=`<div class="msg user">${text}</div>`;
-input.value='';
-box.scrollTop=box.scrollHeight;
-
-let id='a'+Date.now();
-box.innerHTML+=`<div id="${id}" class="msg ai">⏳ ثانية...</div>`;
-box.scrollTop=box.scrollHeight;
-document.getElementById('status').textContent='بكتب...';
-
+let input=document.getElementById('inp');let text=input.value.trim();if(!text) return;
+let box=document.getElementById('chat');box.innerHTML+=`<div class="msg user">${text}</div>`;input.value='';
+let id='a'+Date.now();box.innerHTML+=`<div id="${id}" class="msg ai">⏳ ثانية...</div>`;box.scrollTop=box.scrollHeight;
 try{
-let prompt=`جاوب باختصار شديد جدا (سطرين بس) بنفس لغة المستخدم: ${text}`;
-let res=await fetch('https://text.pollinations.ai/openai',{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({messages:[{role:'user',content:prompt}],model:'openai-fast',stream:false})
-});
-let data=await res.json();
-let reply=data.choices?.[0]?.message?.content||'حاول تاني';
-document.getElementById(id).textContent=reply;
-}catch(e){
-try{
-let r2=await fetch(`https://text.pollinations.ai/${encodeURIComponent(text)}?model=openai-fast`);
-let t2=await r2.text();
-document.getElementById(id).textContent=t2;
-}catch(e2){document.getElementById(id).textContent='النت ضعيف، جرب تاني';}
-}
-document.getElementById('status').textContent='جاهز ✅';
+let res=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`جاوب باختصار (3 أسطر) بنفس لغة المستخدم: ${text}`}],model:'openai-fast'})});
+let data=await res.json();document.getElementById(id).textContent=data.choices?.[0]?.message?.content||'حاول تاني';
+}catch(e){document.getElementById(id).textContent='النت ضعيف، جرب تاني';}
 box.scrollTop=box.scrollHeight;
 }
-
-// صور شغالة 100%
-async function genImage(){
-let p=document.getElementById('imgPrompt').value.trim();
-if(!p) return alert('اكتب وصف الصورة');
-let resBox=document.getElementById('imgResult');
-let seed=Math.floor(Math.random()*1000000);
-let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&seed=${seed}&model=flux`;
-resBox.innerHTML=`<div class="card" style="grid-column:1/3">⏳ بصمم: ${p}<br><img src="${url}" onload="this.parentElement.scrollIntoView()" onerror="this.src='https://via.placeholder.com/512?text=حاول+تاني'"></div>`+resBox.innerHTML;
-document.getElementById('imgPrompt').value='';
-showPage('page-images');
+async function genImage2(){
+let p=document.getElementById('imgPrompt2').value;if(!p) return;
+let box=document.getElementById('imgRes');let url=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&seed=${Date.now()}`;
+box.innerHTML=`<div class="card"><img src="${url}" style="width:100%;border-radius:10px"></div>`+box.innerHTML;
+}
+async function doTranslate(){
+let t=document.getElementById('trIn').value;if(!t) return;
+let out=document.getElementById('trOut');out.textContent='⏳ بترجم...';
+try{
+let res=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:`ترجم هذا النص: ${t}`}],model:'openai-fast'})});
+let data=await res.json();out.textContent=data.choices?.[0]?.message?.content;
+}catch(e){out.textContent='خطأ في الترجمة';}
 }
 </script>
 </body>
