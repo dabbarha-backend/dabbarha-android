@@ -2,88 +2,159 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دبرها</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>دبرها - الذكاء السوداني</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:radial-gradient(circle at 15% 0%, #0a2a5b 0%, #020a1a 70%);color:white;font-family:system-ui;height:100vh;display:flex;flex-direction:column}
-.header{padding:15px;text-align:center;background:rgba(0,0,0,0.3);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,195,255,0.2)}
-.header h1{color:#FFD700;font-size:20px}
-.tabs{display:flex;gap:8px;padding:10px;justify-content:center}
-.tab{padding:8px 16px;border-radius:20px;border:1px solid rgba(0,195,255,0.3);background:rgba(0,0,0,0.3);color:#7cc8ff;cursor:pointer}
-.tab.active{background:rgba(0,195,255,0.2);color:#00F5FF;border-color:#00F5FF}
-.chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
-.msg{padding:12px 15px;border-radius:18px;max-width:85%;line-height:1.5;word-break:break-word}
-.user{background:rgba(255,215,0,0.15);border:1px solid #FFD700;align-self:flex-start}
+body{background:radial-gradient(circle at 15% 0%, #0a2a5b 0%, #020a1a 100%);color:white;font-family:system-ui,-apple-system,sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.header{padding:12px;text-align:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0,195,255,0.2)}
+.header h1{color:#FFD700;font-size:18px;margin-bottom:10px}
+.tabs{display:flex;gap:8px;justify-content:center}
+.tab{padding:8px 16px;border-radius:20px;border:1px solid rgba(0,195,255,0.3);background:rgba(0,0,0,0.3);color:#7cc8ff;cursor:pointer;font-size:13px;transition:0.2s}
+.tab.active{background:rgba(0,195,255,0.25);color:#00F5FF;border-color:#00F5FF;box-shadow:0 0 10px rgba(0,195,255,0.3)}
+.page{display:none;flex:1;overflow:hidden;flex-direction:column}
+.page.active{display:flex}
+.chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.msg{padding:12px 15px;border-radius:18px;max-width:85%;line-height:1.6;font-size:14px;word-break:break-word;animation:pop 0.2s ease}
+@keyframes pop{from{transform:scale(0.9);opacity:0}to{transform:scale(1);opacity:1}}
+.user{background:linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.1));border:1px solid #FFD700;align-self:flex-start;color:#FFE}
 .ai{background:rgba(0,20,50,0.9);border:1px solid rgba(0,195,255,0.3);align-self:flex-end}
-.msg img{width:100%;border-radius:12px;margin-top:10px}
-.inputBox{display:flex;gap:10px;padding:12px;background:rgba(0,0,0,0.5);border-top:1px solid rgba(0,195,255,0.2)}
-.inputBox input{flex:1;padding:12px 18px;border-radius:25px;border:1px solid rgba(0,195,255,0.3);background:rgba(0,20,50,0.8);color:white;outline:none}
-.inputBox button{background:#FFD700;color:black;border:none;width:48px;height:48px;border-radius:50%;font-weight:bold;cursor:pointer}
-.page{display:none;flex:1;overflow-y:auto;padding:15px}
-.page.active{display:flex;flex-direction:column}
-.card{background:rgba(0,20,50,0.6);border:1px solid rgba(0,195,255,0.2);padding:15px;border-radius:15px;margin-bottom:12px}
-.hidden{display:none!important}
+.msg img{width:100%;border-radius:12px;margin-top:10px;display:block}
+.msg small{color:#00F5FF88;font-size:11px;display:block;margin-top:5px}
+.inputBox{display:flex;gap:10px;padding:12px;background:rgba(0,0,0,0.6);border-top:1px solid rgba(0,195,255,0.2);align-items:center}
+.inputBox input{flex:1;padding:13px 18px;border-radius:25px;border:1px solid rgba(0,195,255,0.3);background:rgba(0,20,50,0.9);color:white;outline:none;font-size:14px}
+.inputBox input:focus{border-color:#00F5FF}
+.inputBox button{background:#FFD700;color:black;border:none;width:48px;height:48px;border-radius:50%;font-weight:bold;cursor:pointer;font-size:18px;flex-shrink:0}
+.card{background:rgba(0,20,50,0.6);border:1px solid rgba(0,195,255,0.2);padding:15px;border-radius:15px;margin:12px}
+.card h3{color:#FFD700;margin-bottom:8px}
+.card input{width:100%;padding:10px;border-radius:10px;border:1px solid #333;background:#000;color:white;margin-top:10px}
+.card button{width:100%;padding:10px;border-radius:10px;border:none;background:#FFD700;font-weight:bold;margin-top:10px;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="header"><h1>⚡ دبرها - الذكاء السوداني</h1>
+<div class="header">
+<h1>⚡ دبرها - الذكاء السوداني</h1>
 <div class="tabs">
-<button class="tab active" onclick="show('ai',this)">🧠 المساعد</button>
-<button class="tab" onclick="show('people',this)">💬 الناس</button>
-<button class="tab" onclick="show('games',this)">🎮 أوفلاين</button>
-</div></div>
+<button id="tab-ai" class="tab active" onclick="showPage('ai')">🧠 المساعد</button>
+<button id="tab-people" class="tab" onclick="showPage('people')">💬 الناس</button>
+<button id="tab-games" class="tab" onclick="showPage('games')">🎮 أوفلاين</button>
+</div>
+</div>
 
-<div id="ai" class="page active" style="display:flex"><div id="aiChat" class="chat"></div></div>
-<div id="people" class="page"><div id="peopleChat" class="chat"></div></div>
-<div id="games" class="page">
-<div class="card"><h3>🎮 خمن الرقم (أوفلاين)</h3><p id="gText">خمنت رقم من 1-100، ورينا شطارتك!</p><div style="display:flex;gap:10px;margin-top:10px"><input id="gInput" type="number" placeholder="خمن" style="flex:1;padding:10px;border-radius:10px;border:none"><button onclick="guess()" style="background:#FFD700;padding:10px 20px;border-radius:10px;border:none">جرب</button></div></div>
-<div class="card"><h3>🧩 لغز أوفلاين</h3><p>ما هو الشيء كلما أخذت منه كبر؟<br><b style="color:#00F5FF">الجواب: الحفرة</b></p></div>
+<div id="ai" class="page active"><div id="aiChat" class="chat"><div class="msg ai">مرحبا بيك في دبرها! 👋<br>أنا جاهز - اكتب لي أي شي، أو قول لي <b>صمم لي صورة...</b> 🎨</div></div></div>
+
+<div id="people" class="page"><div id="peopleChat" class="chat"><div class="msg ai">💬 دردشة الناس - هنا الناس تتواصل مع بعض (حفظ محلي حاليا، قريبا أونلاين لايف)</div></div></div>
+
+<div id="games" class="page" style="overflow-y:auto">
+<div class="card"><h3>🎮 خمن الرقم (أوفلاين 100%)</h3><p id="gText">خمنت رقم من 1 لي 100، ورينا شطارتك!</p><input id="gInput" type="number" placeholder="اكتب تخمينك"><button onclick="guess()">جرب حظك</button></div>
+<div class="card"><h3>🧩 لغز اليوم (أوفلاين)</h3><p>ما هو الشيء كلما أخذت منه كبر؟<br><b style="color:#00F5FF">الجواب: الحفرة!</b></p></div>
+<div class="card"><h3>🧮 حساب سريع (أوفلاين)</h3><p id="mathQ"></p><input id="mathA" type="number" placeholder="الجواب"><button onclick="checkMath()">تحقق</button></div>
 </div>
 
 <div class="inputBox">
-<input id="mainInput" placeholder="اكتب هنا... صمم لي صورة، دبر لي..." onkeypress="if(event.key==='Enter') send()">
+<input id="mainInput" placeholder="اكتب هنا... صمم لي صورة، دبر لي..." onkeypress="if(event.key==='Enter')send()">
 <button onclick="send()">⚡</button>
 </div>
 
 <script>
 let mode='ai';
-function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.style.display='none');document.getElementById(id).style.display='flex';document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');mode=id; document.getElementById('mainInput').placeholder = id==='people'?'دردش مع الناس...': id==='games'?'العب بدون نت':'اكتب... صمم لي صورة، دبر لي...'}
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+ document.getElementById('tab-'+id).classList.add('active');
+ mode=id;
+ let inp=document.getElementById('mainInput');
+ if(id==='people') inp.placeholder='دردش مع الناس...';
+ else if(id==='games') inp.placeholder='الألعاب أوفلاين - ما بتحتاج نت';
+ else inp.placeholder='اكتب... صمم لي صورة، دبر لي مشروع...';
+}
 
 let secret=Math.floor(Math.random()*100)+1;
-function guess(){let v=document.getElementById('gInput').value;let t=document.getElementById('gText');if(!v)return;if(v==secret){t.innerHTML='🎉 مبروك! صح! عملت رقم جديد';secret=Math.floor(Math.random()*100)+1}else if(v>secret)t.textContent='👇 أقل';else t.textContent='👆 أكتر';document.getElementById('gInput').value=''}
+function guess(){
+ let v=parseInt(document.getElementById('gInput').value);
+ let t=document.getElementById('gText');
+ if(!v) return;
+ if(v==secret){t.innerHTML='🎉 مبروك! خمنت صح! عملت رقم جديد'; secret=Math.floor(Math.random()*100)+1}
+ else if(v>secret) t.textContent='👇 أقل من كده شوية';
+ else t.textContent='👆 أكتر من كده شوية';
+ document.getElementById('gInput').value='';
+}
+let m1=Math.floor(Math.random()*20)+1, m2=Math.floor(Math.random()*20)+1;
+document.getElementById('mathQ').textContent=`كم يساوي ${m1} + ${m2} ؟`;
+function checkMath(){
+ let v=parseInt(document.getElementById('mathA').value);
+ if(v===(m1+m2)){alert('صح! 🎉'); m1=Math.floor(Math.random()*20)+1; m2=Math.floor(Math.random()*20)+1; document.getElementById('mathQ').textContent=`كم يساوي ${m1} + ${m2} ؟`; document.getElementById('mathA').value='';}
+ else alert('حاول تاني');
+}
 
 let peopleMsgs=JSON.parse(localStorage.getItem('dabbarha_people')||'[]');
-function renderPeople(){let c=document.getElementById('peopleChat');c.innerHTML=peopleMsgs.map(m=>`<div class="msg ${m.me?'user':'ai'}">${m.text}<br><small style="color:#00F5FF88;font-size:11px">${m.time}</small></div>`).join('');c.scrollTop=c.scrollHeight}
+function renderPeople(){
+ let c=document.getElementById('peopleChat');
+ c.innerHTML='<div class="msg ai">💬 دردشة الناس - حفظ محلي</div>'+peopleMsgs.map(m=>`<div class="msg ${m.me?'user':'ai'}">${m.text}<small>${m.time}</small></div>`).join('');
+ c.scrollTop=c.scrollHeight;
+}
+renderPeople();
 
 async function send(){
- let input=document.getElementById('mainInput');let text=input.value.trim();if(!text)return;
- let box = mode==='ai' ? document.getElementById('aiChat') : document.getElementById('peopleChat');
- box.innerHTML+=`<div class="msg user">${text}</div>`;input.value='';box.scrollTop=box.scrollHeight;
+ let input=document.getElementById('mainInput');
+ let text=input.value.trim(); if(!text) return;
+ let box = mode==='ai'? document.getElementById('aiChat') : document.getElementById('peopleChat');
+ box.innerHTML+=`<div class="msg user">${text}</div>`;
+ input.value='';
+ box.scrollTop=box.scrollHeight;
 
  if(mode==='people'){
    let time=new Date().toLocaleTimeString('ar-SD',{hour:'2-digit',minute:'2-digit'});
-   peopleMsgs.push({text,me:true,time});localStorage.setItem('dabbarha_people',JSON.stringify(peopleMsgs));renderPeople();
-   // TODO: هنا نربط Supabase عشان يبقى أونلاين حقيقي بين كل الناس
+   peopleMsgs.push({text,me:true,time});
+   localStorage.setItem('dabbarha_people',JSON.stringify(peopleMsgs));
+   renderPeople();
    return;
  }
+ if(mode==='games') return;
 
- // AI MODE - ذكي حقيقي زيي
- if(text.includes('صمم')||text.includes('صورة')||text.includes('ارسم')||text.includes('image')){
-   let id='img'+Date.now();box.innerHTML+=`<div id="${id}" class="msg ai">🎨 بصمم ليك هسي ثواني...<br><img src="https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=512&height=512&nologo=true" onload="document.getElementById('${id}').scrollIntoView()"></div>`;
+ // === AI MODE - مصلح ===
+ let isImage = text.includes('صمم')||text.includes('صورة')||text.includes('ارسم')||text.toLowerCase().includes('image')||text.toLowerCase().includes('draw');
+
+ if(isImage){
+   let id='img'+Date.now();
+   box.innerHTML+=`<div id="${id}" class="msg ai">🎨 بصمم ليك هسي... ثواني بس<br><img src="https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=512&height=512&nologo=true&seed=${Math.floor(Math.random()*9999)}" onload="this.parentElement.parentElement.scrollTop=this.parentElement.parentElement.scrollHeight"></div>`;
+   box.scrollTop=box.scrollHeight;
  }else{
-   let id='ai'+Date.now();box.innerHTML+=`<div id="${id}" class="msg ai">⏳ دبرها بيفكر...</div>`;
+   let id='ai'+Date.now();
+   box.innerHTML+=`<div id="${id}" class="msg ai">⏳ دبرها بيفكر...</div>`;
+   box.scrollTop=box.scrollHeight;
    try{
-     let prompt=encodeURIComponent(`أنت مساعد سوداني اسمه دبرها، ذكي، بترد باللهجة السودانية العامية الخفيفة، باختصار ومفيد، ساعد المستخدم: ${text}`);
-     let res=await fetch(`https://text.pollinations.ai/${prompt}`);
-     let reply=await res.text();
-     let el=document.getElementById(id); el.textContent=''; let i=0;
-     let iv=setInterval(()=>{el.textContent=reply.slice(0,i++); box.scrollTop=box.scrollHeight; if(i>reply.length)clearInterval(iv)},15);
-   }catch(e){document.getElementById(id).textContent='النت ضعيف، حاول تاني';}
+     let resp = await fetch('https://text.pollinations.ai/openai', {
+       method:'POST',
+       headers:{'Content-Type':'application/json'},
+       body: JSON.stringify({
+         model: 'openai',
+         messages: [
+           {role:'system', content:'أنت دبرها، مساعد سوداني ذكي، خفيف، بترد باللهجة السودانية باختصار ومفيد. جاوب مباشر.'},
+           {role:'user', content: text}
+         ],
+         temperature: 0.7
+       })
+     });
+     let data = await resp.json();
+     let reply = data.choices?.[0]?.message?.content || 'ما قدرت ارد، حاول تاني';
+
+     let el=document.getElementById(id);
+     el.textContent='';
+     let i=0;
+     let iv=setInterval(()=>{
+       el.textContent=reply.slice(0,i++);
+       box.scrollTop=box.scrollHeight;
+       if(i>reply.length) clearInterval(iv);
+     },12);
+
+   }catch(e){
+     document.getElementById(id).innerHTML='⚠️ النت تقيل شوية، جرب تاني<br>لو داير صور، اكتب: <b>صمم لي بيت سوداني</b> - الصور شغالة طوالي';
+   }
+   box.scrollTop=box.scrollHeight;
  }
- box.scrollTop=box.scrollHeight;
 }
-renderPeople();
 </script>
 </body>
 </html>
