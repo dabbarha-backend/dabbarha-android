@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الترجمة</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+*{font-family:'Cairo';box-sizing:border-box;margin:0;padding:0}
+body{background:#020a1a;color:#fff;min-height:100vh;padding:16px;background:radial-gradient(circle at 50% 0%, #0a2a6b 0%, #020a1a 70%)}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.back{width:45px;height:45px;background:rgba(0,195,255,0.15);border:1px solid #00c3ff;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#00c3ff;text-decoration:none;font-size:22px}
+.card{background:linear-gradient(180deg,rgba(15,45,110,0.8),rgba(8,20,50,0.95));border:1px solid rgba(0,195,255,0.3);border-radius:18px;padding:16px;margin-bottom:12px}
+textarea{width:100%;min-height:90px;background:rgba(0,0,0,0.4);border:1px solid rgba(0,195,255,0.4);border-radius:12px;color:#fff;padding:12px;resize:none}
+select{background:rgba(0,0,0,0.4);border:1px solid #00c3ff;border-radius:10px;color:#fff;padding:8px 12px}
+.btn{width:100%;background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:14px;border-radius:12px;color:#fff;font-weight:800;margin-top:10px;cursor:pointer;box-shadow:0 0 20px rgba(0,195,255,0.4)}
+.result{min-height:60px;padding:12px;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.3);border-radius:12px;margin-top:12px;color:#aaffcc}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">‹</a><b>🌍 الترجمة الفورية</b></div>
+<div class="card">
+<div style="display:flex;gap:10px;margin-bottom:10px"><select id="from"><option value="ar">عربي</option><option value="en">English</option><option value="fr">Français</option></select><span>→</span><select id="to"><option value="en">English</option><option value="ar">عربي</option><option value="fr">Français</option></select></div>
+<textarea id="input" placeholder="اكتب النص هنا..."></textarea>
+<button class="btn" onclick="translateText()">ترجم الآن ✨</button>
+<div class="result" id="out">الترجمة حتظهر هنا...</div>
+<button class="btn" style="background:rgba(255,255,255,0.1);margin-top:8px" onclick="copyRes()">📋 نسخ الترجمة</button>
+</div>
+<script>
+async function translateText(){
+let text=document.getElementById('input').value.trim();if(!text)return;
+let to=document.getElementById('to').value;
+document.getElementById('out').textContent="يترجم... ⏳";
+try{
+let res=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ar|${to}`);
+let j=await res.json();
+document.getElementById('out').textContent=j.responseData.translatedText;
+}catch{
+document.getElementById('out').textContent="(أوفلاين) الترجمة التجريبية: "+text.split('').reverse().join('')+" [النت مقطوع - الترجمة الحقيقية تحتاج نت]";
+}
+}
+function copyRes(){navigator.clipboard.writeText(document.getElementById('out').textContent);alert("تم النسخ!")}
+</script>
+</body>
+</html>
