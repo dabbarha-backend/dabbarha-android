@@ -1,0 +1,78 @@
+here<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المساعد الذكي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+*{font-family:'Cairo';box-sizing:border-box;margin:0;padding:0}
+body{background:#020a1a;color:#fff;height:100vh;display:flex;flex-direction:column;background-image:radial-gradient(circle at 50% 0%, #0a2a6b 0%, #020a1a 70%)}
+.top{padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(0,195,255,0.2);background:rgba(5,15,40,0.8);backdrop-filter:blur(10px)}
+.back{width:40px;height:40px;background:rgba(0,195,255,0.15);border:1px solid #00c3ff;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#00c3ff;text-decoration:none;font-size:20px}
+.chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:85%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.6}
+.user{align-self:flex-end;background:linear-gradient(135deg,#00c3ff,#0066ff);border-bottom-right-radius:5px;box-shadow:0 0 15px rgba(0,195,255,0.4)}
+.ai{align-self:flex-start;background:rgba(15,40,100,0.7);border:1px solid rgba(0,195,255,0.25);border-bottom-left-radius:5px}
+.inputArea{padding:12px;background:rgba(5,15,40,0.9);border-top:1px solid rgba(0,195,255,0.2);display:flex;gap:10px;align-items:center}
+.inputArea input{flex:1;padding:14px 16px;background:rgba(0,0,0,0.4);border:1px solid rgba(0,195,255,0.4);border-radius:25px;color:#fff;outline:none}
+.inputArea button{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;color:#fff;font-size:20px;cursor:pointer;box-shadow:0 0 15px rgba(0,195,255,0.5)}
+.quick{display:flex;gap:8px;padding:0 16px 10px;overflow-x:auto}
+.quick span{background:rgba(0,195,255,0.1);border:1px solid rgba(0,195,255,0.3);padding:6px 14px;border-radius:20px;font-size:12px;white-space:nowrap;cursor:pointer;color:#7ec8ff}
+</style>
+</head>
+<body>
+<div class="top">
+<a href="index.html" class="back">‹</a>
+<div><b>المساعد الذكي</b><br><small style="color:#00ff88">● متصل الآن - دبّرها AI</small></div>
+</div>
+
+<div class="chat" id="chat">
+<div class="msg ai">مرحبا! 👋 أنا مساعد دبّرها الذكي<br><br>أقدر أساعدك في:<br>• 📚 الدراسة والشرح<br>• 💰 نصائح مالية<br>• 🌍 الترجمة<br>• 🧩 حل الألغاز<br><br>اكتب لي أي سؤال!</div>
+</div>
+
+<div class="quick">
+<span onclick="ask('اشرح لي كيف أوفر قروشي')">💰 كيف أوفر؟</span>
+<span onclick="ask('ساعدني في الدراسة')">📚 دراسة</span>
+<span onclick="ask('ترجم: مرحبا كيف حالك')">🌍 ترجمة</span>
+<span onclick="ask('احكي لي نكتة سودانية')">😂 نكتة</span>
+</div>
+
+<div class="inputArea">
+<input id="inp" placeholder="اكتب سؤالك هنا..." onkeypress="if(event.key==='Enter')send()">
+<button onclick="send()">➤</button>
+</div>
+
+<script src="config.js"></script>
+<script>
+const BACKEND = (window.DABBARHA_CONFIG && window.DABBARHA_CONFIG.BACKEND_URL) || "";
+const chat=document.getElementById('chat'), inp=document.getElementById('inp');
+
+function addMsg(t,type){
+let d=document.createElement('div');d.className='msg '+type;d.innerHTML=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+}
+
+async function send(){
+let q=inp.value.trim();if(!q)return;
+addMsg(q,'user');inp.value='';
+addMsg('يكتب... ⏳','ai');
+try{
+let r=await fetch(BACKEND+'/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});
+let j=await r.json();
+chat.lastChild.remove();
+addMsg(j.reply || j.message || "ما قدرت أرد هسي، حاول تاني","ai");
+}catch(e){
+chat.lastChild.remove();
+addMsg("⚠️ الخادم نايم، حاول بعد 30 ثانية، أو جرب الألعاب لحد ما يصحى 🎮<br><br>إجابة مؤقتة: "+fakeReply(q),"ai");
+}
+}
+
+function fakeReply(q){
+if(q.includes("قروش")||q.includes("مال")) return "💰 عشان توفر: 1- اكتب مصاريفك 2- خت 30% ادخار أول ما تقبض 3- قلل الفارغة";
+if(q.includes("نكتة")) return "😂 واحد قال لصاحبو: ليه ما بتذاكر؟ قال ليهو: عشان دبّرها بتذاكر لي!";
+return "سؤالك جميل! الخادم حيصحى قريب ويرد ليك رد ذكي كامل. حاليا أنا في الوضع الأوفلاين.";
+}
+
+function ask(t){inp.value=t;send();}
+</script>
+</body>
+</html>
