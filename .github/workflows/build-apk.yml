@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -21,113 +20,64 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Install dependencies
+      - name: Install Capacitor
         run: |
           npm install --legacy-peer-deps
           npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
 
       - name: Create Android project
         run: |
-          npx cap copy
           npx cap add android
+          npx cap copy
           npx cap sync android
 
-      - name: Create F+ icon
+      - name: Create F+ launcher icon
         run: |
-          cat > /tmp/icon.svg <<'EOF'
-          <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-            <defs>
-              <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#fff5a8"/>
-                <stop offset="0.25" stop-color="#f5d76e"/>
-                <stop offset="0.55" stop-color="#d4af37"/>
-                <stop offset="0.8" stop-color="#9b7015"/>
-                <stop offset="1" stop-color="#ffe98a"/>
-              </linearGradient>
-
-              <radialGradient id="bg">
-                <stop offset="0" stop-color="#202020"/>
-                <stop offset="0.7" stop-color="#090909"/>
-                <stop offset="1" stop-color="#000000"/>
-              </radialGradient>
-
-              <filter id="shadow">
-                <feDropShadow dx="0" dy="12" stdDeviation="14"
-                              flood-color="#000000" flood-opacity=".8"/>
-              </filter>
-            </defs>
-
-            <rect x="25" y="25" width="974" height="974" rx="190"
-                  fill="url(#bg)"
-                  stroke="url(#gold)"
-                  stroke-width="30"/>
-
-            <!-- Crown -->
-            <path d="M310 300 L385 185 L510 280 L640 185 L715 300
-                     L680 345 L345 345 Z"
-                  fill="url(#gold)"
-                  stroke="#fff0a0"
-                  stroke-width="10"
-                  filter="url(#shadow)"/>
-
-            <!-- F -->
-            <path d="M330 420
-                     L735 420
-                     L680 500
-                     L475 500
-                     L475 570
-                     L650 570
-                     L600 645
-                     L475 645
-                     L475 810
-                     L350 810
-                     Z"
-                  fill="url(#gold)"
-                  stroke="#fff1a0"
-                  stroke-width="8"
-                  filter="url(#shadow)"/>
-
-            <!-- Plus -->
-            <rect x="650" y="615" width="55" height="190"
-                  rx="12" fill="url(#gold)"
-                  stroke="#fff1a0" stroke-width="7"/>
-            <rect x="582" y="682" width="190" height="55"
-                  rx="12" fill="url(#gold)"
-                  stroke="#fff1a0" stroke-width="7"/>
-
-            <!-- shine -->
-            <path d="M125 160 Q512 65 900 160"
-                  fill="none"
-                  stroke="#fff8c8"
-                  stroke-width="10"
-                  opacity=".55"/>
-          </svg>
-          EOF
-
           sudo apt-get update
-          sudo apt-get install -y imagemagick
+          sudo apt-get install -y imagemagick librsvg2-bin
 
-          mkdir -p android/app/src/main/res
+          cat > /tmp/fplus.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+            <defs>
+              <radialGradient id="b"><stop stop-color="#242424"/><stop offset="1" stop-color="#030303"/></radialGradient>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#fff6b0"/><stop offset=".45" stop-color="#d4af37"/><stop offset="1" stop-color="#8c6410"/>
+              </linearGradient>
+            </defs>
+            <rect x="32" y="32" width="960" height="960" rx="210" fill="url(#b)" stroke="url(#g)" stroke-width="28"/>
+            <path d="M295 305 L380 175 L510 270 L645 175 L730 305 L690 350 L335 350 Z" fill="url(#g)" stroke="#fff1a0" stroke-width="10"/>
+            <path d="M330 430H740L680 505H470V570H640L590 645H470V815H345V430Z" fill="url(#g)" stroke="#fff1a0" stroke-width="8"/>
+            <rect x="650" y="615" width="55" height="190" rx="12" fill="url(#g)"/>
+            <rect x="582" y="682" width="190" height="55" rx="12" fill="url(#g)"/>
+            <path d="M125 170Q512 70 900 170" fill="none" stroke="#fff9cf" stroke-width="10" opacity=".55"/>
+          </svg>
+          SVG
 
-          for size in 48 72 96 144 192; do
-            case $size in
-              48)  folder=mipmap-mdpi ;;
-              72)  folder=mipmap-hdpi ;;
-              96)  folder=mipmap-xhdpi ;;
-              144) folder=mipmap-xxhdpi ;;
-              192) folder=mipmap-xxxhdpi ;;
-            esac
+          rm -f android/app/src/main/res/mipmap-*/ic_launcher*.png || true
+          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher*.xml || true
+          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher*.xml || true
 
-            mkdir -p android/app/src/main/res/$folder
-
-            convert -background none /tmp/icon.svg \
-              -resize ${size}x${size} \
-              android/app/src/main/res/$folder/ic_launcher.png
-
-            convert -background none /tmp/icon.svg \
-              -resize ${size}x${size} \
-              android/app/src/main/res/$folder/ic_launcher_round.png
+          for spec in "mdpi:48" "hdpi:72" "xhdpi:96" "xxhdpi:144" "xxxhdpi:192"; do
+            folder="${spec%%:*}"
+            size="${spec##*:}"
+            mkdir -p "android/app/src/main/res/mipmap-$folder"
+            rsvg-convert -w "$size" -h "$size" /tmp/fplus.svg > "android/app/src/main/res/mipmap-$folder/ic_launcher.png"
+            cp "android/app/src/main/res/mipmap-$folder/ic_launcher.png" "android/app/src/main/res/mipmap-$folder/ic_launcher_round.png"
           done
+
+          mkdir -p android/app/src/main/res/mipmap-anydpi-v26
+          cat > android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'XML'
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+            <background android:drawable="@color/ic_launcher_background"/>
+            <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>
+          XML
+          mkdir -p android/app/src/main/res/drawable
+          rsvg-convert -w 432 -h 432 /tmp/fplus.svg > android/app/src/main/res/drawable/ic_launcher_foreground.png
+          cat > android/app/src/main/res/values/dabbarha_colors.xml <<'XML'
+          <resources><color name="ic_launcher_background">#050505</color></resources>
+          XML
 
       - name: Build APK
         run: |
@@ -135,8 +85,7 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: dabbarha-complete-apk
+          name: dabbarha-fplus-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
