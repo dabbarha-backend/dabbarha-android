@@ -1,6 +1,4 @@
-from pathlib import Path
-
-html = r'''<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
@@ -10,139 +8,124 @@ html = r'''<!doctype html>
 <script src="config.js"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#050505;--c:#101010;--c2:#171717;--g:#d4af37;--g2:#ffe88a;--tx:#fff8df;--mut:#968e7e;--ln:rgba(212,175,55,.25)}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,rgba(212,175,55,.18),transparent 34%),#050505;color:var(--tx);font-family:Tahoma,Arial,sans-serif}
-body{padding-bottom:90px}.wrap{max-width:760px;margin:auto}
-button,input,textarea{font:inherit}button{cursor:pointer}
-header{position:sticky;top:0;z-index:50;padding:12px 15px;background:rgba(5,5,5,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--ln)}
+:root{--bg:#050505;--card:#101010;--card2:#171717;--gold:#d4af37;--gold2:#fff0a0;--text:#fff8df;--muted:#9b9382;--line:rgba(212,175,55,.25)}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,rgba(212,175,55,.17),transparent 35%),#050505;color:var(--text);font-family:Tahoma,Arial,sans-serif}
+body{padding-bottom:92px}.wrap{max-width:760px;margin:auto}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+header{position:sticky;top:0;z-index:30;padding:12px 14px;background:rgba(5,5,5,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .head{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}
-.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;color:#080808;font:bold 30px Georgia;background:linear-gradient(145deg,#fff5b0,#d4af37 48%,#976e13);box-shadow:inset 0 1px 0 #fff,0 0 25px rgba(212,175,55,.18)}
-.brand b{font-size:20px;background:linear-gradient(90deg,#fff2a4,#d4af37,#fff2a4);-webkit-background-clip:text;color:transparent}.brand small{display:block;color:var(--mut);font-size:10px;margin-top:4px}
-.status{border:1px solid var(--ln);border-radius:20px;padding:8px 10px;color:#ddca81;font-size:11px}.status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g);margin-left:5px}
-.hero{margin:17px 15px;padding:23px 19px;border:1px solid var(--ln);border-radius:27px;background:radial-gradient(circle at 10% 0,rgba(255,232,138,.15),transparent 35%),#0e0e0e;box-shadow:0 18px 50px #000}
-.tiny{color:#e4c65b;font-size:12px;margin-bottom:8px}.hero h1{margin:0;font-size:28px;line-height:1.35}.hero h1 span{color:var(--g)}.hero p{color:#aaa18f;font-size:13px;line-height:1.8;margin:9px 0 16px}
-.actions{display:flex;gap:9px;flex-wrap:wrap}.gold,.dark{min-height:45px;border-radius:14px;padding:0 17px;font-weight:bold}.gold{border:1px solid #ebcf6c;color:#090909;background:linear-gradient(145deg,#fff1a0,#d4af37,#a37716)}.dark{border:1px solid var(--ln);color:#e7d79d;background:#121212}
-.section{padding:0 15px;margin-top:20px}.title{font-size:17px;font-weight:bold;color:#f1dc95;margin-bottom:11px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.card{display:block;min-height:128px;padding:16px;border:1px solid var(--ln);border-radius:20px;background:linear-gradient(145deg,#171717,#0d0d0d);box-shadow:0 10px 28px #0008;color:inherit;text-decoration:none}.card:active{transform:scale(.97)}
-.icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#fff0a0,#d4af37,#9c7317);color:#090909;font-weight:bold;font-size:20px;margin-bottom:11px}.card h3{margin:0;font-size:14px;color:#f6e9be}.card p{margin:6px 0 0;font-size:10px;line-height:1.55;color:#8f887b}
-.panel{display:none;margin:16px 15px 0;border:1px solid var(--ln);border-radius:23px;background:#0b0b0b;overflow:hidden}.panel-head{padding:15px;border-bottom:1px solid var(--ln);font-weight:bold;color:#e7ce6c}.messages{min-height:260px;max-height:48vh;overflow:auto;padding:12px}.msg{max-width:90%;padding:11px 13px;border-radius:15px;margin:8px 0;font-size:13px;line-height:1.8;white-space:pre-wrap}.ai{margin-left:auto;background:#15130e;border:1px solid var(--ln);color:#f6eac5}.me{margin-right:auto;background:#191919;border:1px solid #292929;color:#eee}.composer{display:flex;gap:7px;padding:10px;border-top:1px solid var(--ln)}textarea{flex:1;min-height:47px;max-height:130px;resize:none;border-radius:14px;border:1px solid #342b19;background:#070707;color:#fff;padding:12px;outline:none}.send{width:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#fff0a0,#d4af37);color:#080808;font-weight:bold}
-.voicebox{padding:15px}.voice-status{color:#a89f8e;font-size:12px;line-height:1.7;min-height:42px}.voice-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.bottom{position:fixed;z-index:60;bottom:9px;left:50%;transform:translateX(-50%);width:min(700px,calc(100% - 18px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px;border:1px solid var(--ln);border-radius:22px;background:rgba(12,12,12,.95);backdrop-filter:blur(18px);box-shadow:0 12px 40px #000}
+.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;color:#090909;font:bold 29px Georgia;background:linear-gradient(145deg,#fff7bd,#d4af37 50%,#956d12);box-shadow:inset 0 1px 0 #fff,0 0 25px rgba(212,175,55,.2)}
+.brand b{font-size:20px;background:linear-gradient(90deg,#fff0a0,#d4af37,#fff0a0);-webkit-background-clip:text;color:transparent}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.status{border:1px solid var(--line);border-radius:20px;padding:8px 10px;color:#e1c95f;font-size:11px}.status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);margin-left:5px}
+.hero{margin:16px 14px;padding:22px 18px;border:1px solid var(--line);border-radius:26px;background:radial-gradient(circle at 8% 0,rgba(255,232,138,.14),transparent 38%),#0e0e0e;box-shadow:0 18px 50px #000}
+.tiny{color:#e4c65b;font-size:12px;margin-bottom:8px}.hero h1{margin:0;font-size:28px;line-height:1.4}.hero h1 span{color:var(--gold)}.hero p{color:#aaa18f;font-size:13px;line-height:1.8;margin:9px 0 16px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.gold,.dark{min-height:45px;border-radius:14px;padding:0 16px;font-weight:bold}.gold{border:1px solid #ebcf6c;color:#080808;background:linear-gradient(145deg,#fff1a0,#d4af37,#9e7417)}.dark{border:1px solid var(--line);color:#e7d79d;background:#121212}
+.section{padding:0 14px;margin-top:20px}.title{font-size:17px;font-weight:bold;color:#f1dc95;margin-bottom:11px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.card{min-height:122px;padding:15px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#171717,#0d0d0d);box-shadow:0 10px 28px #0008;color:inherit;text-decoration:none;display:block}.card:active{transform:scale(.98)}
+.icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#fff0a0,#d4af37,#9c7317);color:#090909;font-weight:bold;font-size:20px;margin-bottom:10px}.card h3{margin:0;font-size:14px;color:#f6e9be}.card p{margin:6px 0 0;font-size:10px;line-height:1.55;color:#8f887b}
+.panel{display:none;margin:15px 14px 0;border:1px solid var(--line);border-radius:22px;background:#0b0b0b;overflow:hidden}.panel.show{display:block}.panel-head{padding:14px 15px;border-bottom:1px solid var(--line);font-weight:bold;color:#e7ce6c}.panel-body{padding:13px}.messages{min-height:260px;max-height:48vh;overflow:auto;padding:10px}.msg{max-width:90%;padding:11px 13px;border-radius:15px;margin:8px 0;font-size:13px;line-height:1.8;white-space:pre-wrap}.ai{margin-left:auto;background:#15130e;border:1px solid var(--line);color:#f6eac5}.me{margin-right:auto;background:#191919;border:1px solid #292929;color:#eee}.composer{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line)}textarea,input,select{border:1px solid #342b19;background:#070707;color:#fff;border-radius:14px;padding:11px;outline:none;width:100%}textarea{min-height:48px;resize:vertical}.send{width:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#fff0a0,#d4af37);color:#080808;font-weight:bold}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.stack>*{margin-bottom:9px}.result{margin-top:10px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#101010}.result img{display:block;max-width:100%;border-radius:14px;margin-top:8px}.muted{color:var(--muted);font-size:11px;line-height:1.7}.bigbtn{width:100%;min-height:48px}.quiz{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px}.answers button{display:block;width:100%;margin:7px 0;text-align:right}
+.bottom{position:fixed;z-index:60;bottom:9px;left:50%;transform:translateX(-50%);width:min(700px,calc(100% - 18px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px;border:1px solid var(--line);border-radius:22px;background:rgba(12,12,12,.96);backdrop-filter:blur(18px);box-shadow:0 12px 40px #000}
 .nav{min-height:54px;border:0;border-radius:15px;background:transparent;color:#8e8778;font-size:10px}.nav b{display:block;font-size:18px;margin-bottom:3px}.nav.active{color:#080808;background:linear-gradient(145deg,#fff0a0,#d4af37,#a67c1a)}
-#toast{position:fixed;z-index:100;bottom:82px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#151515;border:1px solid var(--ln);color:#f0da8a;padding:10px 14px;border-radius:13px;font-size:12px;transition:.2s;max-width:90%;text-align:center}#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast{position:fixed;z-index:100;bottom:82px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#151515;border:1px solid var(--line);color:#f0da8a;padding:10px 14px;border-radius:13px;font-size:12px;transition:.2s;max-width:90%;text-align:center}#toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:380px){.hero h1{font-size:24px}.grid{gap:7px}.card{padding:13px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="head"><div class="brand"><div class="logo">D</div><div><b>دبّرها</b><small>DABBARHA • المساعد الذكي</small></div></div><div class="status"><i></i>متصل</div></div></header>
+<header><div class="head"><div class="brand"><div class="logo">F+</div><div><b>دبّرها</b><small>DABBARHA • المساعد الذكي</small></div></div><div class="status"><i></i>متصل</div></div></header>
 
 <section class="hero">
-<div class="tiny">✦ ذكاء اصطناعي • أدوات • ترجمة • صوت</div>
+<div class="tiny">✦ ذكاء اصطناعي • صور • ترجمة • صوت • أدوات</div>
 <h1>كل شيء في <span>دبّرها</span></h1>
-<p>واجهة فاخرة مرتبطة بالـBackend الموجود في مشروعك. المحادثة تستخدم المسار الحقيقي <b>/api/chat</b>.</p>
-<div class="actions"><button class="gold" onclick="show('chat')">✦ ابدأ المحادثة</button><button class="dark" onclick="go('image.html')">◈ الصور</button></div>
+<p>نسخة فاخرة متصلة بالـBackend الحقيقي. لا يوجد مفتاح Gemini داخل التطبيق؛ المفتاح يبقى في الخادم.</p>
+<div class="actions"><button class="gold" onclick="openPanel('chat')">✦ المساعد</button><button class="dark" onclick="openPanel('image')">◈ إنشاء صورة</button></div>
 </section>
 
 <section class="section"><div class="title">الخدمات</div><div class="grid">
-<div class="card" onclick="show('chat')"><div class="icon">✦</div><h3>المساعد الذكي</h3><p>محادثة حقيقية مع Gemini عبر الخادم.</p></div>
-<a class="card" href="image.html"><div class="icon">◈</div><h3>الصور</h3><p>صفحة الصور الأصلية في مشروعك.</p></a>
-<a class="card" href="translation.html"><div class="icon">文</div><h3>الترجمة</h3><p>صفحة الترجمة الأصلية.</p></a>
-<a class="card" href="games.html"><div class="icon">♛</div><h3>الألعاب</h3><p>الألعاب والألغاز الأصلية.</p></a>
-<a class="card" href="money.html"><div class="icon">₿</div><h3>المال</h3><p>أدوات المال الموجودة في التطبيق.</p></a>
-<div class="card" onclick="show('voice')"><div class="icon">◉</div><h3>الصوت</h3><p>تحويل كلامك إلى نص وإرساله للمساعد.</p></div>
+<div class="card" onclick="openPanel('chat')"><div class="icon">✦</div><h3>المساعد الذكي</h3><p>محادثة Gemini عبر /api/chat.</p></div>
+<div class="card" onclick="openPanel('image')"><div class="icon">◈</div><h3>إنشاء الصور</h3><p>توليد صورة من وصفك عبر Gemini.</p></div>
+<div class="card" onclick="openPanel('analyze')"><div class="icon">⌁</div><h3>تحليل صورة</h3><p>ارفع صورة ودع Gemini يشرحها.</p></div>
+<div class="card" onclick="openPanel('translate')"><div class="icon">文</div><h3>الترجمة</h3><p>ترجمة النصوص عبر الخادم.</p></div>
+<div class="card" onclick="openPanel('voice')"><div class="icon">◉</div><h3>الصوت</h3><p>تحدث ثم أرسل النص للمساعد.</p></div>
+<div class="card" onclick="openPanel('games')"><div class="icon">♛</div><h3>الألعاب</h3><p>ألغاز وتحديات داخل التطبيق.</p></div>
+<div class="card" onclick="openPanel('money')"><div class="icon">₿</div><h3>المال</h3><p>حاسبة ميزانية ومصروفات.</p></div>
+<div class="card" onclick="openPanel('tools')"><div class="icon">⚙</div><h3>أدوات</h3><p>أدوات سريعة للدراسة والعمل.</p></div>
 </div></section>
 
-<section id="chat" class="panel">
-<div class="panel-head">✦ دبّرها — Gemini</div>
-<div id="messages" class="messages"><div class="msg ai">أهلاً بك 👋<br>اكتب رسالتك وسأرسلها إلى Gemini عبر الخادم.</div></div>
-<div class="composer"><textarea id="message" placeholder="اكتب رسالتك..." onkeydown="key(event)"></textarea><button id="send" class="send" onclick="send()">➤</button></div>
-</section>
+<section id="chat" class="panel"><div class="panel-head">✦ دبّرها — Gemini</div><div id="messages" class="messages"><div class="msg ai">أهلاً بك 👋<br>اكتب رسالتك وسأرسلها إلى Gemini عبر الخادم.</div></div><div class="composer"><textarea id="message" placeholder="اكتب رسالتك..." onkeydown="key(event)"></textarea><button id="send" class="send" onclick="send()">➤</button></div></section>
 
-<section id="voice" class="panel">
-<div class="panel-head">◉ الصوت</div>
-<div class="voicebox">
-<div id="voiceStatus" class="voice-status">اضغط على «ابدأ الاستماع» وتحدث بالعربية.</div>
-<div class="voice-actions"><button class="gold" onclick="listen()">🎙️ ابدأ الاستماع</button><button class="dark" onclick="speakLast()">🔊 اقرأ آخر رد</button></div>
-</div>
-</section>
+<section id="image" class="panel"><div class="panel-head">◈ إنشاء صورة</div><div class="panel-body stack"><textarea id="imagePrompt" placeholder="مثال: مدينة مستقبلية ليلية فاخرة، أسلوب واقعي..."></textarea><button class="gold bigbtn" onclick="generateImage()">إنشاء الصورة</button><div id="imageResult" class="result muted">ستظهر الصورة هنا.</div></div></section>
+
+<section id="analyze" class="panel"><div class="panel-head">⌁ تحليل صورة</div><div class="panel-body stack"><input id="analyzeFile" type="file" accept="image/*"><textarea id="analyzePrompt" placeholder="ماذا تريد أن تعرف عن الصورة؟"></textarea><button class="gold bigbtn" onclick="analyzeImage()">تحليل الصورة</button><div id="analyzeResult" class="result muted">اختر صورة ثم اضغط تحليل.</div></div></section>
+
+<section id="translate" class="panel"><div class="panel-head">文 الترجمة</div><div class="panel-body stack"><textarea id="sourceText" placeholder="اكتب النص..."></textarea><div class="row"><select id="fromLang"><option>العربية</option><option>English</option><option>Français</option></select><select id="toLang"><option>English</option><option>العربية</option><option>Français</option></select></div><button class="gold bigbtn" onclick="translateText()">ترجم الآن</button><div id="translateResult" class="result muted">الترجمة ستظهر هنا.</div></div></section>
+
+<section id="voice" class="panel"><div class="panel-head">◉ الصوت</div><div class="panel-body"><div id="voiceStatus" class="muted">اضغط بدء الاستماع وتحدث.</div><div class="actions"><button class="gold" onclick="listen()">🎙️ استماع</button><button class="dark" onclick="speakLast()">🔊 قراءة آخر رد</button></div></div></section>
+
+<section id="games" class="panel"><div class="panel-head">♛ الألعاب</div><div class="panel-body"><div class="quiz"><b>تحدي سريع</b><p id="qtext">ما هو الكوكب المعروف بالكوكب الأحمر؟</p><div class="answers"><button class="dark" onclick="quiz(false)">الأرض</button><button class="dark" onclick="quiz(true)">المريخ</button><button class="dark" onclick="quiz(false)">الزهرة</button></div><div id="quizResult" class="muted"></div></div></div></section>
+
+<section id="money" class="panel"><div class="panel-head">₿ إدارة المال</div><div class="panel-body stack"><input id="income" type="number" placeholder="الدخل"><input id="expense" type="number" placeholder="المصروفات"><button class="gold bigbtn" onclick="calcMoney()">احسب المتبقي</button><div id="moneyResult" class="result muted">أدخل الدخل والمصروفات.</div></div></section>
+
+<section id="tools" class="panel"><div class="panel-head">⚙ أدوات</div><div class="panel-body stack"><textarea id="notes" placeholder="ملاحظتك..."></textarea><button class="gold bigbtn" onclick="saveNote()">حفظ الملاحظة</button><div id="noteResult" class="result muted"></div></div></section>
 </div>
 
-<nav class="bottom">
-<button class="nav active" onclick="home()"><b>⌂</b>الرئيسية</button>
-<button class="nav" onclick="show('chat')"><b>✦</b>المساعد</button>
-<button class="nav" onclick="go('image.html')"><b>◈</b>الصور</button>
-<button class="nav" onclick="go('translation.html')"><b>文</b>الترجمة</button>
-</nav>
+<nav class="bottom"><button class="nav active" onclick="home()"><b>⌂</b>الرئيسية</button><button class="nav" onclick="openPanel('chat')"><b>✦</b>المساعد</button><button class="nav" onclick="openPanel('image')"><b>◈</b>الصور</button><button class="nav" onclick="openPanel('translate')"><b>文</b>الترجمة</button></nav>
 <div id="toast"></div>
 
 <script>
-/* ===== إعداد الاتصال الحقيقي ===== */
 const CFG=window.DABBARHA_CONFIG||{};
 const BACKEND=String(CFG.BACKEND_URL||'').replace(/\/+$/,'');
-const CHAT_URL=BACKEND+'/api/chat';
+const API={chat:BACKEND+'/api/chat',image:BACKEND+'/api/image',analyze:BACKEND+'/api/analyze',translate:BACKEND+'/api/translate'};
 let lastAnswer='';
 
-function toast(x){const t=document.getElementById('toast');t.textContent=x;t.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove('show'),2400)}
-function go(p){location.href=p}
-function home(){document.querySelectorAll('.panel').forEach(x=>x.style.display='none');scrollTo({top:0,behavior:'smooth'})}
-function show(id){document.querySelectorAll('.panel').forEach(x=>x.style.display='none');const p=document.getElementById(id);p.style.display='block';p.scrollIntoView({behavior:'smooth',block:'start'});if(id==='chat')setTimeout(()=>document.getElementById('message').focus(),300)}
+function toast(x){const t=document.getElementById('toast');t.textContent=x;t.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove('show'),2500)}
+function home(){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));scrollTo({top:0,behavior:'smooth'})}
+function openPanel(id){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));const p=document.getElementById(id);if(!p)return;p.classList.add('show');p.scrollIntoView({behavior:'smooth',block:'start'})}
 function key(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
 function add(text,who){const d=document.createElement('div');d.className='msg '+who;d.textContent=text;const m=document.getElementById('messages');m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
-
-/* الرد المتوقع من server.js: نحاول قراءة أكثر من صيغة، وأولها صيغة Gemini */
-function answerOf(d){
- if(typeof d==='string')return d;
- if(!d||typeof d!=='object')return '';
- if(typeof d.answer==='string')return d.answer;
- if(typeof d.reply==='string')return d.reply;
- if(typeof d.response==='string')return d.response;
- if(typeof d.text==='string')return d.text;
- try{const x=d.candidates?.[0]?.content?.parts?.[0]?.text;if(x)return x}catch(e){}
- return '';
-}
+function jsonOrText(raw){try{return JSON.parse(raw)}catch{return raw}}
+async function post(url,body){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});const d=jsonOrText(await r.text());if(!r.ok)throw new Error((d&&d.error)||('HTTP '+r.status));return d}
 
 async function send(){
- const input=document.getElementById('message'),btn=document.getElementById('send');
- const text=input.value.trim();if(!text)return;
- if(!BACKEND){add('لم يتم العثور على BACKEND_URL في config.js.','ai');return}
- add(text,'me');input.value='';input.disabled=true;btn.disabled=true;
- const wait=add('جاري الاتصال بـ Gemini...','ai');
- try{
-  const r=await fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({message:text})});
-  const raw=await r.text();let d;try{d=JSON.parse(raw)}catch(e){d=raw}
-  wait.remove();
-  if(!r.ok){add((d&&typeof d==='object'&&(d.error||d.message))||('خطأ من الخادم: HTTP '+r.status),'ai');return}
-  const a=answerOf(d);
-  if(a){lastAnswer=a;add(a,'ai');}
-  else add('الخادم رد، لكن الواجهة لم تتعرف على صيغة الرد.','ai');
- }catch(e){wait.remove();add('تعذر الاتصال بالخادم. تأكد من الإنترنت وأن Render يعمل.','ai');console.error(e)}
+ const input=document.getElementById('message'),btn=document.getElementById('send'),text=input.value.trim();
+ if(!text)return;if(!BACKEND){add('لم يتم العثور على BACKEND_URL في config.js.','ai');return}
+ add(text,'me');input.value='';input.disabled=true;btn.disabled=true;const wait=add('جاري الاتصال بـ Gemini...','ai');
+ try{const d=await post(API.chat,{message:text});wait.remove();const a=d.reply||d.answer||d.text||'';lastAnswer=a||'لم يصل رد.';add(lastAnswer,'ai')}
+ catch(e){wait.remove();add('تعذر الاتصال: '+e.message,'ai')}
  finally{input.disabled=false;btn.disabled=false;input.focus()}
 }
 
-/* ===== صوت حقيقي من الجهاز ===== */
-function listen(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR){toast('المتصفح لا يدعم التعرف على الصوت');return}
- const r=new SR();r.lang='ar-SA';r.interimResults=false;r.maxAlternatives=1;
- const s=document.getElementById('voiceStatus');s.textContent='🎙️ أستمع الآن...';
- r.onresult=e=>{const text=e.results[0][0].transcript;s.textContent='تم التعرف: '+text;show('chat');document.getElementById('message').value=text;send()}
- r.onerror=e=>{s.textContent='تعذر استخدام الميكروفون: '+e.error}
- r.onend=()=>{if(s.textContent.includes('أستمع'))s.textContent='انتهى الاستماع.'}
- r.start()
-}
-function speakLast(){
- if(!lastAnswer){toast('لا يوجد رد لقراءته');return}
- if(!('speechSynthesis'in window)){toast('الصوت غير مدعوم');return}
- speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang='ar-SA';speechSynthesis.speak(u)
+async function generateImage(){
+ const prompt=document.getElementById('imagePrompt').value.trim(),out=document.getElementById('imageResult');if(!prompt)return toast('اكتب وصف الصورة أولاً');
+ out.textContent='جاري إنشاء الصورة...';
+ try{const d=await post(API.image,{prompt});if(!d.image)throw new Error(d.error||'لم تصل صورة');out.innerHTML='<div>تم إنشاء الصورة.</div><img src="data:'+d.mimeType+';base64,'+d.image+'"><a class="gold" style="display:inline-block;margin-top:10px;padding:12px;text-decoration:none" download="dabbarha-image.png" href="data:'+d.mimeType+';base64,'+d.image+'">حفظ الصورة</a>'}
+ catch(e){out.textContent='خطأ: '+e.message}
 }
 
-window.addEventListener('load',()=>{console.log('Backend:',BACKEND,'Chat:',CHAT_URL);if(!BACKEND)toast('تحذير: تحقق من config.js')})
+function file64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=reject;r.readAsDataURL(file)})}
+async function analyzeImage(){
+ const file=document.getElementById('analyzeFile').files[0],prompt=document.getElementById('analyzePrompt').value.trim()||'حلل الصورة واشرح أهم ما فيها بالعربية.';
+ const out=document.getElementById('analyzeResult');if(!file)return toast('اختر صورة أولاً');out.textContent='جاري التحليل...';
+ try{const data=await file64(file);const d=await post(API.analyze,{image:data,mimeType:file.type,prompt});out.textContent=d.reply||'لم يصل تحليل.'}
+ catch(e){out.textContent='خطأ: '+e.message}
+}
+async function translateText(){
+ const text=document.getElementById('sourceText').value.trim(),from=document.getElementById('fromLang').value,to=document.getElementById('toLang').value,out=document.getElementById('translateResult');
+ if(!text)return toast('اكتب النص أولاً');out.textContent='جاري الترجمة...';
+ try{const d=await post(API.translate,{text,from,to});out.textContent=d.translation||d.reply||'لم تصل الترجمة.'}
+ catch(e){out.textContent='خطأ: '+e.message}
+}
+function listen(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return toast('التعرف على الصوت غير مدعوم في هذا الجهاز');
+ const r=new SR(),s=document.getElementById('voiceStatus');r.lang='ar-SA';r.interimResults=false;s.textContent='🎙️ أستمع الآن...';
+ r.onresult=e=>{const t=e.results[0][0].transcript;s.textContent='تم التعرف: '+t;openPanel('chat');document.getElementById('message').value=t;send()};r.onerror=e=>s.textContent='تعذر الصوت: '+e.error;r.onend=()=>{if(s.textContent.includes('أستمع'))s.textContent='انتهى الاستماع.'};r.start()
+}
+function speakLast(){if(!lastAnswer)return toast('لا يوجد رد');if(!('speechSynthesis'in window))return toast('الصوت غير مدعوم');speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang='ar-SA';speechSynthesis.speak(u)}
+function quiz(ok){document.getElementById('quizResult').textContent=ok?'إجابة صحيحة ✓':'إجابة غير صحيحة، حاول مرة أخرى.'}
+function calcMoney(){const a=Number(document.getElementById('income').value||0),b=Number(document.getElementById('expense').value||0);document.getElementById('moneyResult').textContent='المتبقي: '+(a-b)}
+function saveNote(){const n=document.getElementById('notes').value.trim();if(!n)return;localStorage.setItem('dabbarha_note',n);document.getElementById('noteResult').textContent='تم حفظ الملاحظة على الجهاز ✓'}
+window.addEventListener('load',()=>{if(!BACKEND)toast('تحذير: تحقق من config.js')})
 </script>
 </body>
 </html>
-'''
-p=Path("/mnt/data/index_FINAL_COMPLETE.html")
-p.write_text(html,encoding="utf-8")
-print(p)
-print(len(html))
