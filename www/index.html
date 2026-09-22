@@ -3,341 +3,671 @@ from pathlib import Path
 html = r'''<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#080604">
-<title>دبّرها DABBARHA</title>
-<style>
-:root{
-  --gold:#f6c453;
-  --gold2:#ffdf78;
-  --gold3:#b87916;
-  --dark:#070504;
-  --panel:#15100a;
-  --panel2:#21170b;
-  --text:#fff8df;
-  --muted:#cbbd9d;
-  --line:rgba(246,196,83,.35);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:#050403;color:var(--text);font-family:Tahoma,Arial,sans-serif}
-body{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(255,202,70,.18),transparent 34%),
-    radial-gradient(circle at 20% 80%,rgba(255,180,30,.10),transparent 30%),
-    linear-gradient(145deg,#050403,#171006 50%,#050403);
-}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-.app{max-width:520px;margin:auto;min-height:100vh;padding:14px 12px 92px}
-.top{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:8px 4px 14px
-}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{
-  width:52px;height:52px;border-radius:16px;display:grid;place-items:center;
-  color:#100a02;font-weight:900;font-size:31px;font-family:Georgia,serif;
-  background:radial-gradient(circle,#fff2b0 0,#ffd45a 35%,#b97915 72%,#3b2205 100%);
-  border:2px solid #ffe69a;box-shadow:0 0 18px #e8a92c, inset 0 0 14px #fff3ae;
-}
-.brand h1{font-size:22px;margin:0}
-.brand small{color:var(--muted)}
-.iconbtn{
-  width:42px;height:42px;border-radius:14px;border:1px solid var(--line);
-  background:linear-gradient(145deg,#2a1b08,#0c0906);color:var(--gold2);
-  box-shadow:0 0 12px rgba(246,196,83,.18)
-}
-.page{display:none;animation:in .3s ease}
-.page.active{display:block}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.hero{
-  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;
-  padding:26px 18px;margin-bottom:14px;text-align:center;
-  background:
-    radial-gradient(circle at 50% 35%,rgba(255,213,90,.24),transparent 34%),
-    linear-gradient(150deg,#2a1a08,#0c0906 65%,#241604);
-  box-shadow:0 0 28px rgba(246,196,83,.18),inset 0 0 30px rgba(246,196,83,.07)
-}
-.hero:before{
-  content:"";position:absolute;inset:-60%;background:linear-gradient(120deg,transparent 42%,rgba(255,236,158,.12) 50%,transparent 58%);
-  animation:shine 5s linear infinite
-}
-@keyframes shine{to{transform:translateX(40%) rotate(8deg)}}
-.hero>*{position:relative}
-.bigD{
-  margin:auto;width:128px;height:128px;border-radius:50%;display:grid;place-items:center;
-  font:900 86px Georgia,serif;color:#130b02;
-  background:radial-gradient(circle,#fff6c9 0,#ffd55c 28%,#d28a19 58%,#4a2b05 100%);
-  border:3px solid #ffe9a0;box-shadow:0 0 35px #d99524,0 0 75px rgba(246,196,83,.28),inset 0 0 24px #fff0a5
-}
-.hero h2{font-size:30px;margin:14px 0 2px}
-.hero p{margin:0;color:var(--muted)}
-.goldbtn{
-  border:1px solid #ffe89b;border-radius:17px;padding:14px 20px;
-  color:#160d02;font-weight:900;background:linear-gradient(135deg,#fff0a6,#f6c453 48%,#b97512);
-  box-shadow:0 0 18px rgba(246,196,83,.28),inset 0 1px #fff8c8
-}
-.hero .goldbtn{margin-top:18px;width:80%}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:18px 3px 10px}
-.section-title h3{margin:0;font-size:17px}.section-title span{color:var(--gold)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{
-  min-height:112px;border:1px solid var(--line);border-radius:20px;padding:15px;
-  background:linear-gradient(145deg,rgba(39,25,9,.96),rgba(10,8,5,.96));
-  box-shadow:inset 0 0 20px rgba(246,196,83,.04),0 7px 18px rgba(0,0,0,.25);
-  color:var(--text);text-align:right
-}
-.card:active{transform:scale(.98)}
-.card .ico{font-size:28px;color:var(--gold2);margin-bottom:8px}
-.card b{display:block;font-size:16px}.card small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
-.chatbox{min-height:58vh;display:flex;flex-direction:column}
-.messages{
-  flex:1;overflow:auto;padding:4px 2px 12px;display:flex;flex-direction:column;gap:9px;
-  min-height:350px;max-height:62vh
-}
-.msg{max-width:88%;padding:12px 14px;border-radius:18px;line-height:1.65;border:1px solid var(--line);white-space:pre-wrap}
-.msg.bot{align-self:flex-start;background:linear-gradient(145deg,#251907,#100c07)}
-.msg.user{align-self:flex-end;background:linear-gradient(145deg,#8c5b0e,#3a2307);color:#fff7dd}
-.composer{display:flex;gap:8px;position:sticky;bottom:70px;padding-top:8px}
-.composer textarea{
-  flex:1;resize:none;min-height:52px;max-height:130px;padding:13px;border-radius:18px;
-  border:1px solid var(--line);outline:none;color:#fff;background:#0e0a06
-}
-.send{width:56px;border:1px solid #ffe69a;border-radius:18px;background:linear-gradient(145deg,#ffe889,#c68518);font-size:22px}
-.back{margin-bottom:10px}
-.tools .card{min-height:100px}
-.panel{
-  border:1px solid var(--line);border-radius:22px;padding:16px;background:rgba(16,11,6,.9);
-  box-shadow:inset 0 0 20px rgba(246,196,83,.04)
-}
-input[type=file]{display:none}
-.preview{display:none;margin-top:12px;border-radius:18px;max-width:100%;border:1px solid var(--line)}
-.plan{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;border-bottom:1px solid rgba(246,196,83,.16)}
-.nav{
-  position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);
-  width:min(520px,100%);padding:9px 10px calc(9px + env(safe-area-inset-bottom));
-  background:rgba(7,5,3,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);
-  display:grid;grid-template-columns:repeat(4,1fr);gap:7px
-}
-.nav button{border:0;background:transparent;color:#bcae90;padding:7px 3px;border-radius:12px}
-.nav button.active{color:#fff0a2;background:rgba(246,196,83,.10)}
-.nav i{display:block;font-style:normal;font-size:21px}.nav span{font-size:11px}
-.toast{
-  position:fixed;z-index:50;top:16px;left:50%;transform:translate(-50%,-120px);
-  background:#211508;color:#ffeaa2;border:1px solid var(--line);border-radius:14px;padding:11px 15px;
-  transition:.25s;box-shadow:0 10px 30px #000
-}
-.toast.show{transform:translate(-50%,0)}
-.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--gold2);font-size:12px}
-@media(min-width:700px){.app{padding-top:28px}.nav{bottom:15px;border:1px solid var(--line);border-radius:22px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#070707">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>دبّرها | DABBARHA</title>
+
+  <!-- إعدادات المشروع الأصلية -->
+  <script src="config.js"></script>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    :root{
+      --bg:#050505;
+      --bg2:#0b0b0b;
+      --card:#111111;
+      --card2:#161616;
+      --gold:#d4af37;
+      --gold2:#f5d76e;
+      --gold3:#9d7b18;
+      --text:#fffaf0;
+      --muted:#aaa08b;
+      --line:rgba(212,175,55,.22);
+      --shadow:0 15px 45px rgba(0,0,0,.55);
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(212,175,55,.13), transparent 34%),
+        radial-gradient(circle at 100% 40%, rgba(212,175,55,.06), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Tahoma, Arial, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    button,a{
+      font:inherit;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .app{
+      width:100%;
+      max-width:720px;
+      margin:auto;
+      min-height:100vh;
+      padding-bottom:92px;
+    }
+
+    /* ===== Header ===== */
+    .top{
+      position:sticky;
+      top:0;
+      z-index:50;
+      padding:14px 16px 12px;
+      background:rgba(5,5,5,.86);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .top-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      min-width:0;
+    }
+
+    .logo{
+      width:50px;
+      height:50px;
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 50px;
+      color:#080808;
+      font-size:27px;
+      font-weight:1000;
+      font-family:Georgia,serif;
+      background:
+        linear-gradient(145deg,#fff2a8 0%,#f5d76e 18%,#d4af37 45%,#9d7413 70%,#f1d36a 100%);
+      border:1px solid rgba(255,244,180,.7);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.7),
+        inset 0 -5px 10px rgba(70,40,0,.28),
+        0 0 25px rgba(212,175,55,.18);
+    }
+
+    .brand-title{
+      font-weight:1000;
+      font-size:20px;
+      white-space:nowrap;
+      background:linear-gradient(90deg,#fff4b2,#d4af37,#fff0a0);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .brand-sub{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:3px;
+    }
+
+    .status{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(212,175,55,.06);
+      font-size:11px;
+      color:#d9c78d;
+      white-space:nowrap;
+    }
+
+    .dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:#d4af37;
+      box-shadow:0 0 10px #d4af37;
+    }
+
+    /* ===== Hero ===== */
+    .hero{
+      margin:18px 16px 16px;
+      padding:24px 20px;
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(212,175,55,.28);
+      border-radius:27px;
+      background:
+        radial-gradient(circle at 15% 0%,rgba(245,215,110,.18),transparent 35%),
+        linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.015)),
+        #0d0d0d;
+      box-shadow:var(--shadow);
+    }
+
+    .hero:before{
+      content:"D";
+      position:absolute;
+      left:-15px;
+      bottom:-45px;
+      font-family:Georgia,serif;
+      font-size:170px;
+      font-weight:900;
+      line-height:1;
+      color:rgba(212,175,55,.035);
+      pointer-events:none;
+    }
+
+    .crown{
+      color:#e9ca63;
+      font-size:13px;
+      margin-bottom:8px;
+      letter-spacing:.7px;
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:29px;
+      line-height:1.25;
+      font-weight:1000;
+      color:#fff8df;
+    }
+
+    .hero h1 span{
+      background:linear-gradient(90deg,#fff4b0,#d4af37,#fff0a0);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero p{
+      margin:10px 0 0;
+      color:#b9b09e;
+      line-height:1.8;
+      font-size:13px;
+      max-width:560px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:9px;
+      margin-top:17px;
+      flex-wrap:wrap;
+    }
+
+    .gold-btn,
+    .dark-btn{
+      border-radius:14px;
+      min-height:45px;
+      padding:0 17px;
+      border:1px solid var(--line);
+      cursor:pointer;
+      font-weight:900;
+      transition:.18s ease;
+    }
+
+    .gold-btn{
+      color:#080808;
+      border-color:#e7ca64;
+      background:linear-gradient(145deg,#fff0a0,#d4af37 48%,#a67e1c);
+      box-shadow:0 7px 22px rgba(212,175,55,.15);
+    }
+
+    .dark-btn{
+      color:#eee2bd;
+      background:#111;
+    }
+
+    .gold-btn:active,.dark-btn:active{
+      transform:scale(.97);
+    }
+
+    /* ===== Section ===== */
+    .section{
+      padding:0 16px;
+      margin-top:20px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:11px;
+    }
+
+    .section-title{
+      font-size:17px;
+      font-weight:1000;
+      color:#f7e8b3;
+    }
+
+    .section-note{
+      color:#7f786b;
+      font-size:11px;
+    }
+
+    /* ===== Cards ===== */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:11px;
+    }
+
+    .card{
+      position:relative;
+      overflow:hidden;
+      min-height:132px;
+      padding:17px;
+      border-radius:21px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012)),
+        #101010;
+      box-shadow:0 9px 28px rgba(0,0,0,.34);
+      cursor:pointer;
+      transition:transform .18s ease,border-color .18s ease;
+    }
+
+    .card:active{
+      transform:scale(.975);
+    }
+
+    .card:after{
+      content:"";
+      position:absolute;
+      width:90px;
+      height:90px;
+      left:-35px;
+      bottom:-42px;
+      border-radius:50%;
+      background:rgba(212,175,55,.07);
+      filter:blur(4px);
+    }
+
+    .icon{
+      width:43px;
+      height:43px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      margin-bottom:12px;
+      font-size:21px;
+      color:#090909;
+      background:linear-gradient(145deg,#fff0a0,#d4af37,#9c7519);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .card h3{
+      margin:0;
+      font-size:15px;
+      color:#f8edc9;
+    }
+
+    .card p{
+      margin:6px 0 0;
+      font-size:11px;
+      line-height:1.55;
+      color:#928a7b;
+    }
+
+    /* ===== Feature strip ===== */
+    .strip{
+      display:flex;
+      gap:9px;
+      overflow-x:auto;
+      padding:2px 1px 8px;
+      scrollbar-width:none;
+    }
+
+    .strip::-webkit-scrollbar{
+      display:none;
+    }
+
+    .mini{
+      flex:0 0 148px;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#101010;
+    }
+
+    .mini strong{
+      display:block;
+      color:#e9cf72;
+      font-size:13px;
+      margin-bottom:5px;
+    }
+
+    .mini span{
+      color:#817b70;
+      font-size:10px;
+      line-height:1.5;
+    }
+
+    /* ===== Footer nav ===== */
+    .bottom{
+      position:fixed;
+      z-index:60;
+      left:50%;
+      bottom:10px;
+      transform:translateX(-50%);
+      width:min(680px,calc(100% - 20px));
+      padding:8px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:5px;
+      border:1px solid rgba(212,175,55,.25);
+      border-radius:22px;
+      background:rgba(12,12,12,.92);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:0 15px 45px rgba(0,0,0,.7);
+    }
+
+    .nav-btn{
+      min-height:56px;
+      border:0;
+      border-radius:16px;
+      color:#8f8879;
+      background:transparent;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      font-size:10px;
+    }
+
+    .nav-btn b{
+      font-size:18px;
+      line-height:1;
+    }
+
+    .nav-btn.active{
+      color:#0b0b0b;
+      background:linear-gradient(145deg,#fff0a0,#d4af37,#a67d1b);
+      box-shadow:0 5px 18px rgba(212,175,55,.16);
+    }
+
+    /* ===== Toast ===== */
+    #toast{
+      position:fixed;
+      z-index:100;
+      left:50%;
+      bottom:88px;
+      transform:translate(-50%,20px);
+      opacity:0;
+      pointer-events:none;
+      max-width:calc(100% - 35px);
+      padding:11px 15px;
+      border-radius:13px;
+      border:1px solid rgba(212,175,55,.35);
+      background:#141414;
+      color:#f2df9d;
+      font-size:12px;
+      text-align:center;
+      transition:.25s ease;
+    }
+
+    #toast.show{
+      opacity:1;
+      transform:translate(-50%,0);
+    }
+
+    @media(max-width:380px){
+      .brand-title{font-size:17px}
+      .hero h1{font-size:25px}
+      .grid{gap:8px}
+      .card{padding:14px;min-height:125px}
+      .status{display:none}
+    }
+  </style>
 </head>
+
 <body>
-<div id="toast" class="toast"></div>
 
 <div class="app">
+
+  <!-- رأس التطبيق -->
   <header class="top">
-    <div class="brand">
-      <div class="logo">D</div>
-      <div><h1>دبّرها</h1><small>DABBARHA • ذكاء اصطناعي</small></div>
+    <div class="top-row">
+      <div class="brand">
+        <div class="logo">D</div>
+        <div>
+          <div class="brand-title">دبّرها</div>
+          <div class="brand-sub">DABBARHA • مساعدك الذكي</div>
+        </div>
+      </div>
+
+      <div class="status">
+        <span class="dot"></span>
+        <span>متصل</span>
+      </div>
     </div>
-    <button class="iconbtn" onclick="showPage('assistant')">✦</button>
   </header>
 
-  <main id="home" class="page active">
+  <!-- الواجهة الرئيسية -->
+  <main>
+
     <section class="hero">
-      <div class="bigD">D</div>
-      <h2>دبّرها</h2>
-      <p>ذكاء اصطناعي • لحياة أسهل</p>
-      <button class="goldbtn" onclick="showPage('assistant')">ابدأ الآن ✦</button>
-    </section>
+      <div class="crown">✦ تجربة فاخرة وذكية</div>
+      <h1>أهلاً بك في <span>دبّرها</span></h1>
+      <p>
+        كل أدواتك الذكية في مكان واحد: مساعد ذكي، صور، ترجمة، صوت،
+        ألعاب، دراسة وإدارة المال.
+      </p>
 
-    <div class="section-title"><h3>أدواتك الذكية</h3><span>✦</span></div>
-    <section class="grid">
-      <button class="card" onclick="showPage('study')"><div class="ico">🎓</div><b>الدراسة</b><small>مذاكرة • ملخصات • حلول</small></button>
-      <button class="card" onclick="showPage('money')"><div class="ico">💰</div><b>المال والعمل</b><small>فرص • دخل • استثمار</small></button>
-      <button class="card" onclick="showPage('docs')"><div class="ico">📄</div><b>المستندات</b><small>كتابة • ترجمة • تحليل</small></button>
-      <button class="card" onclick="showPage('tools')"><div class="ico">🌐</div><b>الترجمة</b><small>جميع اللغات</small></button>
-      <button class="card" onclick="showPage('image')"><div class="ico">🖼️</div><b>تحليل الصور</b><small>صور • نصوص • فهم</small></button>
-      <button class="card" onclick="showPage('voice')"><div class="ico">🎙️</div><b>المحادثة الصوتية</b><small>تحدث مع دبّرها</small></button>
-    </section>
-  </main>
-
-  <main id="assistant" class="page">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>المساعد الذكي</h3><span class="badge">دبّرها ✦</span></div>
-    <div class="chatbox panel">
-      <div id="messages" class="messages">
-        <div class="msg bot">مرحباً 👋 أنا دبّرها، مساعدك الذكي.<br>كيف يمكنني مساعدتك اليوم؟</div>
+      <div class="hero-actions">
+        <button class="gold-btn" onclick="openPage('chat.html')">ابدأ مع المساعد</button>
+        <button class="dark-btn" onclick="openPage('image.html')">إنشاء صورة</button>
       </div>
-      <div class="composer">
-        <textarea id="message" rows="1" placeholder="اكتب سؤالك أو مشكلتك هنا..."></textarea>
-        <button class="send" onclick="sendMessage()">➤</button>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">الخدمات الذكية</div>
+        <div class="section-note">كل شيء أمامك</div>
       </div>
-    </div>
-  </main>
 
-  <main id="tools" class="page tools">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>المزيد من الأدوات</h3></div>
-    <section class="grid">
-      <button class="card" onclick="showPage('study')"><div class="ico">📚</div><b>التعلم الذكي</b><small>دورات • اختبارات</small></button>
-      <button class="card" onclick="showPage('money')"><div class="ico">💼</div><b>العمل والمال</b><small>فرص • مهارات</small></button>
-      <button class="card" onclick="showPage('study')"><div class="ico">🏃</div><b>الرياضة</b><small>تمارين • لياقة</small></button>
-      <button class="card" onclick="showPage('money')"><div class="ico">📅</div><b>التقويم</b><small>مواعيد • تذكيرات</small></button>
-      <button class="card" onclick="showPage('docs')"><div class="ico">📝</div><b>الكتابة</b><small>نصوص • أفكار</small></button>
-      <button class="card" onclick="showPage('image')"><div class="ico">🤖</div><b>الذكاء الاصطناعي</b><small>صور • نصوص</small></button>
+      <div class="grid">
+
+        <a class="card" href="chat.html">
+          <div class="icon">✦</div>
+          <h3>المساعد الذكي</h3>
+          <p>تحدث مع المساعد واستخدم وظائف الذكاء الموجودة في مشروعك.</p>
+        </a>
+
+        <a class="card" href="image.html">
+          <div class="icon">◈</div>
+          <h3>الصور</h3>
+          <p>افتح صفحة الصور الموجودة في التطبيق.</p>
+        </a>
+
+        <a class="card" href="translation.html">
+          <div class="icon">文</div>
+          <h3>الترجمة</h3>
+          <p>ترجمة النصوص من خلال صفحة الترجمة الأصلية.</p>
+        </a>
+
+        <a class="card" href="games.html">
+          <div class="icon">♛</div>
+          <h3>الألعاب والألغاز</h3>
+          <p>استمتع بالألعاب والألغاز الموجودة في التطبيق.</p>
+        </a>
+
+        <a class="card" href="money.html">
+          <div class="icon">₿</div>
+          <h3>المال</h3>
+          <p>افتح أدوات المال والحسابات الموجودة في مشروعك.</p>
+        </a>
+
+        <a class="card" href="chat.html">
+          <div class="icon">◉</div>
+          <h3>الصوت</h3>
+          <p>استخدم وظائف الصوت من خلال المساعد الموجود في المشروع.</p>
+        </a>
+
+      </div>
     </section>
-  </main>
 
-  <main id="image" class="page">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>تحليل الصور</h3></div>
-    <div class="panel">
-      <label class="goldbtn" style="display:block;text-align:center">
-        اختر صورة من جهازك
-        <input id="imageInput" type="file" accept="image/*" onchange="previewImage(event)">
-      </label>
-      <img id="preview" class="preview" alt="معاينة الصورة">
-      <button class="goldbtn" style="width:100%;margin-top:12px" onclick="analyzeImage()">تحليل الصورة ✦</button>
-      <div id="imageResult" style="margin-top:12px;color:var(--muted)"></div>
-    </div>
-  </main>
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">لماذا دبّرها؟</div>
+        <div class="section-note">مصمم لك</div>
+      </div>
 
-  <main id="voice" class="page">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>محادثة صوتية</h3></div>
-    <div class="panel" style="text-align:center;padding:35px 15px">
-      <div class="bigD" style="width:115px;height:115px;font-size:72px">D</div>
-      <p id="voiceStatus" style="color:var(--muted)">اضغط للبدء والتحدث</p>
-      <button class="goldbtn" onclick="startVoice()">🎙️ ابدأ الاستماع</button>
-    </div>
-  </main>
+      <div class="strip">
+        <div class="mini">
+          <strong>⚡ سريع</strong>
+          <span>واجهة خفيفة ومناسبة لشاشات الهاتف.</span>
+        </div>
 
-  <main id="docs" class="page">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>المستندات والترجمة</h3></div>
-    <section class="grid">
-      <button class="card" onclick="quickPrompt('ترجم هذا النص إلى الإنجليزية')"><div class="ico">🌐</div><b>ترجمة النصوص</b><small>عربي • English • لغات متعددة</small></button>
-      <button class="card" onclick="quickPrompt('اكتب لي مستنداً احترافياً')"><div class="ico">📄</div><b>كتابة مستند</b><small>خطابات • تقارير • نماذج</small></button>
-      <button class="card" onclick="quickPrompt('لخص لي هذا النص')"><div class="ico">📋</div><b>تلخيص نص</b><small>اختصر المحتوى بسرعة</small></button>
-      <button class="card" onclick="quickPrompt('اكتب لي تقريراً احترافياً')"><div class="ico">📊</div><b>تقرير احترافي</b><small>تنظيم وصياغة</small></button>
+        <div class="mini">
+          <strong>🔒 إعداداتك</strong>
+          <span>يتم تحميل إعدادات الاتصال من config.js الخاص بمشروعك.</span>
+        </div>
+
+        <div class="mini">
+          <strong>✦ فاخر</strong>
+          <span>تصميم أسود وذهبي بلمسة لامعة.</span>
+        </div>
+
+        <div class="mini">
+          <strong>◈ منظم</strong>
+          <span>كل خدمة في صفحة مستقلة حتى لا تتعطل الوظائف الأصلية.</span>
+        </div>
+      </div>
     </section>
-  </main>
 
-  <main id="study" class="page">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>الدراسة والتعلم</h3></div>
-    <div class="panel">
-      <div class="plan"><span>📚 خطة الدراسة الأسبوعية</span><span>›</span></div>
-      <div class="plan"><span>🧠 شرح درس أو موضوع</span><span>›</span></div>
-      <div class="plan"><span>📝 إنشاء اختبار</span><span>›</span></div>
-      <div class="plan"><span>✍️ حل المسائل</span><span>›</span></div>
-      <button class="goldbtn" style="width:100%;margin-top:15px" onclick="quickPrompt('أنشئ لي خطة دراسة أسبوعية')">إنشاء خطة جديدة +</button>
-    </div>
-  </main>
-
-  <main id="money" class="page">
-    <button class="iconbtn back" onclick="showPage('home')">‹</button>
-    <div class="section-title"><h3>المال والعمل</h3></div>
-    <section class="grid">
-      <button class="card" onclick="quickPrompt('اقترح لي أفكاراً للعمل وزيادة الدخل')"><div class="ico">💰</div><b>زيادة الدخل</b><small>أفكار ومهارات</small></button>
-      <button class="card" onclick="quickPrompt('ساعدني في كتابة سيرة ذاتية')"><div class="ico">📄</div><b>السيرة الذاتية</b><small>صياغة احترافية</small></button>
-      <button class="card" onclick="quickPrompt('ساعدني في البحث عن فكرة مشروع')"><div class="ico">💡</div><b>أفكار مشاريع</b><small>خطط وأفكار</small></button>
-      <button class="card" onclick="quickPrompt('أنشئ لي خطة لتنظيم مصاريفي')"><div class="ico">📊</div><b>تنظيم المال</b><small>خطة وميزانية</small></button>
-    </section>
   </main>
 </div>
 
-<nav class="nav">
-  <button id="nav-home" class="active" onclick="showPage('home')"><i>⌂</i><span>الرئيسية</span></button>
-  <button id="nav-assistant" onclick="showPage('assistant')"><i>✦</i><span>المساعد</span></button>
-  <button id="nav-tools" onclick="showPage('tools')"><i>▦</i><span>الأدوات</span></button>
-  <button id="nav-docs" onclick="showPage('docs')"><i>⚙</i><span>المزيد</span></button>
+<!-- شريط التنقل -->
+<nav class="bottom">
+  <button class="nav-btn active" onclick="goHome()">
+    <b>⌂</b>
+    الرئيسية
+  </button>
+
+  <button class="nav-btn" onclick="openPage('chat.html')">
+    <b>✦</b>
+    المساعد
+  </button>
+
+  <button class="nav-btn" onclick="openPage('image.html')">
+    <b>◈</b>
+    الصور
+  </button>
+
+  <button class="nav-btn" onclick="openPage('translation.html')">
+    <b>文</b>
+    الترجمة
+  </button>
 </nav>
 
-<script>
-/*
-  إذا كان لديك config.js في المشروع، يمكنه تعريف:
-  const BACKEND_URL = "https://....";
-  هذا الملف يحاول استخدامه تلقائياً.
-*/
-let BACKEND = "";
-try { if (typeof BACKEND_URL !== "undefined") BACKEND = BACKEND_URL; } catch(e) {}
+<div id="toast"></div>
 
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  const page=document.getElementById(id);
-  if(page) page.classList.add("active");
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
-  const nav=document.getElementById("nav-"+id);
-  if(nav) nav.classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function toast(t){
-  const x=document.getElementById("toast"); x.textContent=t; x.classList.add("show");
-  setTimeout(()=>x.classList.remove("show"),2500);
-}
-function addMessage(text,type){
-  const box=document.getElementById("messages");
-  const d=document.createElement("div"); d.className="msg "+type; d.textContent=text;
-  box.appendChild(d); box.scrollTop=box.scrollHeight;
-}
-async function sendMessage(){
-  const input=document.getElementById("message");
-  const text=input.value.trim(); if(!text)return;
-  addMessage(text,"user"); input.value="";
-  addMessage("جاري التفكير...","bot");
-  const box=document.getElementById("messages");
-  const loading=box.lastElementChild;
-  try{
-    if(!BACKEND){
-      loading.textContent="تم استلام رسالتك ✦\nلربط المساعد الذكي فعلياً، ضع عنوان الخادم BACKEND_URL في config.js.";
-      return;
-    }
-    const r=await fetch(BACKEND,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:text,text:text})
-    });
-    const data=await r.json();
-    loading.textContent=data.reply||data.response||data.message||"تمت معالجة طلبك.";
-  }catch(e){
-    loading.textContent="تعذر الاتصال بالخادم حالياً. تأكد من BACKEND_URL واتصال الإنترنت.";
+<script>
+  /*
+    ==========================================
+    DABBARHA
+    إعداد الاتصال بالمشروع الأصلي
+    ==========================================
+
+    لا نضع رابط Gemini هنا يدوياً.
+    المشروع يستخدم config.js الموجود في www.
+
+    الشكل المتوقع في config.js:
+    window.DABBARHA_CONFIG = {
+      BACKEND_URL: "https://..."
+    };
+  */
+
+  const APP_CONFIG =
+    window.DABBARHA_CONFIG || {};
+
+  const BACKEND_URL =
+    APP_CONFIG.BACKEND_URL || "";
+
+  function showToast(message){
+    const el = document.getElementById("toast");
+    if(!el) return;
+
+    el.textContent = message;
+    el.classList.add("show");
+
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => {
+      el.classList.remove("show");
+    }, 2200);
   }
-}
-function quickPrompt(t){showPage("assistant");document.getElementById("message").value=t;document.getElementById("message").focus();}
-document.getElementById("message").addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}
-});
-function previewImage(e){
-  const file=e.target.files[0]; if(!file)return;
-  const img=document.getElementById("preview");
-  img.src=URL.createObjectURL(file); img.style.display="block";
-  document.getElementById("imageResult").textContent="تم اختيار الصورة بنجاح.";
-}
-function analyzeImage(){
-  const f=document.getElementById("imageInput").files[0];
-  if(!f){toast("اختر صورة أولاً");return}
-  document.getElementById("imageResult").innerHTML="<span style='color:#ffe58a'>تم تجهيز الصورة للتحليل ✦</span><br>لإرسال الصورة إلى الذكاء الاصطناعي فعلياً، نحتاج ربط نقطة تحليل الصور في الخادم.";
-}
-function startVoice(){
-  const status=document.getElementById("voiceStatus");
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){status.textContent="المتصفح لا يدعم التعرف الصوتي على هذا الجهاز.";return}
-  const r=new SR(); r.lang="ar-SA"; r.interimResults=false;
-  status.textContent="🎙️ جاري الاستماع...";
-  r.onresult=e=>{
-    const t=e.results[0][0].transcript;
-    status.textContent="سمعت: "+t;
-    quickPrompt(t);
-  };
-  r.onerror=()=>status.textContent="حدث خطأ في التعرف الصوتي.";
-  r.onend=()=>{if(status.textContent.includes("جاري"))status.textContent="انتهى الاستماع."};
-  r.start();
-}
+
+  function openPage(page){
+    if(!page) return;
+
+    try{
+      window.location.href = page;
+    }catch(e){
+      showToast("تعذر فتح الصفحة");
+    }
+  }
+
+  function goHome(){
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+  }
+
+  /*
+    فحص إعدادات الاتصال فقط.
+    لا نغيّر API ولا نخترع endpoint جديد هنا.
+    صفحات chat.html / image.html / translation.html
+    تبقى مسؤولة عن وظائفها الأصلية.
+  */
+  window.addEventListener("load", () => {
+    if(!BACKEND_URL){
+      console.warn("DABBARHA_CONFIG.BACKEND_URL غير موجود.");
+    }else{
+      console.log("DABBARHA backend configured.");
+    }
+  });
+
+  /*
+    منع النقر المزدوج السريع على الروابط داخل التطبيق.
+  */
+  document.querySelectorAll("a.card").forEach(card => {
+    card.addEventListener("click", () => {
+      card.style.opacity = ".72";
+      setTimeout(() => {
+        card.style.opacity = "1";
+      }, 350);
+    });
+  });
 </script>
+
 </body>
 </html>
 '''
@@ -345,4 +675,4 @@ function startVoice(){
 path = Path("/mnt/data/index.html")
 path.write_text(html, encoding="utf-8")
 print(f"تم إنشاء الملف: {path}")
-print("عدد الأحرف:", len(html))
+print(f"عدد الأحرف: {len(html):,}")
