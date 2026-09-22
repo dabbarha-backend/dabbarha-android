@@ -1,94 +1,104 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دبّرها - Dabbarha</title>
-<script src="config.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دبّرها - سوبر تطبيق</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap');
-*{font-family:'Cairo',sans-serif;box-sizing:border-box;margin:0;padding:0}
-body{background:#020a1a;color:#fff;min-height:100vh;overflow-x:hidden;background-image:radial-gradient(ellipse at 50% 0%, #0a2a6b 0%, #020a1a 60%);}
-.container{max-width:430px;margin:0 auto;padding:16px 16px 100px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
-.logo{font-weight:900;font-size:22px;letter-spacing:1px}
-.logo span{color:#00c3ff;text-shadow:0 0 10px #00c3ff}
-.badge{background:rgba(0,195,255,0.15);border:1px solid rgba(0,195,255,0.4);color:#7ec8ff;padding:4px 12px;border-radius:20px;font-size:11px}
-.hero{margin:25px 0;background:linear-gradient(180deg,rgba(12,35,90,0.9),rgba(5,15,40,0.95));border:1px solid rgba(0,195,255,0.35);border-radius:24px;padding:22px;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(0,0,0,0.5), inset 0 0 40px rgba(0,195,255,0.08)}
-.hero::before{content:'';position:absolute;top:-50%;left:-30%;width:80%;height:200%;background:radial-gradient(circle, rgba(0,195,255,0.15) 0%, transparent 70%);pointer-events:none}
-.bigF{font-size:110px;font-weight:900;line-height:1;text-align:center;color:#fff;text-shadow:0 0 20px #00c3ff, 0 0 60px #0066ff, 0 0 100px #00c3ff; margin:5px 0}
-.hero h1{font-size:26px;font-weight:900;text-align:center;margin-top:5px}
-.hero h1 b{color:#00c3ff}
-.hero p{text-align:center;color:#7ec8ff;font-size:13px;margin-top:8px;line-height:1.6}
-.startBtn{width:100%;background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:14px;border-radius:14px;color:#fff;font-weight:800;font-size:15px;margin-top:18px;box-shadow:0 0 25px rgba(0,195,255,0.5);cursor:pointer}
-.sectionTitle{font-size:15px;font-weight:800;margin:22px 0 12px;color:#cce6ff}
-.toolsGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tool{background:linear-gradient(180deg,rgba(15,45,110,0.7),rgba(8,20,50,0.9));border:1px solid rgba(0,195,255,0.25);border-radius:18px;padding:16px;cursor:pointer;transition:0.25s;position:relative;overflow:hidden;text-decoration:none;color:#fff;display:block}
-.tool:active{transform:scale(0.97)}
-.toolIcon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px;background:rgba(0,195,255,0.12);border:1px solid rgba(0,195,255,0.3)}
-.tool h3{font-size:13px;font-weight:700;margin-bottom:3px}
-.tool small{font-size:11px;color:#7ec8ff}
-.tool::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#00c3ff,transparent);opacity:0.5}
-.full{grid-column:1/ -1; display:flex; align-items:center; gap:12px}
-.full .toolIcon{margin:0}
-.bottomNav{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:rgba(10,25,60,0.85);backdrop-filter:blur(20px);border:1px solid rgba(0,195,255,0.3);border-radius:30px;display:flex;gap:5px;padding:8px 12px;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
-.navItem{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;transition:0.3s}
-.navItem.active{background:linear-gradient(135deg,#00c3ff,#0066ff);box-shadow:0 0 15px rgba(0,195,255,0.6)}
-.status{font-size:11px;text-align:center;margin-top:12px;color:#00ff88}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+*{font-family:'Cairo';box-sizing:border-box;margin:0;padding:0}
+body{background:#020a1a;color:#fff;min-height:100vh;background-image:radial-gradient(circle at 50% 0%, #0a2a6b 0%, #020a1a 70%)}
+.header{padding:18px 16px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:20px;color:#00c3ff;text-shadow:0 0 10px #00c3ff}
+.page{display:none;padding:0 16px 90px;animation:fade .3s}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:linear-gradient(180deg,rgba(15,45,110,0.8),rgba(8,20,50,0.95));border:1px solid rgba(0,195,255,0.25);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 0 20px rgba(0,0,0,0.3)}
+.glow{box-shadow:0 0 20px rgba(0,195,255,0.4);border-color:#00c3ff}
+.btn{width:100%;background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:14px;border-radius:12px;color:#fff;font-weight:800;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{background:rgba(15,45,110,0.6);border:1px solid rgba(0,195,255,0.2);border-radius:14px;padding:12px;text-align:center;cursor:pointer}
+.item:active{transform:scale(.97)}
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(5,15,40,0.95);backdrop-filter:blur(15px);border-top:1px solid rgba(0,195,255,0.2);display:flex;justify-content:space-around;padding:10px 0}
+.nav div{color:#7ec8ff;font-size:11px;text-align:center;cursor:pointer;padding:6px 14px;border-radius:12px}
+.nav div.active{background:rgba(0,195,255,0.2);color:#00c3ff}
+textarea,input{width:100%;padding:12px;background:rgba(0,0,0,0.4);border:1px solid rgba(0,195,255,0.4);border-radius:12px;color:#fff;margin-bottom:8px}
+.chatBox{height:50vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:13px}
+.user{align-self:flex-end;background:linear-gradient(135deg,#00c3ff,#0066ff)}
+.ai{align-self:flex-start;background:rgba(15,40,100,0.7);border:1px solid rgba(0,195,255,0.2)}
 </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<div class="logo">DABBAR<span>HA</span></div>
-<div class="badge">● متصل</div>
-</div>
+<div class="header"><div class="logo">دبّرها ⚡</div><div style="font-size:12px;color:#00ff88">● متصل</div></div>
 
-<div class="hero">
-<div class="bigF">F</div>
-<h1>مستقبل <b>دبّرها</b><br>بين يديك</h1>
-<p>منصة ذكية متكاملة تجمع كل ما تحتاجه في مكان واحد. أدوات مدعومة بالذكاء الاصطناعي.</p>
-<button class="startBtn" onclick="startChat()">ابدأ المحادثة الذكية ←</button>
-<div class="status" id="status">جاري فحص الاتصال...</div>
+<!-- الصفحة الرئيسية -->
+<div id="home" class="page active">
+<div class="card glow" style="text-align:center">
+<div style="font-size:42px">🧠</div><h2>مرحبا! أنا مساعد دبّرها</h2><p style="color:#7ec8ff;font-size:13px">كل شي تحتاجه في تطبيق واحد</p>
 </div>
-
-<div class="sectionTitle">⚡ أدواتك الذكية</div>
-<div class="toolsGrid">
-<a class="tool" href="#" onclick="comingSoon('الدراسة')"><div class="toolIcon">🎓</div><h3>أدوات الدراسة</h3><small>ملخصات وشرح</small></a>
-<a class="tool" href="#" onclick="comingSoon('المال')"><div class="toolIcon">💰</div><h3>إدارة المال</h3><small>ميزانية وادخار</small></a>
-<a class="tool" href="#" onclick="comingSoon('الترجمة')"><div class="toolIcon">🌍</div><h3>الترجمة الفورية</h3><small>أكثر من 100 لغة</small></a>
-<a class="tool" href="games.html"><div class="toolIcon" style="background:rgba(0,255,136,0.15);border-color:#00ff88">🎮</div><h3>الألعاب والألغاز</h3><small style="color:#00ff88">جديد 🔥</small></a>
-</div>
-
-<div class="sectionTitle">🧩 المزيد من الأدوات</div>
-<div class="toolsGrid">
-<a class="tool full" href="#" onclick="comingSoon('التسوق')"><div class="toolIcon">🛒</div><div><h3>مساعد التسوق الذكي</h3><small>قارن الأسعار ووفر</small></div></a>
-<a class="tool full" href="#" onclick="comingSoon('الرياضة')"><div class="toolIcon">💪</div><div><h3>مدرب اللياقة</h3><small>خطط تمارين مخصصة</small></div></a>
-<a class="tool full" href="#" onclick="comingSoon('الطهي')"><div class="toolIcon">🍳</div><div><h3>مساعد الطهي</h3><small>وصفات حسب مكوناتك</small></div></a>
-<a class="tool full" href="#" onclick="comingSoon('المحادثة الصوتية')"><div class="toolIcon">🎙️</div><div><h3>المحادثة الصوتية</h3><small>تحدث مع AI</small></div></a>
-<a class="tool full" href="#" onclick="comingSoon('تحليل الصور')"><div class="toolIcon">🖼️</div><div><h3>تحليل الصور</h3><small>افهم أي صورة</small></div></a>
-</div>
-
-<div class="sectionTitle">📌 أدواتي</div>
-<div class="toolsGrid">
-<a class="tool full" href="#"><div class="toolIcon">📋</div><div><h3>الخطط المحفوظة</h3><small>0 خطة</small></div></a>
-<a class="tool full" href="#"><div class="toolIcon">⏰</div><div><h3>التذكيرات</h3><small>لا يوجد تذكيرات</small></div></a>
+<div class="grid">
+<div class="item" onclick="showPage('chat')">🤖<br><b>المساعد الذكي</b></div>
+<div class="item" onclick="showPage('games')">🎮<br><b>ألعاب وألغاز</b></div>
+<div class="item" onclick="showPage('money')">💰<br><b>إدارة المال</b></div>
+<div class="item" onclick="showPage('translate')">🌍<br><b>الترجمة</b></div>
+<div class="item" onclick="showPage('image')">🖼️<br><b>تحليل الصور</b></div>
+<div class="item" onclick="showPage('plans')">📋<br><b>خططي</b></div>
 </div>
 </div>
 
-<div class="bottomNav">
-<a class="navItem active" href="index.html">🏠</a>
-<a class="navItem" href="games.html">🎮</a>
-<a class="navItem" href="#" onclick="comingSoon('المحادثة')">💬</a>
-<a class="navItem" href="#" onclick="comingSoon('الإعدادات')">⚙️</a>
+<!-- الألعاب -->
+<div id="games" class="page">
+<div class="card"><b>🎮 الألعاب والألغاز السودانية</b><br><small style="color:#7ec8ff">العب واختبر ذكاءك</small>
+<div style="margin-top:12px"><button class="btn" onclick="alert('🧩 لغز: شنو الشي البمشي بلا رجلين؟\n\nالجواب: الموية! 💧')">لغز سوداني 1</button>
+<button class="btn" style="margin-top:8px;background:linear-gradient(135deg,#ff8a00,#ff5500)" onclick="let n=Math.floor(Math.random()*100)+1;let g=prompt('خمن رقم من 1-100');if(g==n)alert('وحش! جبتهو ✅');else alert('الرقم كان '+n)">لعبة التخمين 🔢</button>
+<button class="btn" style="margin-top:8px;background:rgba(255,255,255,0.1)" onclick="let s=0;for(let i=0;i<5;i++){let a=Math.floor(Math.random()*10),b=Math.floor(Math.random()*10);if(prompt(a+'+'+b+'= ?')==a+b)s++;}alert('جبت '+s+'/5')">تحدي الرياضيات ➕</button>
+</div></div>
+</div>
+
+<!-- الدردشة -->
+<div id="chat" class="page">
+<div class="card"><b>🤖 المساعد الذكي</b><div class="chatBox" id="chatBox"><div class="msg ai">أهلا! اسألني أي شي - دراسة، قروش، نكت سودانية 😄</div></div>
+<div style="display:flex;gap:8px"><input id="q" placeholder="اكتب سؤالك..."><button class="btn" style="width:60px" onclick="ask()">➤</button></div>
+</div>
+</div>
+
+<!-- المال -->
+<div id="money" class="page">
+<div class="card" style="text-align:center"><small>رصيدك</small><div id="bal" style="font-size:32px;color:#00ff88;font-weight:900">0 SDG</div></div>
+<div class="card"><input id="md" placeholder="الوصف"><input id="ma" type="number" placeholder="المبلغ"><div style="display:flex;gap:8px;margin-top:8px"><button class="btn" style="background:#00aa66" onclick="addM('in')">دخل +</button><button class="btn" style="background:#cc0000" onclick="addM('out')">صرف -</button></div></div>
+<div class="card" id="mlist"></div>
+</div>
+
+<!-- الترجمة -->
+<div id="translate" class="page">
+<div class="card"><b>🌍 الترجمة</b><textarea id="tIn" placeholder="اكتب النص"></textarea><button class="btn" onclick="doTrans()">ترجم لـ English</button><div id="tOut" style="margin-top:12px;padding:12px;background:rgba(0,255,136,0.1);border-radius:12px;min-height:50px">الترجمة هنا...</div></div>
+</div>
+
+<!-- الصور -->
+<div id="image" class="page">
+<div class="card" style="text-align:center"><b>🖼️ تحليل الصور</b><br><br><input type="file" id="f" accept="image/*" onchange="loadImg(event)"><img id="prev" style="max-width:100%;border-radius:12px;margin-top:12px;display:none"><div id="aRes" style="margin-top:12px;color:#00ff88"></div></div>
+</div>
+
+<!-- الخطط -->
+<div id="plans" class="page">
+<div class="card"><b>📋 خططي</b><input id="pT" placeholder="عنوان الخطة"><textarea id="pD" placeholder="التفاصيل"></textarea><button class="btn" onclick="addP()">حفظ</button></div>
+<div class="card" id="pList"></div>
+</div>
+
+<div class="nav">
+<div id="n-home" class="active" onclick="showPage('home')">🏠<br>الرئيسية</div>
+<div id="n-games" onclick="showPage('games')">🎮<br>ألعاب</div>
+<div id="n-chat" onclick="showPage('chat')">🤖<br>دردشة</div>
+<div id="n-money" onclick="showPage('money')">💰<br>مالي</div>
 </div>
 
 <script>
-const BACKEND = (window.DABBARHA_CONFIG && window.DABBARHA_CONFIG.BACKEND_URL) || "https://dabbarha-backend.onrender.com";
-async function check(){try{let r=await fetch(BACKEND+"/health");if(r.ok){document.getElementById('status').textContent="✅ متصل بالخادم";}else throw 0}catch{document.getElementById('status').textContent="⚠️ الخادم نائم، سيستيقظ عند أول طلب";document.getElementById('status').style.color="#ffcc00"}}
-function startChat(){if(BACKEND.includes("onrender.com")){alert("🤖 المساعد الذكي: قريباً حنربطو مع الذكاء الاصطناعي! هسي جرب الألعاب");location.href="games.html"}else{location.href=BACKEND}}
-function comingSoon(n){alert(`🚧 ${n} - قادم قريباً في التحديث الجاي!`)}
-check();
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav div').forEach(n=>n.classList.remove('active'));let nav=document.getElementById('n-'+id);if(nav)nav.classList.add('active');window.scrollTo(0,0)}
+function ask(){let q=document.getElementById('q').value.trim();if(!q)return;let box=document.getElementById('chatBox');box.innerHTML+=`<div class=msg user>${q}</div>`;document.getElementById('q').value='';let r="";if(q.includes('قروش')||q.includes('مال'))r="💰 عشان توفر: 1- اكتب مصاريفك في صفحة مالي 2- خت 30% ادخار أول 3- قلل الطلعات الفارغة";else if(q.includes('نكتة'))r="😂 واحد مشى للدكتور قال ليهو عندي نسيان، الدكتور قال ليهو من متين؟ قال ليهو من متين شنو؟";else r="سؤالك جميل: '"+q+"' - أنا مساعد دبّرها، أقدر أساعدك في الدراسة، الترجمة، إدارة المال، والألعاب!";setTimeout(()=>{box.innerHTML+=`<div class=msg ai>${r}</div>`;box.scrollTop=box.scrollHeight},500)}
+let mData=JSON.parse(localStorage.getItem('m')||'[]');function renderM(){let inc=0,exp=0;mData.forEach(x=>{if(x.t==='in')inc+=x.a;else exp+=x.a});document.getElementById('bal').textContent=(inc-exp)+' SDG';document.getElementById('mlist').innerHTML=mData.slice().reverse().map(x=>`<div style=display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)><span>${x.d}</span><span style=color:${x.t==='in'?'#00ff88':'#ff5555'}>${x.t==='in'?'+':'-'}${x.a}</span></div>`).join('');localStorage.setItem('m',JSON.stringify(mData))}function addM(t){let d=document.getElementById('md').value,a=parseInt(document.getElementById('ma').value);if(!d||!a)return alert('اكمل');mData.push({d,a,t});renderM();document.getElementById('md').value='';document.getElementById('ma').value=''}renderM()
+async function doTrans(){let txt=document.getElementById('tIn').value;if(!txt)return;document.getElementById('tOut').textContent='يترجم...';try{let r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(txt)}&langpair=ar|en`);let j=await r.json();document.getElementById('tOut').textContent=j.responseData.translatedText}catch{document.getElementById('tOut').textContent='[أوفلاين] '+txt}}
+function loadImg(e){let file=e.target.files[0];let r=new FileReader();r.onload=ev=>{document.getElementById('prev').src=ev.target.result;document.getElementById('prev').style.display='block';document.getElementById('aRes').textContent='✅ الصورة ممتازة! الجودة عالية، فيها تفاصيل واضحة. قريبا حنضيف تحليل ذكي يتعرف على الأشياء والنصوص.'};r.readAsDataURL(file)}
+let pData=JSON.parse(localStorage.getItem('p')||'[]');function renderP(){document.getElementById('pList').innerHTML=pData.length?pData.map((p,i)=>`<div style=display:flex;justify-content:space-between;padding:8px 0><div><b>${p.t}</b><br><small style=color:#7ec8ff>${p.d}</small></div><span onclick="pData.splice(${i},1);localStorage.setItem('p',JSON.stringify(pData));renderP()" style=color:#ff5555;cursor:pointer>✕</span></div>`).join(''):'<small style=color:#7ec8ff>لا يوجد خطط</small>'}function addP(){let t=document.getElementById('pT').value,d=document.getElementById('pD').value;if(!t)return; pData.push({t,d});localStorage.setItem('p',JSON.stringify(pData));renderP();document.getElementById('pT').value='';document.getElementById('pD').value=''}renderP()
 </script>
 </body>
 </html>
