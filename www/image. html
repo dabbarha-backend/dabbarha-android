@@ -1,0 +1,43 @@
+here<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحليل الصور</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+*{font-family:'Cairo';box-sizing:border-box;margin:0;padding:0}
+body{background:#020a1a;color:#fff;min-height:100vh;padding:16px;text-align:center;background:radial-gradient(circle at 50% 0%, #0a2a6b 0%, #020a1a 70%)}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:20px;text-align:right}
+.back{width:45px;height:45px;background:rgba(0,195,255,0.15);border:1px solid #00c3ff;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#00c3ff;text-decoration:none;font-size:22px}
+.upload{border:2px dashed #00c3ff;border-radius:20px;padding:40px 20px;background:rgba(0,195,255,0.05);cursor:pointer}
+.upload img{max-width:100%;border-radius:15px;margin-top:15px;display:none}
+.btn{width:100%;background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:14px;border-radius:12px;color:#fff;font-weight:800;margin-top:15px;cursor:pointer}
+.card{background:linear-gradient(180deg,rgba(15,45,110,0.8),rgba(8,20,50,0.95));border:1px solid rgba(0,195,255,0.3);border-radius:18px;padding:16px;margin-top:15px;text-align:right}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">‹</a><b>🖼️ تحليل الصور بالذكاء</b></div>
+<div class="upload" onclick="document.getElementById('file').click()">
+<div id="txt">📸 اضغط لاختيار صورة<br><small style="color:#7ec8ff">أي صورة من الاستوديو</small></div>
+<img id="preview"><input type="file" id="file" accept="image/*" hidden onchange="loadImg(event)">
+</div>
+<button class="btn" onclick="analyze()">حلل الصورة ✨</button>
+<div class="card" id="res" style="display:none"></div>
+<script>
+let imgData=null;
+function loadImg(e){
+let f=e.target.files[0];if(!f)return;
+let r=new FileReader();r.onload=ev=>{
+document.getElementById('preview').src=ev.target.result;document.getElementById('preview').style.display='block';document.getElementById('txt').style.display='none';imgData=ev.target.result;
+};r.readAsDataURL(f);
+}
+function analyze(){
+if(!imgData)return alert('اختار صورة أول');
+let box=document.getElementById('res');box.style.display='block';box.innerHTML='يحلل... ⏳';
+setTimeout(()=>{
+box.innerHTML=`<b>✅ التحليل:</b><br><br>• الصورة تحتوي على عناصر واضحة<br>• الجودة: ممتازة<br>• اقتراح: يمكنك استخدام هذه الصورة لـ:<br> - وصفها في منشور<br> - البحث عن مشابه لها<br> - ترجمة النصوص داخلها<br><br><small style="color:#00ff88">💡 قريباً: تحليل حقيقي بالذكاء الاصطناعي يتعرف على الأشخاص والأشياء والنصوص!</small>`;
+},1500);
+}
+</script>
+</body>
+</html>
