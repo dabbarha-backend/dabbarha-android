@@ -1,12 +1,348 @@
-<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src * data: blob: https: http: 'unsafe-inline' 'unsafe-eval'"><style>body{margin:0;background:#0a0700;color:#fff;font-family:system-ui;height:100vh;display:flex;flex-direction:column}.page{display:none;flex:1;overflow:auto;padding:10px;background:radial-gradient(#2a1f0a,#070509)}.page.on{display:flex;flex-direction:column}.card{background:linear-gradient(#1e1608,#0e0b05);border:1px solid #facc1566;border-radius:16px;padding:12px;margin:5px}.gold{color:#facc15}.btn{width:100%;padding:12px;background:linear-gradient(90deg,#facc15,#fde68a);color:#000;border:none;border-radius:12px;font-weight:900}.nav{height:60px;background:#000;border-top:1px solid #facc1533;display:flex;justify-content:space-around;align-items:center}.nav div{color:#6b5a2a;font-size:11px;text-align:center}.nav.on{color:#facc15}.chat{flex:1;display:flex;flex-direction:column;gap:8px;overflow:auto}.msg{padding:10px;border-radius:14px;max-width:85%;font-size:13px;border:1px solid #facc1540;background:#1a1405}.user{align-self:flex-start;background:#3a2a0a}.ai{align-self:flex-end}.msg img{width:100%;border-radius:10px;margin-top:6px}.input{display:flex;gap:6px;padding:10px;background:#000}.input input{flex:1;padding:12px;border-radius:20px;border:1px solid #facc1540;background:#1a1405;color:#fff}.input button{width:44px;height:44px;border-radius:50%;background:#facc15;border:none}</style></head><body>
-<div id="p1" class="page on" style="justify-content:center;align-items:center;text-align:center;background:radial-gradient(circle at center,#3a2a0a 0%,#000 70%)"><div style="width:140px;height:140px;border-radius:50%;background:radial-gradient(#fde68a,#facc15);display:flex;align-items:center;justify-content:center;font-size:80px;box-shadow:0 0 50px gold;border:4px solid gold;margin-bottom:20px">D</div><h1 class="gold" style="font-size:40px;margin:0">دبّرها</h1><p>DABBARHA</p><small style="color:#fde68a">ذكاء اصطناعي.. لحياة أسهل</small><button class="btn" style="margin-top:30px;width:200px" onclick="go('p2')">ابدأ الآن →</button></div>
-<div id="p2" class="page"><h3 class="gold">👑 مرحبا بك في دبرها</h3><div class="card"><input id="hIn" placeholder="اكتب سؤالك هنا..." style="width:100%;padding:10px;border-radius:10px;background:#000;color:#fff;border:1px solid #444"><button class="btn" style="margin-top:6px" onclick="let v=document.getElementById('hIn').value;if(v){go('p3');document.getElementById('q').value=v;send()}">اسأل</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="card">📊 المال والعمل</div><div class="card">📚 الدراسة</div><div class="card">📄 المستندات</div><div class="card">🎭 الترفيه</div><div class="card" onclick="go('p4')">🎨 مولد الصور</div><div class="card" onclick="go('p5')">🎤 الصوتي</div></div><div class="nav"><div class="on">🏠 الرئيسية</div><div onclick="go('p3')">💬 الشات</div><div onclick="go('p4')">🎨 الصور</div></div></div>
-<div id="p3" class="page"><div style="display:flex;justify-content:space-between;padding:5px"><span onclick="go('p2')">＜ رجوع</span><b class="gold">المساعد الذكي</b></div><div id="chat" class="chat"><div class="msg ai">مرحبا! أنا دبرها، جاهز أساعدك 👋</div></div><div class="input"><input id="q" placeholder="اكتب رسالتك..."><button onclick="send()">↑</button></div></div>
-<div id="p4" class="page"><div onclick="go('p2')">＜ رجوع</div><h3 class="gold">🎨 مولد الصور - شغال 100%</h3><div class="card"><input id="imgP" placeholder="مثلا: منزل سوداني" style="width:100%;padding:10px;border-radius:10px;background:#000;color:#fff;border:1px solid #444"><button class="btn" style="margin-top:6px" onclick="makeImg()">صمم</button></div><div id="imgBox"></div></div>
-<div id="p5" class="page"><div onclick="go('p2')">＜ رجوع</div><h3 class="gold">🎤 محادثة صوتية</h3><div style="text-align:center;margin-top:40px"><div style="width:120px;height:120px;border-radius:50%;background:radial-gradient(#facc15,#a16207);margin:auto;display:flex;align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 30px gold" onclick="startVoice()">🎤</div><p>دوس للكلام</p><p id="voiceTxt" style="color:#facc15"></p></div></div>
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080604">
+<title>دبّرها DABBARHA</title>
+<style>
+:root{
+  --gold:#f6c453;
+  --gold2:#ffdf78;
+  --gold3:#b87916;
+  --dark:#070504;
+  --panel:#15100a;
+  --panel2:#21170b;
+  --text:#fff8df;
+  --muted:#cbbd9d;
+  --line:rgba(246,196,83,.35);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#050403;color:var(--text);font-family:Tahoma,Arial,sans-serif}
+body{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,202,70,.18),transparent 34%),
+    radial-gradient(circle at 20% 80%,rgba(255,180,30,.10),transparent 30%),
+    linear-gradient(145deg,#050403,#171006 50%,#050403);
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:14px 12px 92px}
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 4px 14px
+}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+  width:52px;height:52px;border-radius:16px;display:grid;place-items:center;
+  color:#100a02;font-weight:900;font-size:31px;font-family:Georgia,serif;
+  background:radial-gradient(circle,#fff2b0 0,#ffd45a 35%,#b97915 72%,#3b2205 100%);
+  border:2px solid #ffe69a;box-shadow:0 0 18px #e8a92c, inset 0 0 14px #fff3ae;
+}
+.brand h1{font-size:22px;margin:0}
+.brand small{color:var(--muted)}
+.iconbtn{
+  width:42px;height:42px;border-radius:14px;border:1px solid var(--line);
+  background:linear-gradient(145deg,#2a1b08,#0c0906);color:var(--gold2);
+  box-shadow:0 0 12px rgba(246,196,83,.18)
+}
+.page{display:none;animation:in .3s ease}
+.page.active{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{
+  position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;
+  padding:26px 18px;margin-bottom:14px;text-align:center;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(255,213,90,.24),transparent 34%),
+    linear-gradient(150deg,#2a1a08,#0c0906 65%,#241604);
+  box-shadow:0 0 28px rgba(246,196,83,.18),inset 0 0 30px rgba(246,196,83,.07)
+}
+.hero:before{
+  content:"";position:absolute;inset:-60%;background:linear-gradient(120deg,transparent 42%,rgba(255,236,158,.12) 50%,transparent 58%);
+  animation:shine 5s linear infinite
+}
+@keyframes shine{to{transform:translateX(40%) rotate(8deg)}}
+.hero>*{position:relative}
+.bigD{
+  margin:auto;width:128px;height:128px;border-radius:50%;display:grid;place-items:center;
+  font:900 86px Georgia,serif;color:#130b02;
+  background:radial-gradient(circle,#fff6c9 0,#ffd55c 28%,#d28a19 58%,#4a2b05 100%);
+  border:3px solid #ffe9a0;box-shadow:0 0 35px #d99524,0 0 75px rgba(246,196,83,.28),inset 0 0 24px #fff0a5
+}
+.hero h2{font-size:30px;margin:14px 0 2px}
+.hero p{margin:0;color:var(--muted)}
+.goldbtn{
+  border:1px solid #ffe89b;border-radius:17px;padding:14px 20px;
+  color:#160d02;font-weight:900;background:linear-gradient(135deg,#fff0a6,#f6c453 48%,#b97512);
+  box-shadow:0 0 18px rgba(246,196,83,.28),inset 0 1px #fff8c8
+}
+.hero .goldbtn{margin-top:18px;width:80%}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:18px 3px 10px}
+.section-title h3{margin:0;font-size:17px}.section-title span{color:var(--gold)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{
+  min-height:112px;border:1px solid var(--line);border-radius:20px;padding:15px;
+  background:linear-gradient(145deg,rgba(39,25,9,.96),rgba(10,8,5,.96));
+  box-shadow:inset 0 0 20px rgba(246,196,83,.04),0 7px 18px rgba(0,0,0,.25);
+  color:var(--text);text-align:right
+}
+.card:active{transform:scale(.98)}
+.card .ico{font-size:28px;color:var(--gold2);margin-bottom:8px}
+.card b{display:block;font-size:16px}.card small{display:block;color:var(--muted);margin-top:5px;line-height:1.5}
+.chatbox{min-height:58vh;display:flex;flex-direction:column}
+.messages{
+  flex:1;overflow:auto;padding:4px 2px 12px;display:flex;flex-direction:column;gap:9px;
+  min-height:350px;max-height:62vh
+}
+.msg{max-width:88%;padding:12px 14px;border-radius:18px;line-height:1.65;border:1px solid var(--line);white-space:pre-wrap}
+.msg.bot{align-self:flex-start;background:linear-gradient(145deg,#251907,#100c07)}
+.msg.user{align-self:flex-end;background:linear-gradient(145deg,#8c5b0e,#3a2307);color:#fff7dd}
+.composer{display:flex;gap:8px;position:sticky;bottom:70px;padding-top:8px}
+.composer textarea{
+  flex:1;resize:none;min-height:52px;max-height:130px;padding:13px;border-radius:18px;
+  border:1px solid var(--line);outline:none;color:#fff;background:#0e0a06
+}
+.send{width:56px;border:1px solid #ffe69a;border-radius:18px;background:linear-gradient(145deg,#ffe889,#c68518);font-size:22px}
+.back{margin-bottom:10px}
+.tools .card{min-height:100px}
+.panel{
+  border:1px solid var(--line);border-radius:22px;padding:16px;background:rgba(16,11,6,.9);
+  box-shadow:inset 0 0 20px rgba(246,196,83,.04)
+}
+input[type=file]{display:none}
+.preview{display:none;margin-top:12px;border-radius:18px;max-width:100%;border:1px solid var(--line)}
+.plan{display:flex;align-items:center;justify-content:space-between;padding:13px 4px;border-bottom:1px solid rgba(246,196,83,.16)}
+.nav{
+  position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(520px,100%);padding:9px 10px calc(9px + env(safe-area-inset-bottom));
+  background:rgba(7,5,3,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:7px
+}
+.nav button{border:0;background:transparent;color:#bcae90;padding:7px 3px;border-radius:12px}
+.nav button.active{color:#fff0a2;background:rgba(246,196,83,.10)}
+.nav i{display:block;font-style:normal;font-size:21px}.nav span{font-size:11px}
+.toast{
+  position:fixed;z-index:50;top:16px;left:50%;transform:translate(-50%,-120px);
+  background:#211508;color:#ffeaa2;border:1px solid var(--line);border-radius:14px;padding:11px 15px;
+  transition:.25s;box-shadow:0 10px 30px #000
+}
+.toast.show{transform:translate(-50%,0)}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--gold2);font-size:12px}
+@media(min-width:700px){.app{padding-top:28px}.nav{bottom:15px;border:1px solid var(--line);border-radius:22px}}
+</style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">D</div>
+      <div><h1>دبّرها</h1><small>DABBARHA • ذكاء اصطناعي</small></div>
+    </div>
+    <button class="iconbtn" onclick="showPage('assistant')">✦</button>
+  </header>
+
+  <main id="home" class="page active">
+    <section class="hero">
+      <div class="bigD">D</div>
+      <h2>دبّرها</h2>
+      <p>ذكاء اصطناعي • لحياة أسهل</p>
+      <button class="goldbtn" onclick="showPage('assistant')">ابدأ الآن ✦</button>
+    </section>
+
+    <div class="section-title"><h3>أدواتك الذكية</h3><span>✦</span></div>
+    <section class="grid">
+      <button class="card" onclick="showPage('study')"><div class="ico">🎓</div><b>الدراسة</b><small>مذاكرة • ملخصات • حلول</small></button>
+      <button class="card" onclick="showPage('money')"><div class="ico">💰</div><b>المال والعمل</b><small>فرص • دخل • استثمار</small></button>
+      <button class="card" onclick="showPage('docs')"><div class="ico">📄</div><b>المستندات</b><small>كتابة • ترجمة • تحليل</small></button>
+      <button class="card" onclick="showPage('tools')"><div class="ico">🌐</div><b>الترجمة</b><small>جميع اللغات</small></button>
+      <button class="card" onclick="showPage('image')"><div class="ico">🖼️</div><b>تحليل الصور</b><small>صور • نصوص • فهم</small></button>
+      <button class="card" onclick="showPage('voice')"><div class="ico">🎙️</div><b>المحادثة الصوتية</b><small>تحدث مع دبّرها</small></button>
+    </section>
+  </main>
+
+  <main id="assistant" class="page">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>المساعد الذكي</h3><span class="badge">دبّرها ✦</span></div>
+    <div class="chatbox panel">
+      <div id="messages" class="messages">
+        <div class="msg bot">مرحباً 👋 أنا دبّرها، مساعدك الذكي.<br>كيف يمكنني مساعدتك اليوم؟</div>
+      </div>
+      <div class="composer">
+        <textarea id="message" rows="1" placeholder="اكتب سؤالك أو مشكلتك هنا..."></textarea>
+        <button class="send" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </main>
+
+  <main id="tools" class="page tools">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>المزيد من الأدوات</h3></div>
+    <section class="grid">
+      <button class="card" onclick="showPage('study')"><div class="ico">📚</div><b>التعلم الذكي</b><small>دورات • اختبارات</small></button>
+      <button class="card" onclick="showPage('money')"><div class="ico">💼</div><b>العمل والمال</b><small>فرص • مهارات</small></button>
+      <button class="card" onclick="showPage('study')"><div class="ico">🏃</div><b>الرياضة</b><small>تمارين • لياقة</small></button>
+      <button class="card" onclick="showPage('money')"><div class="ico">📅</div><b>التقويم</b><small>مواعيد • تذكيرات</small></button>
+      <button class="card" onclick="showPage('docs')"><div class="ico">📝</div><b>الكتابة</b><small>نصوص • أفكار</small></button>
+      <button class="card" onclick="showPage('image')"><div class="ico">🤖</div><b>الذكاء الاصطناعي</b><small>صور • نصوص</small></button>
+    </section>
+  </main>
+
+  <main id="image" class="page">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>تحليل الصور</h3></div>
+    <div class="panel">
+      <label class="goldbtn" style="display:block;text-align:center">
+        اختر صورة من جهازك
+        <input id="imageInput" type="file" accept="image/*" onchange="previewImage(event)">
+      </label>
+      <img id="preview" class="preview" alt="معاينة الصورة">
+      <button class="goldbtn" style="width:100%;margin-top:12px" onclick="analyzeImage()">تحليل الصورة ✦</button>
+      <div id="imageResult" style="margin-top:12px;color:var(--muted)"></div>
+    </div>
+  </main>
+
+  <main id="voice" class="page">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>محادثة صوتية</h3></div>
+    <div class="panel" style="text-align:center;padding:35px 15px">
+      <div class="bigD" style="width:115px;height:115px;font-size:72px">D</div>
+      <p id="voiceStatus" style="color:var(--muted)">اضغط للبدء والتحدث</p>
+      <button class="goldbtn" onclick="startVoice()">🎙️ ابدأ الاستماع</button>
+    </div>
+  </main>
+
+  <main id="docs" class="page">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>المستندات والترجمة</h3></div>
+    <section class="grid">
+      <button class="card" onclick="quickPrompt('ترجم هذا النص إلى الإنجليزية')"><div class="ico">🌐</div><b>ترجمة النصوص</b><small>عربي • English • لغات متعددة</small></button>
+      <button class="card" onclick="quickPrompt('اكتب لي مستنداً احترافياً')"><div class="ico">📄</div><b>كتابة مستند</b><small>خطابات • تقارير • نماذج</small></button>
+      <button class="card" onclick="quickPrompt('لخص لي هذا النص')"><div class="ico">📋</div><b>تلخيص نص</b><small>اختصر المحتوى بسرعة</small></button>
+      <button class="card" onclick="quickPrompt('اكتب لي تقريراً احترافياً')"><div class="ico">📊</div><b>تقرير احترافي</b><small>تنظيم وصياغة</small></button>
+    </section>
+  </main>
+
+  <main id="study" class="page">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>الدراسة والتعلم</h3></div>
+    <div class="panel">
+      <div class="plan"><span>📚 خطة الدراسة الأسبوعية</span><span>›</span></div>
+      <div class="plan"><span>🧠 شرح درس أو موضوع</span><span>›</span></div>
+      <div class="plan"><span>📝 إنشاء اختبار</span><span>›</span></div>
+      <div class="plan"><span>✍️ حل المسائل</span><span>›</span></div>
+      <button class="goldbtn" style="width:100%;margin-top:15px" onclick="quickPrompt('أنشئ لي خطة دراسة أسبوعية')">إنشاء خطة جديدة +</button>
+    </div>
+  </main>
+
+  <main id="money" class="page">
+    <button class="iconbtn back" onclick="showPage('home')">‹</button>
+    <div class="section-title"><h3>المال والعمل</h3></div>
+    <section class="grid">
+      <button class="card" onclick="quickPrompt('اقترح لي أفكاراً للعمل وزيادة الدخل')"><div class="ico">💰</div><b>زيادة الدخل</b><small>أفكار ومهارات</small></button>
+      <button class="card" onclick="quickPrompt('ساعدني في كتابة سيرة ذاتية')"><div class="ico">📄</div><b>السيرة الذاتية</b><small>صياغة احترافية</small></button>
+      <button class="card" onclick="quickPrompt('ساعدني في البحث عن فكرة مشروع')"><div class="ico">💡</div><b>أفكار مشاريع</b><small>خطط وأفكار</small></button>
+      <button class="card" onclick="quickPrompt('أنشئ لي خطة لتنظيم مصاريفي')"><div class="ico">📊</div><b>تنظيم المال</b><small>خطة وميزانية</small></button>
+    </section>
+  </main>
+</div>
+
+<nav class="nav">
+  <button id="nav-home" class="active" onclick="showPage('home')"><i>⌂</i><span>الرئيسية</span></button>
+  <button id="nav-assistant" onclick="showPage('assistant')"><i>✦</i><span>المساعد</span></button>
+  <button id="nav-tools" onclick="showPage('tools')"><i>▦</i><span>الأدوات</span></button>
+  <button id="nav-docs" onclick="showPage('docs')"><i>⚙</i><span>المزيد</span></button>
+</nav>
+
 <script>
-function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on')}
-async function send(){let i=document.getElementById('q');let t=i.value.trim();if(!t)return;let c=document.getElementById('chat');c.innerHTML+=`<div class=msg user>${t}</div>`;i.value='';let id='m'+Date.now();c.innerHTML+=`<div id=${id} class="msg ai">⏳...</div>`;c.scrollTop=9999;try{let r=await fetch('https://text.pollinations.ai/openai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:t}],model:'openai-fast'})});let d=await r.json();document.getElementById(id).textContent=d.choices[0].message.content}catch(e){document.getElementById(id).textContent='حاول تاني - النت ضعيف'};c.scrollTop=9999}
-function makeImg(){let p=document.getElementById('imgP').value;if(!p)return;let b=document.getElementById('imgBox');let u=`https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true&seed=${Date.now()}`;b.innerHTML=`<div class=card><p>🎨 ${p}</p><img src="${u}" onload="this.scrollIntoView()" style="width:100%;border-radius:10px;min-height:200px;background:#111"></div>`+b.innerHTML}
-function startVoice(){let t=document.getElementById('voiceTxt');if(!('webkitSpeechRecognition' in window)){t.textContent='المتصفح ما بدعم الصوت';return}let r=new webkitSpeechRecognition();r.lang='ar-SA';r.onresult=e=>{document.getElementById('q').value=e.results[0][0].transcript;go('p3');send()};r.start();t.textContent='🎧 بسمع... اتكلم هسي'}
-</script></body></html>
+/*
+  إذا كان لديك config.js في المشروع، يمكنه تعريف:
+  const BACKEND_URL = "https://....";
+  هذا الملف يحاول استخدامه تلقائياً.
+*/
+let BACKEND = "";
+try { if (typeof BACKEND_URL !== "undefined") BACKEND = BACKEND_URL; } catch(e) {}
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const page=document.getElementById(id);
+  if(page) page.classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  const nav=document.getElementById("nav-"+id);
+  if(nav) nav.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function toast(t){
+  const x=document.getElementById("toast"); x.textContent=t; x.classList.add("show");
+  setTimeout(()=>x.classList.remove("show"),2500);
+}
+function addMessage(text,type){
+  const box=document.getElementById("messages");
+  const d=document.createElement("div"); d.className="msg "+type; d.textContent=text;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+async function sendMessage(){
+  const input=document.getElementById("message");
+  const text=input.value.trim(); if(!text)return;
+  addMessage(text,"user"); input.value="";
+  addMessage("جاري التفكير...","bot");
+  const box=document.getElementById("messages");
+  const loading=box.lastElementChild;
+  try{
+    if(!BACKEND){
+      loading.textContent="تم استلام رسالتك ✦\nلربط المساعد الذكي فعلياً، ضع عنوان الخادم BACKEND_URL في config.js.";
+      return;
+    }
+    const r=await fetch(BACKEND,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:text,text:text})
+    });
+    const data=await r.json();
+    loading.textContent=data.reply||data.response||data.message||"تمت معالجة طلبك.";
+  }catch(e){
+    loading.textContent="تعذر الاتصال بالخادم حالياً. تأكد من BACKEND_URL واتصال الإنترنت.";
+  }
+}
+function quickPrompt(t){showPage("assistant");document.getElementById("message").value=t;document.getElementById("message").focus();}
+document.getElementById("message").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}
+});
+function previewImage(e){
+  const file=e.target.files[0]; if(!file)return;
+  const img=document.getElementById("preview");
+  img.src=URL.createObjectURL(file); img.style.display="block";
+  document.getElementById("imageResult").textContent="تم اختيار الصورة بنجاح.";
+}
+function analyzeImage(){
+  const f=document.getElementById("imageInput").files[0];
+  if(!f){toast("اختر صورة أولاً");return}
+  document.getElementById("imageResult").innerHTML="<span style='color:#ffe58a'>تم تجهيز الصورة للتحليل ✦</span><br>لإرسال الصورة إلى الذكاء الاصطناعي فعلياً، نحتاج ربط نقطة تحليل الصور في الخادم.";
+}
+function startVoice(){
+  const status=document.getElementById("voiceStatus");
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){status.textContent="المتصفح لا يدعم التعرف الصوتي على هذا الجهاز.";return}
+  const r=new SR(); r.lang="ar-SA"; r.interimResults=false;
+  status.textContent="🎙️ جاري الاستماع...";
+  r.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    status.textContent="سمعت: "+t;
+    quickPrompt(t);
+  };
+  r.onerror=()=>status.textContent="حدث خطأ في التعرف الصوتي.";
+  r.onend=()=>{if(status.textContent.includes("جاري"))status.textContent="انتهى الاستماع."};
+  r.start();
+}
+</script>
+</body>
+</html>
+'''
+
+path = Path("/mnt/data/index.html")
+path.write_text(html, encoding="utf-8")
+print(f"تم إنشاء الملف: {path}")
+print("عدد الأحرف:", len(html))
