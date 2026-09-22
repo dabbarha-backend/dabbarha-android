@@ -1,0 +1,72 @@
+here<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المال</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+*{font-family:'Cairo';box-sizing:border-box;margin:0;padding:0}
+body{background:#020a1a;color:#fff;min-height:100vh;padding:16px;background-image:radial-gradient(circle at 50% 0%, #0a2a6b 0%, #020a1a 70%)}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.back{width:45px;height:45px;background:rgba(0,195,255,0.15);border:1px solid #00c3ff;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#00c3ff;text-decoration:none;font-size:22px}
+.card{background:linear-gradient(180deg,rgba(15,45,110,0.8),rgba(8,20,50,0.95));border:1px solid rgba(0,195,255,0.3);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 0 20px rgba(0,0,0,0.4)}
+.balance{font-size:36px;font-weight:900;text-align:center;color:#00ff88;text-shadow:0 0 15px #00ff88}
+.row{display:flex;gap:10px;margin-top:14px}
+.inp{flex:1;padding:12px;background:rgba(0,0,0,0.4);border:1px solid rgba(0,195,255,0.4);border-radius:12px;color:#fff}
+.btn{background:linear-gradient(135deg,#00c3ff,#0066ff);border:none;padding:12px 18px;border-radius:12px;color:#fff;font-weight:700;cursor:pointer}
+.list{max-height:250px;overflow-y:auto}
+.item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+</style>
+</head>
+<body>
+<div class="header"><a href="index.html" class="back">‹</a><div style="font-weight:900">💰 إدارة المال<br><small style="font-weight:400;color:#7ec8ff">تابع قروشك بذكاء</small></div></div>
+
+<div class="card">
+<div style="text-align:center;color:#7ec8ff;font-size:12px">رصيدك الحالي</div>
+<div class="balance" id="bal">0 SDG</div>
+<div class="row" style="margin-top:15px;justify-content:space-between;text-align:center">
+<div><div style="color:#00ff88" id="inc">0</div><small>دخل</small></div>
+<div><div style="color:#ff5555" id="exp">0</div><small>صرف</small></div>
+<div><div style="color:#00c3ff" id="sav">0</div><small>توفير</small></div>
+</div>
+</div>
+
+<div class="card">
+<div style="font-weight:700;margin-bottom:10px">➕ إضافة عملية</div>
+<div class="row"><input id="desc" class="inp" placeholder="الوصف (مثلا: مرتب)"><input id="amount" type="number" class="inp" placeholder="المبلغ" style="max-width:110px"></div>
+<div class="row" style="margin-top:10px">
+<button class="btn" style="flex:1;background:linear-gradient(135deg,#00ff88,#00aa66)" onclick="add('in')">دخل +</button>
+<button class="btn" style="flex:1;background:linear-gradient(135deg,#ff5555,#cc0000)" onclick="add('out')">صرف -</button>
+</div>
+</div>
+
+<div class="card">
+<div style="font-weight:700;margin-bottom:10px">📋 آخر العمليات</div>
+<div class="list" id="list"><small style="color:#7ec8ff">لا يوجد عمليات بعد</small></div>
+<button class="btn" style="width:100%;margin-top:10px;background:rgba(255,255,255,0.1)" onclick="clearAll()">مسح الكل</button>
+</div>
+
+<script>
+let data=JSON.parse(localStorage.getItem('money')||'[]');
+function render(){
+let inc=0,exp=0;
+data.forEach(x=>{if(x.t==='in')inc+=x.a;else exp+=x.a});
+document.getElementById('bal').textContent=(inc-exp)+' SDG';
+document.getElementById('inc').textContent=inc;
+document.getElementById('exp').textContent=exp;
+document.getElementById('sav').textContent=Math.round(inc*0.3);
+let l=document.getElementById('list');
+if(!data.length)l.innerHTML='<small style="color:#7ec8ff">لا يوجد عمليات</small>';
+else l.innerHTML=data.slice().reverse().map(x=>`<div class="item"><span>${x.d}</span><span style="color:${x.t==='in'?'#00ff88':'#ff5555'}">${x.t==='in'?'+':'-'}${x.a}</span></div>`).join('');
+localStorage.setItem('money',JSON.stringify(data));
+}
+function add(t){
+let d=document.getElementById('desc').value, a=parseInt(document.getElementById('amount').value);
+if(!d||!a)return alert('اكتب الوصف والمبلغ');
+data.push({d,a,t});document.getElementById('desc').value='';document.getElementById('amount').value='';render();
+}
+function clearAll(){if(confirm('تمسح كل العمليات؟')){data=[];render();}}
+render();
+</script>
+</body>
+</html>
