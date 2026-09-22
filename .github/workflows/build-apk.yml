@@ -1,27 +1,142 @@
 name: Build APK
+
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+
       - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '21'
-      - run: npm install --legacy-peer-deps
-      - run: npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
-      - run: npx @capacitor/cli add android || true
-      - run: npx @capacitor/cli copy android
-      - run: npx @capacitor/cli sync android
-      - run: cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
-      - uses: actions/upload-artifact@v4
+
+      - name: Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+          npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
+
+      - name: Create Android project
+        run: |
+          npx cap copy
+          npx cap add android
+          npx cap sync android
+
+      - name: Create F+ icon
+        run: |
+          cat > /tmp/icon.svg <<'EOF'
+          <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+            <defs>
+              <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#fff5a8"/>
+                <stop offset="0.25" stop-color="#f5d76e"/>
+                <stop offset="0.55" stop-color="#d4af37"/>
+                <stop offset="0.8" stop-color="#9b7015"/>
+                <stop offset="1" stop-color="#ffe98a"/>
+              </linearGradient>
+
+              <radialGradient id="bg">
+                <stop offset="0" stop-color="#202020"/>
+                <stop offset="0.7" stop-color="#090909"/>
+                <stop offset="1" stop-color="#000000"/>
+              </radialGradient>
+
+              <filter id="shadow">
+                <feDropShadow dx="0" dy="12" stdDeviation="14"
+                              flood-color="#000000" flood-opacity=".8"/>
+              </filter>
+            </defs>
+
+            <rect x="25" y="25" width="974" height="974" rx="190"
+                  fill="url(#bg)"
+                  stroke="url(#gold)"
+                  stroke-width="30"/>
+
+            <!-- Crown -->
+            <path d="M310 300 L385 185 L510 280 L640 185 L715 300
+                     L680 345 L345 345 Z"
+                  fill="url(#gold)"
+                  stroke="#fff0a0"
+                  stroke-width="10"
+                  filter="url(#shadow)"/>
+
+            <!-- F -->
+            <path d="M330 420
+                     L735 420
+                     L680 500
+                     L475 500
+                     L475 570
+                     L650 570
+                     L600 645
+                     L475 645
+                     L475 810
+                     L350 810
+                     Z"
+                  fill="url(#gold)"
+                  stroke="#fff1a0"
+                  stroke-width="8"
+                  filter="url(#shadow)"/>
+
+            <!-- Plus -->
+            <rect x="650" y="615" width="55" height="190"
+                  rx="12" fill="url(#gold)"
+                  stroke="#fff1a0" stroke-width="7"/>
+            <rect x="582" y="682" width="190" height="55"
+                  rx="12" fill="url(#gold)"
+                  stroke="#fff1a0" stroke-width="7"/>
+
+            <!-- shine -->
+            <path d="M125 160 Q512 65 900 160"
+                  fill="none"
+                  stroke="#fff8c8"
+                  stroke-width="10"
+                  opacity=".55"/>
+          </svg>
+          EOF
+
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
+          mkdir -p android/app/src/main/res
+
+          for size in 48 72 96 144 192; do
+            case $size in
+              48)  folder=mipmap-mdpi ;;
+              72)  folder=mipmap-hdpi ;;
+              96)  folder=mipmap-xhdpi ;;
+              144) folder=mipmap-xxhdpi ;;
+              192) folder=mipmap-xxxhdpi ;;
+            esac
+
+            mkdir -p android/app/src/main/res/$folder
+
+            convert -background none /tmp/icon.svg \
+              -resize ${size}x${size} \
+              android/app/src/main/res/$folder/ic_launcher.png
+
+            convert -background none /tmp/icon.svg \
+              -resize ${size}x${size} \
+              android/app/src/main/res/$folder/ic_launcher_round.png
+          done
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
           name: dabbarha-complete-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
