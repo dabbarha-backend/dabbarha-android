@@ -1,131 +1,53 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#050505">
-<title>دبّرها | DABBARHA</title>
-<script src="config.js"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دبّرها — Premium</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#050505;--card:#101010;--card2:#171717;--gold:#d4af37;--gold2:#fff0a0;--text:#fff8df;--muted:#9b9382;--line:rgba(212,175,55,.25)}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,rgba(212,175,55,.17),transparent 35%),#050505;color:var(--text);font-family:Tahoma,Arial,sans-serif}
-body{padding-bottom:92px}.wrap{max-width:760px;margin:auto}
-button,input,textarea,select{font:inherit}button{cursor:pointer}
-header{position:sticky;top:0;z-index:30;padding:12px 14px;background:rgba(5,5,5,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.head{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px}
-.logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;color:#090909;font:bold 29px Georgia;background:linear-gradient(145deg,#fff7bd,#d4af37 50%,#956d12);box-shadow:inset 0 1px 0 #fff,0 0 25px rgba(212,175,55,.2)}
-.brand b{font-size:20px;background:linear-gradient(90deg,#fff0a0,#d4af37,#fff0a0);-webkit-background-clip:text;color:transparent}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
-.status{border:1px solid var(--line);border-radius:20px;padding:8px 10px;color:#e1c95f;font-size:11px}.status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);margin-left:5px}
-.hero{margin:16px 14px;padding:22px 18px;border:1px solid var(--line);border-radius:26px;background:radial-gradient(circle at 8% 0,rgba(255,232,138,.14),transparent 38%),#0e0e0e;box-shadow:0 18px 50px #000}
-.tiny{color:#e4c65b;font-size:12px;margin-bottom:8px}.hero h1{margin:0;font-size:28px;line-height:1.4}.hero h1 span{color:var(--gold)}.hero p{color:#aaa18f;font-size:13px;line-height:1.8;margin:9px 0 16px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}.gold,.dark{min-height:45px;border-radius:14px;padding:0 16px;font-weight:bold}.gold{border:1px solid #ebcf6c;color:#080808;background:linear-gradient(145deg,#fff1a0,#d4af37,#9e7417)}.dark{border:1px solid var(--line);color:#e7d79d;background:#121212}
-.section{padding:0 14px;margin-top:20px}.title{font-size:17px;font-weight:bold;color:#f1dc95;margin-bottom:11px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.card{min-height:122px;padding:15px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#171717,#0d0d0d);box-shadow:0 10px 28px #0008;color:inherit;text-decoration:none;display:block}.card:active{transform:scale(.98)}
-.icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#fff0a0,#d4af37,#9c7317);color:#090909;font-weight:bold;font-size:20px;margin-bottom:10px}.card h3{margin:0;font-size:14px;color:#f6e9be}.card p{margin:6px 0 0;font-size:10px;line-height:1.55;color:#8f887b}
-.panel{display:none;margin:15px 14px 0;border:1px solid var(--line);border-radius:22px;background:#0b0b0b;overflow:hidden}.panel.show{display:block}.panel-head{padding:14px 15px;border-bottom:1px solid var(--line);font-weight:bold;color:#e7ce6c}.panel-body{padding:13px}.messages{min-height:260px;max-height:48vh;overflow:auto;padding:10px}.msg{max-width:90%;padding:11px 13px;border-radius:15px;margin:8px 0;font-size:13px;line-height:1.8;white-space:pre-wrap}.ai{margin-left:auto;background:#15130e;border:1px solid var(--line);color:#f6eac5}.me{margin-right:auto;background:#191919;border:1px solid #292929;color:#eee}.composer{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line)}textarea,input,select{border:1px solid #342b19;background:#070707;color:#fff;border-radius:14px;padding:11px;outline:none;width:100%}textarea{min-height:48px;resize:vertical}.send{width:48px;border:0;border-radius:14px;background:linear-gradient(145deg,#fff0a0,#d4af37);color:#080808;font-weight:bold}
-.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.stack>*{margin-bottom:9px}.result{margin-top:10px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#101010}.result img{display:block;max-width:100%;border-radius:14px;margin-top:8px}.muted{color:var(--muted);font-size:11px;line-height:1.7}.bigbtn{width:100%;min-height:48px}.quiz{border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px}.answers button{display:block;width:100%;margin:7px 0;text-align:right}
-.bottom{position:fixed;z-index:60;bottom:9px;left:50%;transform:translateX(-50%);width:min(700px,calc(100% - 18px));display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:7px;border:1px solid var(--line);border-radius:22px;background:rgba(12,12,12,.96);backdrop-filter:blur(18px);box-shadow:0 12px 40px #000}
-.nav{min-height:54px;border:0;border-radius:15px;background:transparent;color:#8e8778;font-size:10px}.nav b{display:block;font-size:18px;margin-bottom:3px}.nav.active{color:#080808;background:linear-gradient(145deg,#fff0a0,#d4af37,#a67c1a)}
-#toast{position:fixed;z-index:100;bottom:82px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#151515;border:1px solid var(--line);color:#f0da8a;padding:10px 14px;border-radius:13px;font-size:12px;transition:.2s;max-width:90%;text-align:center}#toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:380px){.hero h1{font-size:24px}.grid{gap:7px}.card{padding:13px}}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+:root{--bg:#071018;--panel:#0d1b25;--panel2:#102431;--line:#1e3a4a;--text:#f3fbff;--muted:#9bb1bd;--accent:#20d7ff;--accent2:#4c7dff;--good:#4ee1a1;--warn:#ffd166;--danger:#ff6b81;}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#12344a 0,#071018 34%),var(--bg);color:var(--text);font-family:Cairo,Arial,sans-serif}button,input,textarea{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:auto;min-height:100vh;padding:18px 16px 92px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#001018;font-weight:900;font-size:25px;box-shadow:0 8px 30px #20d7ff33}.brand h1{font-size:21px;margin:0}.brand small{color:var(--muted)}.iconbtn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:#0d1c26;color:#fff}.hero{margin-top:18px;padding:22px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,#102733dd,#0a1720dd);overflow:hidden;position:relative}.hero:after{content:"";position:absolute;inset:auto -70px -90px auto;width:220px;height:220px;border-radius:50%;background:#20d7ff16}.hero h2{font-size:30px;margin:0 0 6px}.hero p{margin:0;color:var(--muted)}.search{display:flex;gap:9px;margin-top:18px}.search textarea{flex:1;min-height:78px;resize:none;border:1px solid var(--line);background:#07131b;color:#fff;border-radius:18px;padding:13px;outline:none}.primary{border:0;border-radius:16px;padding:0 18px;background:linear-gradient(135deg,var(--accent),#4c7dff);color:#001018;font-weight:800}.chips{display:flex;gap:8px;overflow:auto;padding:10px 0 2px}.chip{white-space:nowrap;border:1px solid var(--line);background:#0d1c26;color:#dff8ff;border-radius:999px;padding:8px 12px}.section{margin-top:22px}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}.sectionhead h3{margin:0;font-size:19px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{border:1px solid var(--line);background:linear-gradient(180deg,#102532,#0b1922);border-radius:20px;padding:16px}.tool{min-height:118px}.tool .ico{font-size:29px}.tool b{display:block;margin-top:8px}.tool span{font-size:12px;color:var(--muted)}.games{grid-template-columns:repeat(2,minmax(0,1fr))}.game{min-height:140px;position:relative;overflow:hidden}.game .badge{position:absolute;top:12px;left:12px;font-size:11px;color:#001018;background:var(--warn);padding:4px 8px;border-radius:999px}.game .ico{font-size:32px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{text-align:center;padding:12px;border-radius:16px;background:#0a1821;border:1px solid var(--line)}.stat b{font-size:20px;display:block}.stat span{font-size:11px;color:var(--muted)}.ai{display:none}.ai.show{display:block}.aiimg{width:100%;height:250px;object-fit:cover;border-radius:22px;border:1px solid var(--line)}.chat{margin-top:12px}.msg{padding:12px 14px;border-radius:17px;margin:8px 0;line-height:1.7}.bot{background:#0d2531;border:1px solid #1b4c61}.user{background:#143c52;border:1px solid #24637f}.profile{display:none}.profile.show{display:block}.profilehead{display:flex;align-items:center;gap:14px}.avatar{width:70px;height:70px;border-radius:22px;background:linear-gradient(135deg,#20d7ff,#7a63ff);display:grid;place-items:center;font-size:30px;font-weight:800;color:#001018}.list{display:grid;gap:8px;margin-top:12px}.row{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:15px;background:#0b1922;border:1px solid var(--line)}.bottom{position:fixed;bottom:0;left:0;right:0;background:#071018ee;border-top:1px solid var(--line);backdrop-filter:blur(18px);padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:10}.nav{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.nav button{border:0;background:transparent;color:var(--muted);padding:8px 4px;border-radius:14px}.nav button.active{background:#12303d;color:var(--accent)}.nav span{display:block;font-size:11px;margin-top:3px}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;z-index:20}.modal.show{display:flex}.sheet{width:min(760px,100%);margin:auto 0 0;background:#0b1821;border:1px solid var(--line);border-radius:28px 28px 0 0;padding:20px;max-height:85vh;overflow:auto}.close{float:left;background:#142a35;color:#fff;border:0;border-radius:12px;padding:8px 12px}.q{font-size:24px;font-weight:800;line-height:1.5;margin:12px 0}.answers{display:grid;gap:9px}.answer{padding:13px;border:1px solid var(--line);background:#0d202a;border-radius:15px;color:#fff;text-align:right}.result{padding:12px;border-radius:15px;margin-top:10px}.success{background:#0e2d25;color:#8ff3c6}.error{background:#321821;color:#ff9bac}@media(max-width:500px){.app{padding-inline:12px}.hero h2{font-size:26px}.grid{gap:8px}.card{padding:13px}.aiimg{height:210px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header><div class="head"><div class="brand"><div class="logo">F+</div><div><b>دبّرها</b><small>DABBARHA • المساعد الذكي</small></div></div><div class="status"><i></i>متصل</div></div></header>
-
+<div class="app">
+<header class="top"><div class="brand"><div class="logo">ف</div><div><h1>دبّرها</h1><small>مشكلتك؟ دبّرها.</small></div></div><button class="iconbtn" onclick="showProfile()">👤</button></header>
 <section class="hero">
-<div class="tiny">✦ ذكاء اصطناعي • صور • ترجمة • صوت • أدوات</div>
-<h1>كل شيء في <span>دبّرها</span></h1>
-<p>نسخة فاخرة متصلة بالـBackend الحقيقي. لا يوجد مفتاح Gemini داخل التطبيق؛ المفتاح يبقى في الخادم.</p>
-<div class="actions"><button class="gold" onclick="openPanel('chat')">✦ المساعد</button><button class="dark" onclick="openPanel('image')">◈ إنشاء صورة</button></div>
+<h2>مرحبًا بك يا صديقي 👋</h2><p>اسأل، تعلّم، العب، واكتشف شيئًا جديدًا كل يوم.</p>
+<div class="search"><textarea id="ask" placeholder="اكتب سؤالك أو مشكلتك هنا..."></textarea><button class="primary" onclick="askAI()">✨<br>دبّرها</button></div>
+<div class="chips"><button class="chip" onclick="preset('ساعدني في تنظيم يومي')">تنظيم يومي</button><button class="chip" onclick="preset('أريد خطة للدراسة')">الدراسة</button><button class="chip" onclick="preset('ساعدني في العمل')">العمل</button><button class="chip" onclick="openAI()">🤖 الذكاء الاصطناعي</button></div>
 </section>
-
-<section class="section"><div class="title">الخدمات</div><div class="grid">
-<div class="card" onclick="openPanel('chat')"><div class="icon">✦</div><h3>المساعد الذكي</h3><p>محادثة Gemini عبر /api/chat.</p></div>
-<div class="card" onclick="openPanel('image')"><div class="icon">◈</div><h3>إنشاء الصور</h3><p>توليد صورة من وصفك عبر Gemini.</p></div>
-<div class="card" onclick="openPanel('analyze')"><div class="icon">⌁</div><h3>تحليل صورة</h3><p>ارفع صورة ودع Gemini يشرحها.</p></div>
-<div class="card" onclick="openPanel('translate')"><div class="icon">文</div><h3>الترجمة</h3><p>ترجمة النصوص عبر الخادم.</p></div>
-<div class="card" onclick="openPanel('voice')"><div class="icon">◉</div><h3>الصوت</h3><p>تحدث ثم أرسل النص للمساعد.</p></div>
-<div class="card" onclick="openPanel('games')"><div class="icon">♛</div><h3>الألعاب</h3><p>ألغاز وتحديات داخل التطبيق.</p></div>
-<div class="card" onclick="openPanel('money')"><div class="icon">₿</div><h3>المال</h3><p>حاسبة ميزانية ومصروفات.</p></div>
-<div class="card" onclick="openPanel('tools')"><div class="icon">⚙</div><h3>أدوات</h3><p>أدوات سريعة للدراسة والعمل.</p></div>
+<section id="home" class="section"><div class="sectionhead"><h3>أدواتك الذكية</h3><span class="muted">كل ما تحتاجه</span></div><div class="grid">
+<div class="card tool" onclick="preset('ساعدني في إدارة ميزانيتي')"><div class="ico">💰</div><b>ميزانيتي</b><span>مصروفات وخطط مالية</span></div>
+<div class="card tool" onclick="preset('ضع لي خطة دراسة')"><div class="ico">📚</div><b>دراستي</b><span>خطط ومراجعة واختبارات</span></div>
+<div class="card tool" onclick="preset('ساعدني في البحث عن وظيفة')"><div class="ico">💼</div><b>وظيفتي</b><span>مهارات وطلبات عمل</span></div>
+<div class="card tool" onclick="openAI()"><div class="ico">🤖</div><b>ذكاء دبّرها</b><span>مساعدك الذكي</span></div>
+<div class="card tool" onclick="preset('ترجم لي هذا النص')"><div class="ico">🌍</div><b>الترجمة</b><span>ترجمة وشرح</span></div>
+<div class="card tool" onclick="preset('ساعدني في فهم مستند')"><div class="ico">📄</div><b>افهم مستندي</b><span>تلخيص وشرح</span></div>
 </div></section>
-
-<section id="chat" class="panel"><div class="panel-head">✦ دبّرها — Gemini</div><div id="messages" class="messages"><div class="msg ai">أهلاً بك 👋<br>اكتب رسالتك وسأرسلها إلى Gemini عبر الخادم.</div></div><div class="composer"><textarea id="message" placeholder="اكتب رسالتك..." onkeydown="key(event)"></textarea><button id="send" class="send" onclick="send()">➤</button></div></section>
-
-<section id="image" class="panel"><div class="panel-head">◈ إنشاء صورة</div><div class="panel-body stack"><textarea id="imagePrompt" placeholder="مثال: مدينة مستقبلية ليلية فاخرة، أسلوب واقعي..."></textarea><button class="gold bigbtn" onclick="generateImage()">إنشاء الصورة</button><div id="imageResult" class="result muted">ستظهر الصورة هنا.</div></div></section>
-
-<section id="analyze" class="panel"><div class="panel-head">⌁ تحليل صورة</div><div class="panel-body stack"><input id="analyzeFile" type="file" accept="image/*"><textarea id="analyzePrompt" placeholder="ماذا تريد أن تعرف عن الصورة؟"></textarea><button class="gold bigbtn" onclick="analyzeImage()">تحليل الصورة</button><div id="analyzeResult" class="result muted">اختر صورة ثم اضغط تحليل.</div></div></section>
-
-<section id="translate" class="panel"><div class="panel-head">文 الترجمة</div><div class="panel-body stack"><textarea id="sourceText" placeholder="اكتب النص..."></textarea><div class="row"><select id="fromLang"><option>العربية</option><option>English</option><option>Français</option></select><select id="toLang"><option>English</option><option>العربية</option><option>Français</option></select></div><button class="gold bigbtn" onclick="translateText()">ترجم الآن</button><div id="translateResult" class="result muted">الترجمة ستظهر هنا.</div></div></section>
-
-<section id="voice" class="panel"><div class="panel-head">◉ الصوت</div><div class="panel-body"><div id="voiceStatus" class="muted">اضغط بدء الاستماع وتحدث.</div><div class="actions"><button class="gold" onclick="listen()">🎙️ استماع</button><button class="dark" onclick="speakLast()">🔊 قراءة آخر رد</button></div></div></section>
-
-<section id="games" class="panel"><div class="panel-head">♛ الألعاب</div><div class="panel-body"><div class="quiz"><b>تحدي سريع</b><p id="qtext">ما هو الكوكب المعروف بالكوكب الأحمر؟</p><div class="answers"><button class="dark" onclick="quiz(false)">الأرض</button><button class="dark" onclick="quiz(true)">المريخ</button><button class="dark" onclick="quiz(false)">الزهرة</button></div><div id="quizResult" class="muted"></div></div></div></section>
-
-<section id="money" class="panel"><div class="panel-head">₿ إدارة المال</div><div class="panel-body stack"><input id="income" type="number" placeholder="الدخل"><input id="expense" type="number" placeholder="المصروفات"><button class="gold bigbtn" onclick="calcMoney()">احسب المتبقي</button><div id="moneyResult" class="result muted">أدخل الدخل والمصروفات.</div></div></section>
-
-<section id="tools" class="panel"><div class="panel-head">⚙ أدوات</div><div class="panel-body stack"><textarea id="notes" placeholder="ملاحظتك..."></textarea><button class="gold bigbtn" onclick="saveNote()">حفظ الملاحظة</button><div id="noteResult" class="result muted"></div></div></section>
+<section class="section"><div class="sectionhead"><h3>🎮 الألعاب والتحديات</h3><span class="muted">العب واجمع النقاط</span></div><div class="grid games">
+<div class="card game" onclick="startQuiz('لغز منطقي')"><span class="badge">جديد</span><div class="ico">🧩</div><b>ألغاز منطق</b><span class="muted">اختبر تفكيرك</span></div>
+<div class="card game" onclick="startQuiz('معلومات عامة')"><div class="ico">❓</div><b>معلومات عامة</b><span class="muted">أسئلة متنوعة</span></div>
+<div class="card game" onclick="startQuiz('ذاكرة')"><div class="ico">🧠</div><b>اختبار الذاكرة</b><span class="muted">تذكّر بسرعة</span></div>
+<div class="card game" onclick="startQuiz('كلمات')"><div class="ico">🔤</div><b>تحدي الكلمات</b><span class="muted">حروف وكلمات</span></div>
+<div class="card game" onclick="startQuiz('حساب')"><div class="ico">🔢</div><b>تحدي الحساب</b><span class="muted">سرعة ودقة</span></div>
+<div class="card game" onclick="startQuiz('تحقيق')"><div class="ico">🕵️</div><b>قضية اليوم</b><span class="muted">غموض وتحقيق</span></div>
+</div></section>
+<section class="section"><div class="sectionhead"><h3>📖 القصص التفاعلية</h3><span class="muted">اختر طريقك</span></div><div class="grid"><div class="card tool" onclick="story('الممر السري')"><div class="ico">🚪</div><b>الممر السري</b><span>مغامرة واختيارات</span></div><div class="card tool" onclick="story('لغز المدينة')"><div class="ico">🌃</div><b>لغز المدينة</b><span>غموض وتحقيق</span></div></div></section>
+<section class="section"><div class="sectionhead"><h3>🏆 تقدمك</h3><span class="muted">هذا الأسبوع</span></div><div class="stats"><div class="stat"><b id="points">120</b><span>نقاط</span></div><div class="stat"><b>7</b><span>ألغاز</span></div><div class="stat"><b>3</b><span>إنجازات</span></div></div></section>
+<section id="ai" class="section ai card"><button class="close" onclick="closeAI()">إغلاق</button><h3>🤖 دبّرها AI</h3><img class="aiimg" src="assets/ai-robot.jpg" alt="روبوت ذكاء اصطناعي"><div class="chat" id="chat"><div class="msg bot">مرحبًا! أنا دبّرها AI. اكتب ما تريد وسأساعدك خطوة بخطوة.</div></div><div class="search"><textarea id="aimsg" placeholder="اكتب رسالتك..."></textarea><button class="primary" onclick="chatAI()">إرسال</button></div></section>
+<section id="profile" class="section profile card"><button class="close" onclick="closeProfile()">إغلاق</button><div class="profilehead"><div class="avatar">ف</div><div><h2 style="margin:0">فتحي</h2><span class="muted">عضو دبّرها</span></div></div><div class="stats" style="margin-top:15px"><div class="stat"><b>120</b><span>نقاط</span></div><div class="stat"><b>Lv. 3</b><span>المستوى</span></div><div class="stat"><b>8</b><span>إنجازات</span></div></div><div class="list"><div class="row"><span>🔔 الإشعارات</span><span>›</span></div><div class="row"><span>🌙 المظهر</span><span>داكن</span></div><div class="row"><span>🔐 الخصوصية</span><span>›</span></div><div class="row"><span>💾 المحفوظات</span><span>›</span></div><div class="row"><span>⚙️ الإعدادات</span><span>›</span></div></div></section>
 </div>
-
-<nav class="bottom"><button class="nav active" onclick="home()"><b>⌂</b>الرئيسية</button><button class="nav" onclick="openPanel('chat')"><b>✦</b>المساعد</button><button class="nav" onclick="openPanel('image')"><b>◈</b>الصور</button><button class="nav" onclick="openPanel('translate')"><b>文</b>الترجمة</button></nav>
-<div id="toast"></div>
-
+<nav class="bottom"><div class="nav"><button class="active" onclick="scrollHome(this)">🏠<span>الرئيسية</span></button><button onclick="scrollGames(this)">🎮<span>الألعاب</span></button><button onclick="openAI();this.classList.add('active')">🤖<span>AI</span></button><button onclick="showProfile();this.classList.add('active')">👤<span>حسابي</span></button></div></nav>
+<div class="modal" id="modal"><div class="sheet"><button class="close" onclick="closeModal()">إغلاق</button><h3 id="modalTitle"></h3><div id="modalBody"></div></div></div>
 <script>
-const CFG=window.DABBARHA_CONFIG||{};
-const BACKEND=String(CFG.BACKEND_URL||'').replace(/\/+$/,'');
-const API={chat:BACKEND+'/api/chat',image:BACKEND+'/api/image',analyze:BACKEND+'/api/analyze',translate:BACKEND+'/api/translate'};
-let lastAnswer='';
-
-function toast(x){const t=document.getElementById('toast');t.textContent=x;t.classList.add('show');clearTimeout(window.__t);window.__t=setTimeout(()=>t.classList.remove('show'),2500)}
-function home(){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));scrollTo({top:0,behavior:'smooth'})}
-function openPanel(id){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));const p=document.getElementById(id);if(!p)return;p.classList.add('show');p.scrollIntoView({behavior:'smooth',block:'start'})}
-function key(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
-function add(text,who){const d=document.createElement('div');d.className='msg '+who;d.textContent=text;const m=document.getElementById('messages');m.appendChild(d);m.scrollTop=m.scrollHeight;return d}
-function jsonOrText(raw){try{return JSON.parse(raw)}catch{return raw}}
-async function post(url,body){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(body)});const d=jsonOrText(await r.text());if(!r.ok)throw new Error((d&&d.error)||('HTTP '+r.status));return d}
-
-async function send(){
- const input=document.getElementById('message'),btn=document.getElementById('send'),text=input.value.trim();
- if(!text)return;if(!BACKEND){add('لم يتم العثور على BACKEND_URL في config.js.','ai');return}
- add(text,'me');input.value='';input.disabled=true;btn.disabled=true;const wait=add('جاري الاتصال بـ Gemini...','ai');
- try{const d=await post(API.chat,{message:text});wait.remove();const a=d.reply||d.answer||d.text||'';lastAnswer=a||'لم يصل رد.';add(lastAnswer,'ai')}
- catch(e){wait.remove();add('تعذر الاتصال: '+e.message,'ai')}
- finally{input.disabled=false;btn.disabled=false;input.focus()}
-}
-
-async function generateImage(){
- const prompt=document.getElementById('imagePrompt').value.trim(),out=document.getElementById('imageResult');if(!prompt)return toast('اكتب وصف الصورة أولاً');
- out.textContent='جاري إنشاء الصورة...';
- try{const d=await post(API.image,{prompt});if(!d.image)throw new Error(d.error||'لم تصل صورة');out.innerHTML='<div>تم إنشاء الصورة.</div><img src="data:'+d.mimeType+';base64,'+d.image+'"><a class="gold" style="display:inline-block;margin-top:10px;padding:12px;text-decoration:none" download="dabbarha-image.png" href="data:'+d.mimeType+';base64,'+d.image+'">حفظ الصورة</a>'}
- catch(e){out.textContent='خطأ: '+e.message}
-}
-
-function file64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result).split(',')[1]);r.onerror=reject;r.readAsDataURL(file)})}
-async function analyzeImage(){
- const file=document.getElementById('analyzeFile').files[0],prompt=document.getElementById('analyzePrompt').value.trim()||'حلل الصورة واشرح أهم ما فيها بالعربية.';
- const out=document.getElementById('analyzeResult');if(!file)return toast('اختر صورة أولاً');out.textContent='جاري التحليل...';
- try{const data=await file64(file);const d=await post(API.analyze,{image:data,mimeType:file.type,prompt});out.textContent=d.reply||'لم يصل تحليل.'}
- catch(e){out.textContent='خطأ: '+e.message}
-}
-async function translateText(){
- const text=document.getElementById('sourceText').value.trim(),from=document.getElementById('fromLang').value,to=document.getElementById('toLang').value,out=document.getElementById('translateResult');
- if(!text)return toast('اكتب النص أولاً');out.textContent='جاري الترجمة...';
- try{const d=await post(API.translate,{text,from,to});out.textContent=d.translation||d.reply||'لم تصل الترجمة.'}
- catch(e){out.textContent='خطأ: '+e.message}
-}
-function listen(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return toast('التعرف على الصوت غير مدعوم في هذا الجهاز');
- const r=new SR(),s=document.getElementById('voiceStatus');r.lang='ar-SA';r.interimResults=false;s.textContent='🎙️ أستمع الآن...';
- r.onresult=e=>{const t=e.results[0][0].transcript;s.textContent='تم التعرف: '+t;openPanel('chat');document.getElementById('message').value=t;send()};r.onerror=e=>s.textContent='تعذر الصوت: '+e.error;r.onend=()=>{if(s.textContent.includes('أستمع'))s.textContent='انتهى الاستماع.'};r.start()
-}
-function speakLast(){if(!lastAnswer)return toast('لا يوجد رد');if(!('speechSynthesis'in window))return toast('الصوت غير مدعوم');speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastAnswer);u.lang='ar-SA';speechSynthesis.speak(u)}
-function quiz(ok){document.getElementById('quizResult').textContent=ok?'إجابة صحيحة ✓':'إجابة غير صحيحة، حاول مرة أخرى.'}
-function calcMoney(){const a=Number(document.getElementById('income').value||0),b=Number(document.getElementById('expense').value||0);document.getElementById('moneyResult').textContent='المتبقي: '+(a-b)}
-function saveNote(){const n=document.getElementById('notes').value.trim();if(!n)return;localStorage.setItem('dabbarha_note',n);document.getElementById('noteResult').textContent='تم حفظ الملاحظة على الجهاز ✓'}
-window.addEventListener('load',()=>{if(!BACKEND)toast('تحذير: تحقق من config.js')})
+const qs=(s)=>document.querySelector(s); function preset(t){qs('#ask').value=t;qs('#ask').focus()} function openAI(){qs('#ai').classList.add('show');qs('#ai').scrollIntoView({behavior:'smooth'})} function closeAI(){qs('#ai').classList.remove('show')} function showProfile(){qs('#profile').classList.add('show');qs('#profile').scrollIntoView({behavior:'smooth'})} function closeProfile(){qs('#profile').classList.remove('show')} function scrollHome(){qs('#home').scrollIntoView({behavior:'smooth'})} function scrollGames(){document.querySelector('.games').scrollIntoView({behavior:'smooth'})}
+function askAI(){const v=qs('#ask').value.trim();if(!v)return;openAI();qs('#aimsg').value=v;chatAI()}
+function chatAI(){const v=qs('#aimsg').value.trim();if(!v)return;const chat=qs('#chat');chat.innerHTML+=`<div class="msg user">${esc(v)}</div>`;setTimeout(()=>{chat.innerHTML+=`<div class="msg bot">فهمت طلبك. هذه نسخة تصميمية الآن؛ عند ربط الخادم بالذكاء الاصطناعي ستظهر الإجابة الحقيقية هنا. سأرتب لك الحل في خطوات واضحة.</div>`;chat.scrollTop=chat.scrollHeight},450);qs('#aimsg').value=''}
+function startQuiz(type){const qsx=[{q:'ما الشيء الذي كلما أخذت منه زاد؟',a:['الحفرة','الكتاب','الماء','الطريق'],c:0},{q:'أي كوكب يُعرف بالكوكب الأحمر؟',a:['الأرض','المريخ','الزهرة','زحل'],c:1},{q:'إذا كان لديك 3 تفاحات وأخذت 2، كم تفاحة أصبحت معك؟',a:['1','2','3','5'],c:1}];const q=qsx[Math.floor(Math.random()*qsx.length)];qs('#modalTitle').textContent='🎮 '+type;qs('#modalBody').innerHTML=`<div class="q">${q.q}</div><div class="answers">${q.a.map((x,i)=>`<button class="answer" onclick="answerQuiz(${i},${q.c})">${x}</button>`).join('')}</div><div id="res"></div>`;qs('#modal').classList.add('show')}
+function answerQuiz(i,c){const r=qs('#res');if(i===c){let p=Number(localStorage.getItem('p')||120)+10;localStorage.setItem('p',p);qs('#points').textContent=p;r.className='result success';r.textContent='🎉 إجابة صحيحة! +10 نقاط';}else{r.className='result error';r.textContent='حاول مرة أخرى. 💪'}}
+function story(title){qs('#modalTitle').textContent='📖 '+title;qs('#modalBody').innerHTML='<div class="q">تصل إلى بابين في نهاية الطريق...</div><p class="muted">أنت من يقرر ماذا يحدث بعد ذلك.</p><div class="answers"><button class="answer" onclick="storyNext(1)">🚪 افتح الباب الأزرق</button><button class="answer" onclick="storyNext(2)">🔦 اتبع الصوت الغامض</button></div>';qs('#modal').classList.add('show')}
+function storyNext(n){qs('#modalBody').innerHTML=`<div class="q">اختيارك غيّر مسار القصة.</div><p>هذا نموذج تفاعلي، ويمكن توسيعه إلى قصص متعددة الفصول والاختيارات والنهايات.</p><button class="answer" onclick="closeModal()">متابعة</button>`}
+function closeModal(){qs('#modal').classList.remove('show')} function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 </script>
-</body>
-</html>
+</body></html>
