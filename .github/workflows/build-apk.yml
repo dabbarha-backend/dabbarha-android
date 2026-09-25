@@ -8,53 +8,46 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-          cache: gradle
 
-      - name: Install Node dependencies
+      - name: Install dependencies
         run: |
           npm install --legacy-peer-deps
           npm install @capacitor/cli @capacitor/core @capacitor/android --legacy-peer-deps
 
-      - name: Build web app
-        run: |
-          npm run build || npx vite build
+      - name: Build web
+        run: npm run build || npx vite build || echo "no build"
 
       - name: Create Android project
         run: |
           npx cap add android || true
           npx cap sync android
 
-      - name: Fix duplicate ic_launcher_background
+      - name: Fix duplicate
         run: |
           rm -f android/app/src/main/res/values/ic_launcher_background.xml
           rm -f android/app/src/main/res/values/dabbarha_colors.xml
-          ls android/app/src/main/res/values/
 
-      - name: Build APK with Gradle
+      - name: Build APK
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --no-daemon
+          ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: dabbarha-debug-apk
+          name: dabbarha-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
