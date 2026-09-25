@@ -1,91 +1,69 @@
-name: Build APK
+name: Build Dabbarha APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
 
-      - uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: 17
 
-      - name: Install Capacitor
-        run: |
-          npm install --legacy-peer-deps
-          npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: Create Android project
+      - name: Build web
         run: |
-          npx cap add android
-          npx cap copy
+          if npm run | grep -q "build"; then
+            npm run build
+          else
+            npx vite build
+          fi
+
+      - name: Init Capacitor Android
+        run: |
+          npx cap add android || true
           npx cap sync android
 
-      - name: Create F+ launcher icon
+      - name: Fix duplicate color error
         run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick librsvg2-bin
-
-          cat > /tmp/fplus.svg <<'SVG'
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-            <defs>
-              <radialGradient id="b"><stop stop-color="#242424"/><stop offset="1" stop-color="#030303"/></radialGradient>
-              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                <stop stop-color="#fff6b0"/><stop offset=".45" stop-color="#d4af37"/><stop offset="1" stop-color="#8c6410"/>
-              </linearGradient>
-            </defs>
-            <rect x="32" y="32" width="960" height="960" rx="210" fill="url(#b)" stroke="url(#g)" stroke-width="28"/>
-            <path d="M295 305 L380 175 L510 270 L645 175 L730 305 L690 350 L335 350 Z" fill="url(#g)" stroke="#fff1a0" stroke-width="10"/>
-            <path d="M330 430H740L680 505H470V570H640L590 645H470V815H345V430Z" fill="url(#g)" stroke="#fff1a0" stroke-width="8"/>
-            <rect x="650" y="615" width="55" height="190" rx="12" fill="url(#g)"/>
-            <rect x="582" y="682" width="190" height="55" rx="12" fill="url(#g)"/>
-            <path d="M125 170Q512 70 900 170" fill="none" stroke="#fff9cf" stroke-width="10" opacity=".55"/>
-          </svg>
-          SVG
-
-          rm -f android/app/src/main/res/mipmap-*/ic_launcher*.png || true
-          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher*.xml || true
-          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher*.xml || true
-
-          for spec in "mdpi:48" "hdpi:72" "xhdpi:96" "xxhdpi:144" "xxxhdpi:192"; do
-            folder="${spec%%:*}"
-            size="${spec##*:}"
-            mkdir -p "android/app/src/main/res/mipmap-$folder"
-            rsvg-convert -w "$size" -h "$size" /tmp/fplus.svg > "android/app/src/main/res/mipmap-$folder/ic_launcher.png"
-            cp "android/app/src/main/res/mipmap-$folder/ic_launcher.png" "android/app/src/main/res/mipmap-$folder/ic_launcher_round.png"
-          done
-
-          mkdir -p android/app/src/main/res/mipmap-anydpi-v26
-          cat > android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml <<'XML'
+          echo "Fixing duplicate ic_launcher_background..."
+          rm -f android/app/src/main/res/values/ic_launcher_background.xml
+          rm -f android/app/src/main/res/values/dabbarha_colors.xml
+          mkdir -p android/app/src/main/res/values
+          cat > android/app/src/main/res/values/colors.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-            <background android:drawable="@color/ic_launcher_background"/>
-            <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>
-          XML
-          mkdir -p android/app/src/main/res/drawable
-          rsvg-convert -w 432 -h 432 /tmp/fplus.svg > android/app/src/main/res/drawable/ic_launcher_foreground.png
-          cat > android/app/src/main/res/values/dabbarha_colors.xml <<'XML'
-          <resources><color name="ic_launcher_background">#050505</color></resources>
-          XML
+          <resources>
+              <color name="colorPrimary">#242424</color>
+              <color name="colorPrimaryDark">#242424</color>
+              <color name="colorAccent">#ff8c00</color>
+              <color name="ic_launcher_background">#242424</color>
+          </resources>
+          EOF
 
-      - name: Build APK
+      - name: Build Debug APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          name: dabbarha-fplus-apk
+          name: dabbarha-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
