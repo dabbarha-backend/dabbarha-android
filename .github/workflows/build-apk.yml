@@ -8,8 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node 20
         uses: actions/setup-node@v4
@@ -28,14 +30,15 @@ jobs:
           npm install @capacitor/cli @capacitor/core @capacitor/android --legacy-peer-deps
 
       - name: Build web
-        run: npm run build || npx vite build || echo "no build"
+        run: |
+          npm run build || npx vite build || echo "no build script"
 
       - name: Create Android project
         run: |
           npx cap add android || true
           npx cap sync android
 
-      - name: Fix duplicate
+      - name: Fix duplicate resources
         run: |
           rm -f android/app/src/main/res/values/ic_launcher_background.xml
           rm -f android/app/src/main/res/values/dabbarha_colors.xml
