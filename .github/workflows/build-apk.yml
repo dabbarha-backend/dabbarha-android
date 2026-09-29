@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm install
@@ -27,6 +28,20 @@ jobs:
 
       - name: Create Android project
         run: npx cap add android
+
+      - name: Fix Android launcher resources
+        run: |
+          mkdir -p android/app/src/main/res/values
+          if [ ! -f android/app/src/main/res/values/colors.xml ]; then
+            cat > android/app/src/main/res/values/colors.xml <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <color name="ic_launcher_background">#D4AF37</color>
+          </resources>
+          EOF
+          elif ! grep -q 'name="ic_launcher_background"' android/app/src/main/res/values/colors.xml; then
+            sed -i '/<\/resources>/i\    <color name="ic_launcher_background">#D4AF37</color>' android/app/src/main/res/values/colors.xml
+          fi
 
       - name: Copy app files
         run: npx cap copy
@@ -38,7 +53,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - name: Setup Android
         uses: android-actions/setup-android@v3
@@ -52,5 +67,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: dabbarha-apk
+          name: dabbharha-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
