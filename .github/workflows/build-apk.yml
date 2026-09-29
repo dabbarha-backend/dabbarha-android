@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -20,7 +19,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install project dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Install Capacitor
@@ -29,21 +28,10 @@ jobs:
       - name: Create Android project
         run: npx cap add android
 
-      - name: Fix Android launcher resources
-        run: |
-          mkdir -p android/app/src/main/res/values
+      - name: Copy app files
+        run: npx cap copy
 
-          cat > android/app/src/main/res/values/colors.xml <<'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <resources>
-              <color name="ic_launcher_background">#07131C</color>
-          </resources>
-          EOF
-
-      - name: Copy web files
-        run: npx cap copy android
-
-      - name: Sync Capacitor
+      - name: Sync Android
         run: npx cap sync android
 
       - name: Setup Java
@@ -52,10 +40,10 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK
+      - name: Setup Android
         uses: android-actions/setup-android@v3
 
-      - name: Build Debug APK
+      - name: Build APK
         run: |
           cd android
           chmod +x gradlew
@@ -64,5 +52,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: dabbarha-debug-apk
+          name: dabbarha-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
