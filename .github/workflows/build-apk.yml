@@ -18,12 +18,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm install
 
-      - name: Install Capacitor
-        run: npm install @capacitor/core @capacitor/cli @capacitor/android
+      - name: Install Capacitor 7
+        run: |
+          npm install @capacitor/core@7.6.9 @capacitor/cli@7.6.9 @capacitor/android@7.6.8
 
       - name: Create Android project
         run: npx cap add android
@@ -52,7 +54,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - name: Setup Android
         uses: android-actions/setup-android@v3
