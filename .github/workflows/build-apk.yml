@@ -19,6 +19,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Install dependencies
         run: npm install
 
@@ -28,27 +34,14 @@ jobs:
       - name: Create Android project
         run: npx cap add android
 
-      - name: Fix launcher color
-        run: |
-          mkdir -p android/app/src/main/res/values
-          printf '%s\n' '<?xml version="1.0" encoding="utf-8"?>' '<resources>' '<color name="ic_launcher_background">#07131C</color>' '</resources>' > android/app/src/main/res/values/colors.xml
-
       - name: Copy app files
         run: npx cap copy android
 
       - name: Sync Capacitor
         run: npx cap sync android
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-        with:
-          packages: ''
 
       - name: Install Android SDK packages
         run: sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
@@ -64,3 +57,4 @@ jobs:
         with:
           name: dabbarha-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
