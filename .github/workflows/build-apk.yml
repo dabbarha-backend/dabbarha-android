@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Install Capacitor
-        run: npm install @capacitor/core @capacitor/cli @capacitor/android
+        run: npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
       - name: Create Android project
         run: npx cap add android
@@ -36,7 +36,7 @@ jobs:
       - name: Copy app files
         run: npx cap copy android
 
-      - name: Sync Android
+      - name: Sync Capacitor
         run: npx cap sync android
 
       - name: Setup Java
@@ -47,6 +47,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Build APK
         run: |
